@@ -12,6 +12,93 @@
     --font-size-base: 1rem;
 }
 
+  /*Accordions*/
+  :root {
+    --gsap-accordion-font-color: white;
+    --gsap-accordion-font-size: 18px;
+    --gsap-accordion-bg-color: #002244; /* Dark blue */
+    --gsap-accordion-bg-color-active: #004488; /* Darker grey */
+    --gsap-accordion-bg-color-hover: #004488; /* Slightly lighter dark blue */
+    --gsap-accordion-border-color: lightgrey; /* to match body bg color  */
+    --gsap-accordion-content-bg-color: white; /* Medium-dark blue */
+  }
+
+  .gsap-parent-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 50px;
+  }
+
+  .gsap-accordion-inner-content {
+    background: var(--gsap-accordion-content-bg-color);
+    padding: 30px;
+    color: #111;
+  }
+
+  .gsap-accordion-menu {
+    font-weight: 600;
+    font-size: var(--gsap-accordion-font-size);
+    border-top: 1.5px solid var(--gsap-accordion-border-color);
+    border-bottom: 1.5px solid var(--gsap-accordion-border-color);
+    background-color: var(--gsap-accordion-bg-color);
+    color: var(--gsap-accordion-font-color);
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 35px;
+    transition: ease 0.4s;
+    letter-spacing: 1.5px;
+  }
+
+  .gsap-accordion-menu:hover {
+    background: var(--gsap-accordion-bg-color-hover);
+  }
+
+  .gsap-accordion-menu.active {
+    background-color: var(--gsap-accordion-bg-color-active);
+    opacity: 0.9;
+  }
+
+  .gsap-accordion-content {
+    height: 0;
+    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: scroll;
+  }
+
+  .gsap-accordion-content.expanded {
+    height: auto;
+  }
+
+  .gsap-accordion-plus,
+  .gsap-accordion-minus {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+/* 
+  body,html {
+    margin: 0;
+    background-color: #f8f8ff; 
+    color: black;
+    font-family: Montserrat;
+    font-size: 16px;
+    padding-bottom: 500px;
+  } */
+
+  .gsap-accordion-content p {
+    font-size: 18px;
+  }
+
+  .gsap-accordion-content img {
+    max-width: 190px;
+    margin: 0 auto;
+    padding: 40px;
+  } 
+
 * {
     font-family: "Ubuntu", sans-serif;
     line-height: var(--line-height);
@@ -55,7 +142,7 @@
 
     h2 {
         text-align: center;
-        font-size: clamp(1.5rem, 2vw + 0.3rem, 2.5rem);
+        font-size: clamp(1rem, 1.5vw + 0.3rem, 1.5rem);
         margin-bottom: 1rem;
     }
 
@@ -87,7 +174,7 @@
     text-align: center;
     padding: 0 1rem 1rem 1rem;
   }
-  
+
   /* Media Queries */
   /* Mobile devices */
   @media (max-width: 480px) {
