@@ -13,6 +13,8 @@ import {
 import '@xyflow/react/dist/style.css';
 import dagre from 'dagre';
 import curriculumData from '../curriculum.json';
+import logo from './assets/logo (2).svg';
+import dragon from './assets/dragon.gif';
 
 // --- Custom Node Component ---
 const CourseNode = ({ data }) => {
@@ -113,6 +115,7 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <img src={logo} alt="Logo" style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10, width: '100px', height: 'auto' }} />
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -152,6 +155,8 @@ export default function App() {
           </div>
         )}
       </div>
+
+      <img src={dragon} alt="Dragon" style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, width: '150px', height: 'auto', pointerEvents: 'none' }} />
     </div>
   );
 }

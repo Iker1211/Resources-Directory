@@ -8,16 +8,4 @@
     </defs>
     <!-- Yellow circle -->
     <circle cx="100" cy="100" r="100" fill="#e3c200" />
-    <text
-        x="100"
-        y="120"
-        font-size="80"
-        font-weight="bolder"
-        font-family="Arial, sans-serif"
-        fill="#13222e"
-        text-anchor="middle"
-        dominant-baseline="middle"
-    >
-        42
-    </text>
 </svg>
