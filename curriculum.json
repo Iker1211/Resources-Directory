@@ -194,28 +194,97 @@
     }
   ],
   "edges": [
-    { "source": "math_prereqs", "target": "cs50x" },
-    { "source": "math_prereqs", "target": "mit_6_100l" },
-    { "source": "cs50x", "target": "calc_1" },
-    { "source": "cs50x", "target": "security_6_858" },
-    { "source": "calc_1", "target": "linear_algebra" },
-    { "source": "linear_algebra", "target": "multivar_calculus" },
-    { "source": "multivar_calculus", "target": "prob_applied" },
-    { "source": "prob_applied", "target": "ml_dl" },
-    { "source": "security_6_858", "target": "compilers_6_035" },
-    { "source": "compilers_6_035", "target": "distributed_6_824" },
-    { "source": "distributed_6_824", "target": "databases_6_830" },
-    { "source": "databases_6_830", "target": "networking_6_829" },
-    { "source": "networking_6_829", "target": "comp_struct_6_004" },
-    { "source": "comp_struct_6_004", "target": "os_eng_6_828" },
-    { "source": "os_eng_6_828", "target": "sys_eng_6_033" },
-    { "source": "sys_eng_6_033", "target": "intro_alg_6_006" },
-    { "source": "intro_alg_6_006", "target": "design_alg_6_046j" },
-    { "source": "design_alg_6_046j", "target": "logic1_24_241" },
-    { "source": "logic1_24_241", "target": "logic2_24_242" },
-    { "source": "logic2_24_242", "target": "software_const_6_005" },
-    { "source": "software_const_6_005", "target": "missing_semester" },
-    { "source": "missing_semester", "target": "fullstack_open" },
-    { "source": "missing_semester", "target": "odin_project" }
+    {
+      "source": "math_prereqs",
+      "target": "cs50x"
+    },
+    {
+      "source": "math_prereqs",
+      "target": "mit_6_100l"
+    },
+    {
+      "source": "cs50x",
+      "target": "calc_1"
+    },
+    {
+      "source": "calc_1",
+      "target": "linear_algebra"
+    },
+    {
+      "source": "linear_algebra",
+      "target": "multivar_calculus"
+    },
+    {
+      "source": "multivar_calculus",
+      "target": "prob_applied"
+    },
+    {
+      "source": "prob_applied",
+      "target": "ml_dl"
+    },
+    {
+      "source": "cs50x",
+      "target": "missing_semester"
+    },
+    {
+      "source": "missing_semester",
+      "target": "software_const_6_005"
+    },
+    {
+      "source": "software_const_6_005",
+      "target": "intro_alg_6_006"
+    },
+    {
+      "source": "intro_alg_6_006",
+      "target": "design_alg_6_046j"
+    },
+    {
+      "source": "design_alg_6_046j",
+      "target": "logic1_24_241"
+    },
+    {
+      "source": "logic1_24_241",
+      "target": "logic2_24_242"
+    },
+    {
+      "source": "logic2_24_242",
+      "target": "comp_struct_6_004"
+    },
+    {
+      "source": "comp_struct_6_004",
+      "target": "os_eng_6_828"
+    },
+    {
+      "source": "os_eng_6_828",
+      "target": "sys_eng_6_033"
+    },
+    {
+      "source": "sys_eng_6_033",
+      "target": "networking_6_829"
+    },
+    {
+      "source": "networking_6_829",
+      "target": "databases_6_830"
+    },
+    {
+      "source": "databases_6_830",
+      "target": "distributed_6_824"
+    },
+    {
+      "source": "distributed_6_824",
+      "target": "compilers_6_035"
+    },
+    {
+      "source": "compilers_6_035",
+      "target": "security_6_858"
+    },
+    {
+      "source": "security_6_858",
+      "target": "fullstack_open"
+    },
+    {
+      "source": "security_6_858",
+      "target": "odin_project"
+    }
   ]
 }
