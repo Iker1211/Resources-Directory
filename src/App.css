@@ -1,3 +1,49 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  /* * {
+    margin: 0;
+  } */
+  
+  body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+  
+  input, button, textarea, select {
+    font: inherit;
+  }
+
+  /* This one is mine */
+  
+  p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+  }
+  
+  p {
+    text-wrap: pretty;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+  
+  #root, #__next {
+    isolation: isolate;
+  }
+
+/* styles */
 :root {
     --violet: #40295e;
     --blue: #13222e;
@@ -109,7 +155,7 @@
   
   body {
     color: #333;
-    background-image: url("../assets/background-images/background.jpg");
+    background-image: url("./assets/background-images/background.jpg");
   }
   
   header {
