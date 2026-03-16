@@ -18,57 +18,58 @@
     },
     {
       "id": "mit_6_100l",
-      "title": "MIT 6.100L",
+      "title": "Introduction to CS and Programming",
       "category": "cs_intro",
       "url": "https://ocw.mit.edu/courses/6-100l-introduction-to-cs-and-programming-using-python-fall-2022/",
-      "description": "",
+      "description": "6.100L",
       "status": "available"
     },
     {
       "id": "calc_1",
       "title": "Single Variable Calculus",
       "category": "mathematics",
-      "url": "",
-      "description": "18.01 (1 semana)",
+      "url": "https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/",
+      "description": "18.01",
       "status": "available"
     },
     {
       "id": "linear_algebra",
       "title": "Álgebra Lineal",
       "category": "mathematics",
-      "url": "",
-      "description": "",
+      "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+      "description": "18.06",
       "status": "available"
     },
     {
       "id": "multivar_calculus",
       "title": "Cálculo multivariable",
       "category": "mathematics",
-      "url": "",
-      "description": "",
+      "url": "https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/",
+      "description": "18.02",
       "status": "available"
     },
     {
       "id": "prob_applied",
       "title": "Análisis de sistemas probabilísticos y probabilidad aplicada",
       "category": "mathematics",
-      "url": "",
-      "description": "",
+      "url": "https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/",
+      "description": "6.041SC",
       "status": "available"
     },
     {
-      "id": "ml_dl",
+      "id": "ml_dl", 
       "title": "ML, DL",
       "category": "mathematics",
       "url": "",
       "description": "",
-      "status": "available"
+      "status": "available",
+      "_comentario": "lets see how it works" 
     },
     {
       "id": "security_6_858",
       "title": "Computer Systems Security",
       "category": "core_security",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-858-computer-systems-security-fall-2014/",
       "description": "6.858",
       "status": "available"
     },
@@ -76,7 +77,7 @@
       "id": "compilers_6_035",
       "title": "Computer Language Engineering",
       "category": "core_compilers",
-      "url": "",
+      "url": "https://ocw-mit-edu.translate.goog/courses/6-035-computer-language-engineering-spring-2010/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc",
       "description": "6.035",
       "status": "available"
     },
@@ -84,7 +85,7 @@
       "id": "distributed_6_824",
       "title": "Distributed Systems",
       "category": "core_distributed",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-824-distributed-computer-systems-engineering-spring-2006/",
       "description": "6.824",
       "status": "available"
     },
@@ -92,7 +93,7 @@
       "id": "databases_6_830",
       "title": "Database Systems",
       "category": "core_databases",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-830-database-systems-fall-2010/",
       "description": "6.830",
       "status": "available"
     },
@@ -100,15 +101,16 @@
       "id": "networking_6_829",
       "title": "Computer Networks",
       "category": "core_networking",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-829-computer-networks-fall-2002/",
       "description": "6.829",
-      "status": "available"
+      "status": "available",
+      "comentario": "no actualizado"
     },
     {
       "id": "comp_struct_6_004",
       "title": "Computation Structures",
       "category": "core_systems",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/",
       "description": "6.004",
       "status": "available"
     },
@@ -116,7 +118,7 @@
       "id": "os_eng_6_828",
       "title": "Operating Systems Engineering",
       "category": "core_systems",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/",
       "description": "6.828",
       "status": "available"
     },
@@ -124,7 +126,7 @@
       "id": "sys_eng_6_033",
       "title": "Computer Systems Engineering",
       "category": "core_systems",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-033-computer-system-engineering-spring-2018/",
       "description": "6.033",
       "status": "available"
     },
@@ -132,7 +134,7 @@
       "id": "intro_alg_6_006",
       "title": "Introduction to Algorithms",
       "category": "core_theory",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/",
       "description": "6.006",
       "status": "available"
     },
@@ -140,7 +142,7 @@
       "id": "design_alg_6_046j",
       "title": "Design and Analysis of Algorithms",
       "category": "core_theory",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
       "description": "6.046J",
       "status": "available"
     },
@@ -148,7 +150,7 @@
       "id": "logic1_24_241",
       "title": "Logic I",
       "category": "core_theory",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/24-241-logic-i-fall-2009/",
       "description": "24.241",
       "status": "available"
     },
@@ -156,7 +158,7 @@
       "id": "logic2_24_242",
       "title": "Logic II",
       "category": "core_theory",
-      "url": "",
+      "url": "https://ocw.mit.edu/courses/24-242-logic-ii-spring-2004/",
       "description": "24.242",
       "status": "available"
     },
@@ -164,15 +166,15 @@
       "id": "software_const_6_005",
       "title": "Elements of Software Construction",
       "category": "core_programming",
-      "url": "",
-      "description": "6.005 (ingeniería de software formal)",
+      "url": "https://ocw.mit.edu/courses/6-005-software-construction-spring-2016/",
+      "description": "6.005",
       "status": "available"
     },
     {
       "id": "missing_semester",
       "title": "The Missing Semester",
       "category": "cs_tools",
-      "url": "",
+      "url": "https://missing.csail.mit.edu/",
       "description": "Published in 2026",
       "status": "available"
     },
