@@ -1,4 +1,4 @@
-<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<svg width="900" height="200" viewBox="0 0 900 200" xmlns="http://www.w3.org/2000/svg">
     <defs>
         <style>
             :root {
@@ -8,4 +8,6 @@
     </defs>
     <!-- Yellow circle -->
     <circle cx="100" cy="100" r="100" fill="#e3c200" />
+    <!-- Challenge Text -->
+    <text x="230" y="100" dominant-baseline="central" fill="#e3c200" font-family="var(--font-family)" font-size="60" font-weight="bold">Third World Challenge</text>
 </svg>
