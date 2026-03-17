@@ -1,132 +1,68 @@
 {
   "nodes": [
     {
-      "id": "math_prereqs",
-      "title": "Prerrequisitos Matemáticas",
-      "category": "trunk",
-      "branch": "foundations",
-      "url": "https://www.notion.so/matem-ticas-de-safarrancho-31e5b074eed28092b849efb1e26471bf",
-      "description": "Base matemática esencial para computación de alto nivel.",
+      "id": "mit_18_01",
+      "title": "Single Variable Calculus",
+      "category": "mathematics",
+      "url": "https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/",
+      "description": "Fundamentos de derivadas e integrales para optimización.",
       "status": "available"
     },
     {
-      "id": "cs50x",
-      "title": "CS50x: The Gateway",
-      "category": "trunk",
-      "branch": "foundations",
-      "url": "https://cs50.harvard.edu/x/",
-      "description": "Fundamentos de C y Algoritmos. El primer filtro del challenge.",
+      "id": "mit_18_02",
+      "title": "Multivariable Calculus",
+      "category": "mathematics",
+      "url": "https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/",
+      "description": "Gradientes y optimización en múltiples dimensiones (Backpropagation).",
       "status": "available"
     },
     {
-      "id": "algorithms_mastery",
-      "title": "Algorithms Core (6.006 + 6.046J)",
-      "category": "third_world_challenge",
-      "branch": "classical",
-      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
-      "description": "El corazón del MIT. Domina la eficiencia antes de tocar la infraestructura.",
+      "id": "mit_18_06",
+      "title": "Linear Algebra",
+      "category": "mathematics",
+      "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+      "description": "Vectores, matrices y espacios latentes. El lenguaje de la IA.",
       "status": "available"
     },
     {
-      "id": "comp_struct_6_004",
-      "title": "Computation Structures",
-      "category": "third_world_challenge",
-      "branch": "classical",
-      "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/",
-      "description": "Entender el hardware es vital para optimizar software de sistemas.",
+      "id": "mit_6_041sc",
+      "title": "Probabilistic Systems Analysis",
+      "category": "mathematics",
+      "url": "https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-fall-2013/",
+      "description": "Modelado de la incertidumbre y sistemas estocásticos.",
       "status": "available"
     },
     {
-      "id": "os_rust_bridge",
-      "title": "Modern Systems (6.828 Logic + Rust)",
-      "category": "bridge",
-      "branch": "vanguard",
-      "url": "https://os.phil-opp.com/",
-      "description": "Reconciliación: Aplica los principios de 6.005 (Software Construction) y 6.828 (OS) usando Rust.",
+      "id": "mit_6_3900",
+      "title": "Intro to Machine Learning",
+      "category": "ai_core",
+      "url": "https://introml.mit.edu/",
+      "description": "Algoritmos de aprendizaje, desde lineales hasta redes neuronales.",
       "status": "available"
     },
     {
-      "id": "networking_cs144",
-      "title": "Modern Networking (Stanford CS144)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://cs144.github.io/",
-      "description": "Sustituye 6.829. Implementación de TCP en el mundo real de 2026.",
+      "id": "deeplearning_vector_rag",
+      "title": "Vector DBs & RAG Infra",
+      "category": "ai_infra",
+      "url": "https://learn.deeplearning.ai/",
+      "description": "Infraestructura para conectar LLMs con bases de datos externas.",
       "status": "available"
     },
     {
-      "id": "db_cmu_advanced",
-      "title": "Advanced Databases (CMU 15-445)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://15445.courses.cs.cmu.edu/",
-      "description": "El nuevo estándar de oro. Supera al 6.830 clásico en concurrencia y memoria.",
-      "status": "available"
-    },
-    {
-      "id": "dist_systems_2023",
-      "title": "Distributed Systems (MIT 6.824)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://pdos.csail.mit.edu/6.824/",
-      "description": "Final Boss. Cubre la deuda de sistemas operativos y redes de forma masiva.",
-      "status": "available"
-    },
-    {
-      "id": "logic_graph_bridge",
-      "title": "Applied Logics & Graph Modeling",
-      "category": "bridge",
-      "branch": "psych_tech",
-      "url": "https://graphacademy.neo4j.com/",
-      "description": "Une Logic I/II con Neo4j. Modelado de arquetipos y sistemas complejos.",
-      "status": "available"
-    },
-    {
-      "id": "infra_ai_vector_db",
-      "title": "Vector Databases (RAG Infra)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://learn.deeplearning.ai/courses/vector-databases-embeddings-applications",
-      "description": "Infraestructura para IA. Gestión de datos a escala 2026.",
+      "id": "mit_6_s191",
+      "title": "Introduction to Deep Learning",
+      "category": "ai_advanced",
+      "url": "http://introtodeeplearning.com/",
+      "description": "Transformers, Computer Vision y arquitecturas de vanguardia.",
       "status": "available"
     }
   ],
   "edges": [
-    {
-      "source": "math_prereqs",
-      "target": "cs50x"
-    },
-    {
-      "source": "cs50x",
-      "target": "algorithms_mastery"
-    },
-    {
-      "source": "algorithms_mastery",
-      "target": "comp_struct_6_004"
-    },
-    {
-      "source": "comp_struct_6_004",
-      "target": "os_rust_bridge"
-    },
-    {
-      "source": "os_rust_bridge",
-      "target": "networking_cs144"
-    },
-    {
-      "source": "networking_cs144",
-      "target": "db_cmu_advanced"
-    },
-    {
-      "source": "db_cmu_advanced",
-      "target": "dist_systems_2023"
-    },
-    {
-      "source": "db_cmu_advanced",
-      "target": "logic_graph_bridge"
-    },
-    {
-      "source": "db_cmu_advanced",
-      "target": "infra_ai_vector_db"
-    }
+    { "source": "mit_18_01", "target": "mit_18_02" },
+    { "source": "mit_18_02", "target": "mit_18_06" },
+    { "source": "mit_18_06", "target": "mit_6_041sc" },
+    { "source": "mit_6_041sc", "target": "mit_6_3900" },
+    { "source": "mit_6_3900", "target": "deeplearning_vector_rag" },
+    { "source": "deeplearning_vector_rag", "target": "mit_6_s191" }
   ]
 }
