@@ -1,154 +1,59 @@
 {
   "nodes": [
     {
-      "id": "math_prereqs",
-      "title": "Prerrequisitos Matemáticas",
-      "category": "trunk",
-      "branch": "foundations",
-      "url": "https://www.notion.so/matem-ticas-de-safarrancho-31e5b074eed28092b849efb1e26471bf",
-      "description": "Base matemática esencial para computación de alto nivel.",
-      "status": "available"
-    },
-    {
-      "id": "cs50x",
-      "title": "CS50x: Intro to CS",
-      "category": "trunk",
-      "branch": "foundations",
-      "url": "https://cs50.harvard.edu/x/",
-      "description": "La base algorítmica y de C necesaria para ambas ramas.",
-      "status": "available"
-    },
-    {
-      "id": "intro_alg_6_006",
-      "title": "Introduction to Algorithms (MIT)",
-      "category": "classical_timeless",
-      "branch": "classical",
-      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/",
-      "description": "Estructuras de datos y algoritmos clásicos.",
-      "status": "available"
-    },
-    {
-      "id": "os_eng_6_828",
-      "title": "Operating Systems Engineering (MIT)",
-      "category": "classical_timeless",
-      "branch": "classical",
-      "url": "https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/",
-      "description": "Diseño de kernels en C (JOS).",
-      "status": "available"
-    },
-    {
-      "id": "databases_6_830",
-      "title": "Database Systems (MIT)",
-      "category": "classical_timeless",
-      "branch": "classical",
-      "url": "https://ocw.mit.edu/courses/6-830-database-systems-fall-2010/",
-      "description": "Teoría de bases de datos relacionales y transacciones.",
-      "status": "available"
-    },
-    {
-      "id": "os_rust_vanguard",
-      "title": "Writing an OS in Rust",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://os.phil-opp.com/",
-      "description": "Implementación moderna de sistemas con seguridad de memoria (Memory Safety). Reemplazo crítico de 2026.",
-      "status": "available"
-    },
-    {
-      "id": "modern_db_cmu_15445",
-      "title": "Database Systems (CMU 15-445/645)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://15445.courses.cs.cmu.edu/",
-      "description": "El estándar actual. Cubre almacenamiento en memoria, concurrencia moderna y optimización de queries.",
-      "status": "available"
-    },
-    {
-      "id": "modern_networking_cs144",
-      "title": "Intro to Networking (Stanford CS144)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
+      "id": "stanford_cs144",
+      "title": "Modern Networking (CS144)",
+      "category": "networking",
       "url": "https://cs144.github.io/",
-      "description": "Networking moderno: implementación de TCP desde cero y protocolos de alta velocidad.",
+      "description": "Programación de protocolos TCP/IP desde cero. El estándar de Stanford.",
       "status": "available"
     },
     {
-      "id": "dist_systems_morris_2023",
-      "title": "Distributed Systems (MIT 6.824 - Updated)",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
+      "id": "cmu_15_445",
+      "title": "Database Systems (CMU)",
+      "category": "databases",
+      "url": "https://15445.courses.cs.cmu.edu/",
+      "description": "Arquitectura de motores de bases de datos modernos con Andy Pavlo.",
+      "status": "available"
+    },
+    {
+      "id": "rust_os_phil_opp",
+      "title": "Writing an OS in Rust",
+      "category": "systems",
+      "url": "https://os.phil-opp.com/",
+      "description": "Implementación de sistemas con seguridad de memoria. El futuro del backend.",
+      "status": "available"
+    },
+    {
+      "id": "mit_6_824_modern",
+      "title": "Distributed Systems (MIT 2023+)",
+      "category": "distributed",
       "url": "https://pdos.csail.mit.edu/6.824/",
-      "description": "Versión moderna con enfoque en Raft, Go y consistencia en la nube.",
-      "status": "available"
-    },
-    {
-      "id": "graph_infra_neo4j",
-      "title": "Graph Data Modeling for Infrastructure",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://graphacademy.neo4j.com/",
-      "description": "El puente con la Psicología: Modelado de relaciones complejas y grafos de conocimiento.",
-      "status": "available"
-    },
-    {
-      "id": "infra_ai_vector_db",
-      "title": "Vector Databases & RAG Infra",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://learn.deeplearning.ai/courses/vector-databases-embeddings-applications",
-      "description": "Infraestructura crítica para IA: gestión de embeddings y recuperación de datos a escala.",
+      "description": "Consistencia, Raft, y sistemas distribuidos en Go/Rust.",
       "status": "available"
     },
     {
       "id": "ebpf_observability",
       "title": "Linux Observability with eBPF",
-      "category": "industrial_vanguard",
-      "branch": "vanguard",
-      "url": "https://ebpf.io/applications/",
-      "description": "Vanguardia en backend: monitoreo y seguridad a nivel de Kernel sin modificar el código.",
+      "category": "observability",
+      "url": "https://ebpf.io/",
+      "description": "Instrumentación del kernel para seguridad y rendimiento en tiempo real.",
+      "status": "available"
+    },
+    {
+      "id": "neo4j_graph_engineering",
+      "title": "Graph Data Modeling",
+      "category": "graphs",
+      "url": "https://graphacademy.neo4j.com/",
+      "description": "Modelado relacional complejo. El puente técnico con la psicología.",
       "status": "available"
     }
   ],
   "edges": [
-    {
-      "source": "math_prereqs",
-      "target": "cs50x"
-    },
-    {
-      "source": "cs50x",
-      "target": "intro_alg_6_006"
-    },
-    {
-      "source": "intro_alg_6_006",
-      "target": "os_eng_6_828"
-    },
-    {
-      "source": "os_eng_6_828",
-      "target": "os_rust_vanguard"
-    },
-    {
-      "source": "databases_6_830",
-      "target": "modern_db_cmu_15445"
-    },
-    {
-      "source": "modern_db_cmu_15445",
-      "target": "infra_ai_vector_db"
-    },
-    {
-      "source": "os_rust_vanguard",
-      "target": "ebpf_observability"
-    },
-    {
-      "source": "cs50x",
-      "target": "modern_networking_cs144"
-    },
-    {
-      "source": "modern_networking_cs144",
-      "target": "dist_systems_morris_2023"
-    },
-    {
-      "source": "modern_db_cmu_15445",
-      "target": "graph_infra_neo4j"
-    }
+    { "source": "stanford_cs144", "target": "cmu_15_445" },
+    { "source": "cmu_15_445", "target": "rust_os_phil_opp" },
+    { "source": "rust_os_phil_opp", "target": "mit_6_824_modern" },
+    { "source": "mit_6_824_modern", "target": "ebpf_observability" },
+    { "source": "cmu_15_445", "target": "neo4j_graph_engineering" }
   ]
 }
