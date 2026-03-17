@@ -3,195 +3,91 @@
     {
       "id": "math_prereqs",
       "title": "Prerrequisitos Matemáticas",
-      "category": "prerequisites",
-      "url": "https://www.notion.so/matem-ticas-de-safarrancho-31e5b074eed28092b849efb1e26471bf?source=copy_link",
-      "description": "Álgebra Funcional + Exponenciales/Logaritmos\nGeometría cartesiana + Transformaciones\nTrigonometría mínima esencial\nPrecálculo esencial",
+      "category": "trunk",
+      "branch": "foundations",
+      "url": "https://www.notion.so/matem-ticas-de-safarrancho-31e5b074eed28092b849efb1e26471bf",
+      "description": "Base matemática esencial para computación de alto nivel.",
       "status": "available"
     },
     {
       "id": "cs50x",
-      "title": "CS50x",
-      "category": "cs_intro",
+      "title": "CS50x: The Gateway",
+      "category": "trunk",
+      "branch": "foundations",
       "url": "https://cs50.harvard.edu/x/",
-      "description": "Cubre el 70% del contenido del MIT 6.100L. Si quieres estar 100% seguro, puedes complementar con lecturas 9-12, 17-20 y 21-26 del 6.100L",
+      "description": "Fundamentos de C y Algoritmos. El primer filtro del challenge.",
       "status": "available"
     },
     {
-      "id": "mit_6_100l",
-      "title": "Introduction to CS and Programming",
-      "category": "cs_intro",
-      "url": "https://ocw.mit.edu/courses/6-100l-introduction-to-cs-and-programming-using-python-fall-2022/",
-      "description": "6.100L",
+      "id": "algorithms_mastery",
+      "title": "Algorithms Core (6.006 + 6.046J)",
+      "category": "third_world_challenge",
+      "branch": "classical",
+      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+      "description": "El corazón del MIT. Domina la eficiencia antes de tocar la infraestructura.",
       "status": "available"
-    },
-    {
-      "id": "calc_1",
-      "title": "Single Variable Calculus",
-      "category": "mathematics",
-      "url": "https://ocw.mit.edu/courses/18-01-single-variable-calculus-fall-2006/",
-      "description": "18.01",
-      "status": "available"
-    },
-    {
-      "id": "linear_algebra",
-      "title": "Álgebra Lineal",
-      "category": "mathematics",
-      "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
-      "description": "18.06",
-      "status": "available"
-    },
-    {
-      "id": "multivar_calculus",
-      "title": "Cálculo multivariable",
-      "category": "mathematics",
-      "url": "https://ocw.mit.edu/courses/18-02-multivariable-calculus-fall-2007/",
-      "description": "18.02",
-      "status": "available"
-    },
-    {
-      "id": "prob_applied",
-      "title": "Análisis de sistemas probabilísticos y probabilidad aplicada",
-      "category": "mathematics",
-      "url": "https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/",
-      "description": "6.041SC",
-      "status": "available"
-    },
-    {
-      "id": "ml_dl", 
-      "title": "ML, DL",
-      "category": "mathematics",
-      "url": "",
-      "description": "",
-      "status": "available",
-      "_comentario": "lets see how it works" 
-    },
-    {
-      "id": "security_6_858",
-      "title": "Computer Systems Security",
-      "category": "core_security",
-      "url": "https://ocw.mit.edu/courses/6-858-computer-systems-security-fall-2014/",
-      "description": "6.858",
-      "status": "available"
-    },
-    {
-      "id": "compilers_6_035",
-      "title": "Computer Language Engineering",
-      "category": "core_compilers",
-      "url": "https://ocw-mit-edu.translate.goog/courses/6-035-computer-language-engineering-spring-2010/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc",
-      "description": "6.035",
-      "status": "available"
-    },
-    {
-      "id": "distributed_6_824",
-      "title": "Distributed Systems",
-      "category": "core_distributed",
-      "url": "https://ocw.mit.edu/courses/6-824-distributed-computer-systems-engineering-spring-2006/",
-      "description": "6.824",
-      "status": "available"
-    },
-    {
-      "id": "databases_6_830",
-      "title": "Database Systems",
-      "category": "core_databases",
-      "url": "https://ocw.mit.edu/courses/6-830-database-systems-fall-2010/",
-      "description": "6.830",
-      "status": "available"
-    },
-    {
-      "id": "networking_6_829",
-      "title": "Computer Networks",
-      "category": "core_networking",
-      "url": "https://ocw.mit.edu/courses/6-829-computer-networks-fall-2002/",
-      "description": "6.829",
-      "status": "available",
-      "comentario": "no actualizado"
     },
     {
       "id": "comp_struct_6_004",
       "title": "Computation Structures",
-      "category": "core_systems",
+      "category": "third_world_challenge",
+      "branch": "classical",
       "url": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/",
-      "description": "6.004",
+      "description": "Entender el hardware es vital para optimizar software de sistemas.",
       "status": "available"
     },
     {
-      "id": "os_eng_6_828",
-      "title": "Operating Systems Engineering",
-      "category": "core_systems",
-      "url": "https://ocw.mit.edu/courses/6-828-operating-system-engineering-fall-2012/",
-      "description": "6.828",
+      "id": "os_rust_bridge",
+      "title": "Modern Systems (6.828 Logic + Rust)",
+      "category": "bridge",
+      "branch": "vanguard",
+      "url": "https://os.phil-opp.com/",
+      "description": "Reconciliación: Aplica los principios de 6.005 (Software Construction) y 6.828 (OS) usando Rust.",
       "status": "available"
     },
     {
-      "id": "sys_eng_6_033",
-      "title": "Computer Systems Engineering",
-      "category": "core_systems",
-      "url": "https://ocw.mit.edu/courses/6-033-computer-system-engineering-spring-2018/",
-      "description": "6.033",
+      "id": "networking_cs144",
+      "title": "Modern Networking (Stanford CS144)",
+      "category": "industrial_vanguard",
+      "branch": "vanguard",
+      "url": "https://cs144.github.io/",
+      "description": "Sustituye 6.829. Implementación de TCP en el mundo real de 2026.",
       "status": "available"
     },
     {
-      "id": "intro_alg_6_006",
-      "title": "Introduction to Algorithms",
-      "category": "core_theory",
-      "url": "https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/",
-      "description": "6.006",
+      "id": "db_cmu_advanced",
+      "title": "Advanced Databases (CMU 15-445)",
+      "category": "industrial_vanguard",
+      "branch": "vanguard",
+      "url": "https://15445.courses.cs.cmu.edu/",
+      "description": "El nuevo estándar de oro. Supera al 6.830 clásico en concurrencia y memoria.",
       "status": "available"
     },
     {
-      "id": "design_alg_6_046j",
-      "title": "Design and Analysis of Algorithms",
-      "category": "core_theory",
-      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
-      "description": "6.046J",
+      "id": "dist_systems_2023",
+      "title": "Distributed Systems (MIT 6.824)",
+      "category": "industrial_vanguard",
+      "branch": "vanguard",
+      "url": "https://pdos.csail.mit.edu/6.824/",
+      "description": "Final Boss. Cubre la deuda de sistemas operativos y redes de forma masiva.",
       "status": "available"
     },
     {
-      "id": "logic1_24_241",
-      "title": "Logic I",
-      "category": "core_theory",
-      "url": "https://ocw.mit.edu/courses/24-241-logic-i-fall-2009/",
-      "description": "24.241",
+      "id": "logic_graph_bridge",
+      "title": "Applied Logics & Graph Modeling",
+      "category": "bridge",
+      "branch": "psych_tech",
+      "url": "https://graphacademy.neo4j.com/",
+      "description": "Une Logic I/II con Neo4j. Modelado de arquetipos y sistemas complejos.",
       "status": "available"
     },
     {
-      "id": "logic2_24_242",
-      "title": "Logic II",
-      "category": "core_theory",
-      "url": "https://ocw.mit.edu/courses/24-242-logic-ii-spring-2004/",
-      "description": "24.242",
-      "status": "available"
-    },
-    {
-      "id": "software_const_6_005",
-      "title": "Elements of Software Construction",
-      "category": "core_programming",
-      "url": "https://ocw.mit.edu/courses/6-005-software-construction-spring-2016/",
-      "description": "6.005",
-      "status": "available"
-    },
-    {
-      "id": "missing_semester",
-      "title": "The Missing Semester",
-      "category": "cs_tools",
-      "url": "https://missing.csail.mit.edu/",
-      "description": "Published in 2026",
-      "status": "available"
-    },
-    {
-      "id": "fullstack_open",
-      "title": "FullStack Open",
-      "category": "projects",
-      "url": "",
-      "description": "",
-      "status": "available"
-    },
-    {
-      "id": "odin_project",
-      "title": "The Odin Project",
-      "category": "projects",
-      "url": "",
-      "description": "",
+      "id": "infra_ai_vector_db",
+      "title": "Vector Databases (RAG Infra)",
+      "category": "industrial_vanguard",
+      "branch": "vanguard",
+      "url": "https://learn.deeplearning.ai/courses/vector-databases-embeddings-applications",
+      "description": "Infraestructura para IA. Gestión de datos a escala 2026.",
       "status": "available"
     }
   ],
@@ -201,92 +97,36 @@
       "target": "cs50x"
     },
     {
-      "source": "math_prereqs",
-      "target": "mit_6_100l"
-    },
-    {
       "source": "cs50x",
-      "target": "calc_1"
+      "target": "algorithms_mastery"
     },
     {
-      "source": "calc_1",
-      "target": "linear_algebra"
-    },
-    {
-      "source": "linear_algebra",
-      "target": "multivar_calculus"
-    },
-    {
-      "source": "multivar_calculus",
-      "target": "prob_applied"
-    },
-    {
-      "source": "prob_applied",
-      "target": "ml_dl"
-    },
-    {
-      "source": "cs50x",
-      "target": "missing_semester"
-    },
-    {
-      "source": "missing_semester",
-      "target": "software_const_6_005"
-    },
-    {
-      "source": "software_const_6_005",
-      "target": "intro_alg_6_006"
-    },
-    {
-      "source": "intro_alg_6_006",
-      "target": "design_alg_6_046j"
-    },
-    {
-      "source": "design_alg_6_046j",
-      "target": "logic1_24_241"
-    },
-    {
-      "source": "logic1_24_241",
-      "target": "logic2_24_242"
-    },
-    {
-      "source": "logic2_24_242",
+      "source": "algorithms_mastery",
       "target": "comp_struct_6_004"
     },
     {
       "source": "comp_struct_6_004",
-      "target": "os_eng_6_828"
+      "target": "os_rust_bridge"
     },
     {
-      "source": "os_eng_6_828",
-      "target": "sys_eng_6_033"
+      "source": "os_rust_bridge",
+      "target": "networking_cs144"
     },
     {
-      "source": "sys_eng_6_033",
-      "target": "networking_6_829"
+      "source": "networking_cs144",
+      "target": "db_cmu_advanced"
     },
     {
-      "source": "networking_6_829",
-      "target": "databases_6_830"
+      "source": "db_cmu_advanced",
+      "target": "dist_systems_2023"
     },
     {
-      "source": "databases_6_830",
-      "target": "distributed_6_824"
+      "source": "db_cmu_advanced",
+      "target": "logic_graph_bridge"
     },
     {
-      "source": "distributed_6_824",
-      "target": "compilers_6_035"
-    },
-    {
-      "source": "compilers_6_035",
-      "target": "security_6_858"
-    },
-    {
-      "source": "security_6_858",
-      "target": "fullstack_open"
-    },
-    {
-      "source": "security_6_858",
-      "target": "odin_project"
+      "source": "db_cmu_advanced",
+      "target": "infra_ai_vector_db"
     }
   ]
 }
