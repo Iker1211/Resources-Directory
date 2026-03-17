@@ -115,7 +115,7 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      <img src={logo} alt="Logo" style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10, width: '100px', height: 'auto' }} />
+      <img src={logo} alt="Logo" style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10, width: '400px', height: 'auto' }} />
       <ReactFlow
         nodes={nodes}
         edges={edges}
