@@ -8,6 +8,15 @@
       "description": "Fundamentos de C, memoria manual y algoritmos básicos.",
       "status": "available"
     },
+        {
+      "id": "missing-semester",
+      "title": "The Missing Semester of Your CS Education",
+      "category": "foundation",
+      "url": "https://missing.csail.mit.edu/",
+      "description": "bruh",
+      "status": "available",
+      "special": true
+    },
     {
       "id": "mit_6_1200j",
       "title": "Mathematics for Computer Science",
@@ -66,7 +75,8 @@
     }
   ],
   "edges": [
-    { "source": "cs50x", "target": "mit_6_1200j" },
+    { "source": "cs50x", "target": "missing-semester" },
+    { "source": "missing-semester", "target": "mit_6_1200j" },
     { "source": "mit_6_1200j", "target": "mit_6_006" },
     { "source": "mit_6_006", "target": "mit_6_046j" },
     { "source": "mit_6_046j", "target": "mit_6_004" },

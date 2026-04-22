@@ -94,6 +94,23 @@ body {
 .cat-core_theory, .cat-core_compilers, .cat-core_programming { border-left: 4px solid #8b5cf6; } /* indigo */
 .cat-projects { border-left: 4px solid #ec4899; } /* pink */
 
+/* Special Course Styling */
+.course-node.special {
+  background: #1e293b;
+  border-color: #facc15;
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+}
+
+.course-node.special h3 {
+  color: #facc15;
+}
+
+.course-node.special .course-category {
+  color: #facc15;
+}
+.cat-missing_semester { border-left: 4px solid #ef4444; } /* red */
+.cat-missing_semester h3 { color: #fca5a5; }
+
 .sidebar-panel {
   position: absolute;
   right: 0;

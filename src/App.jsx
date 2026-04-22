@@ -18,10 +18,10 @@ import dragon from './assets/dragon.gif';
 
 // --- Custom Node Component ---
 const CourseNode = ({ data }) => {
-  const { title, category, status } = data;
+  const { title, category, status, special } = data;
 
   return (
-    <div className={`course-node status-${status} cat-${category}`}>
+    <div className={`course-node status-${status} cat-${category} ${special ? 'special' : ''}`}>
       <Handle type="target" position={Position.Left} style={{ background: '#555' }} />
       <span className="course-category">{category.replace('_', ' ')}</span>
       <h3>
