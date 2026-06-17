@@ -1,7 +1,4 @@
-:root {
-  --font-ubuntu: "Ubuntu", sans-serif;
-  --bg-color: #0f172a; /* simple dark mode bg fallback */
-}
+@import "tailwindcss";
 
 * {
   box-sizing: border-box;
@@ -9,18 +6,51 @@
   padding: 0;
 }
 
+:root {
+  --font-ubuntu: "Ubuntu", sans-serif;
+  --bg-color: #0f172a;
+  --background: #fdf9f3;
+  --on-surface: #1c1c18;
+  --primary: #5b3cdd;
+}
+
+/* Default body for CurriculumFlow */
 body {
-  font-family: var(--font-ubuntu);
-  background-color: var(--bg-color);
-  background-image: url("/src/assets/background-images/background.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-  color: #fff;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
 }
 
+/* Neo-Brutalist Custom Styles */
+.shadow-neobrutal {
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.shadow-neobrutal-hover:hover {
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 1);
+  transform: translate(6px, 6px);
+  transition: all 100ms ease-in-out;
+}
+
+.glow-ambient {
+  box-shadow: 0 0 24px 0 rgba(91, 60, 221, 0.15);
+}
+
+.border-thick {
+  border-width: 3px;
+  border-color: var(--on-surface);
+}
+
+/* Foundation Route Styles */
+body.foundation-active {
+  font-family: "Newsreader", serif;
+  background-color: #fdf9f3 !important;
+  background-image: none !important;
+  color: #1c1c18 !important;
+  height: auto !important;
+  width: 100% !important;
+  overflow: auto !important;
+}
 #root {
   width: 100vw;
   height: 100vh;
