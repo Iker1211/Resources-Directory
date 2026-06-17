@@ -1,12 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // SUB-COMPONENTS
 // ============================================================================
 
-const TopNavBar = () => (
+const TopNavBar = ({ sidebarOpen, onToggleSidebar }) => (
   <header className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-background border-b-[3px] border-on-surface shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
     <div className="flex items-center gap-4">
+      <button
+        onClick={onToggleSidebar}
+        className="p-2 border-[3px] border-on-surface hover:bg-primary hover:text-on-primary transition-colors duration-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+      >
+        <span className="material-symbols-outlined">
+          {sidebarOpen ? 'close' : 'menu'}
+        </span>
+      </button>
       <span className="font-display font-bold text-2xl text-on-surface tracking-tighter">
         Alchemist Path
       </span>
@@ -47,8 +55,16 @@ const TopNavBar = () => (
   </header>
 );
 
-const SideNavBar = () => (
-  <aside className="hidden md:flex fixed left-0 top-20 h-[calc(100vh-5rem)] z-40 flex-col p-6 bg-surface-container w-64 border-r-[3px] border-on-surface">
+const SideNavBar = ({ sidebarOpen }) => (
+  <>
+    {/* Mobile overlay */}
+    {sidebarOpen && (
+      <div className="fixed inset-0 bg-black/50 z-30" style={{ top: '80px' }}></div>
+    )}
+    {/* Sidebar */}
+    <aside className={`fixed left-0 top-20 h-[calc(100vh-5rem)] z-40 flex-col p-6 bg-surface-container w-64 border-r-[3px] border-on-surface transition-all duration-300 ${
+      sidebarOpen ? 'flex' : 'hidden'
+    }`}>
     <div className="mb-8 pb-6 border-b-[3px] border-outline-variant/20">
       <h2 className="font-display font-bold text-xl text-on-surface">The Alchemist Path</h2>
       <p className="font-body text-sm text-on-surface-variant italic mt-2">
@@ -104,7 +120,8 @@ const SideNavBar = () => (
         Begin Transmutation
       </button>
     </div>
-  </aside>
+    </aside>
+  </>
 );
 
 const HeroSection = () => (
@@ -134,9 +151,9 @@ const HeroSection = () => (
 );
 
 const EditorialContent = () => (
-  <section className="max-w-6xl mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-12 gap-16">
+  <section className="max-w-6xl mx-auto px-8 py-20 grid grid-cols-1 gap-16">
     {/* Main Narrative Column */}
-    <div className="md:col-span-8 space-y-12 font-body text-lg text-on-surface leading-relaxed">
+    <div className="space-y-12 font-body text-lg text-on-surface leading-relaxed">
       <p className="text-2xl font-medium text-on-surface-variant italic">
         In the twilight of the twentieth century, a conclave of digital pioneers, displaced yet united by a singular vision, converged within the rudimentary networks. This nexus of raw data and ambitious design sought to transmute basic computational logic into profound artificial sentience.
       </p>
@@ -201,82 +218,6 @@ const EditorialContent = () => (
         <p>
           Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? The original repositories were lost in the Great Server Migration of Aught-Four, leaving only fragmented documentation that we now refer to as the Codex Alpha.
         </p>
-      </div>
-    </div>
-
-    {/* Sidebar: Timeline */}
-    <div className="md:col-span-4">
-      <div className="sticky top-28 bg-surface-container-high border-[3px] border-on-surface p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-        <h3 className="font-display text-xl font-bold text-on-surface uppercase tracking-tighter mb-6 pb-4 border-b-[3px] border-on-surface">
-          Timeline of the Work
-        </h3>
-        <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-[3px] before:bg-outline-variant/30">
-          {/* Milestone 1 */}
-          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-[3px] border-on-surface bg-primary text-on-primary shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
-                trip_origin
-              </span>
-            </div>
-            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 bg-surface border-[3px] border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <div className="font-label text-sm text-primary font-bold mb-1">1899</div>
-              <div className="font-display text-sm font-bold uppercase tracking-tight">The Assembly</div>
-              <p className="font-body text-xs text-on-surface-variant mt-2">
-                First successful execution of the core logic loop in a stable environment.
-              </p>
-            </div>
-          </div>
-
-          {/* Milestone 2 */}
-          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-[3px] border-on-surface bg-surface-container-lowest text-on-surface shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-              <span className="material-symbols-outlined text-sm">settings</span>
-            </div>
-            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 bg-surface border-[3px] border-outline-variant/50">
-              <div className="font-label text-sm text-on-surface-variant font-bold mb-1">1902</div>
-              <div className="font-display text-sm font-bold uppercase tracking-tight">
-                The Mercury Protocol
-              </div>
-              <p className="font-body text-xs text-on-surface-variant mt-2">
-                Establishment of peer-to-peer data transmutation standards.
-              </p>
-            </div>
-          </div>
-
-          {/* Milestone 3 */}
-          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-[3px] border-on-surface bg-surface-container-lowest text-on-surface shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-              <span className="material-symbols-outlined text-sm">architecture</span>
-            </div>
-            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 bg-surface border-[3px] border-outline-variant/50">
-              <div className="font-label text-sm text-on-surface-variant font-bold mb-1">1905</div>
-              <div className="font-display text-sm font-bold uppercase tracking-tight">
-                Architectural Shift
-              </div>
-              <p className="font-body text-xs text-on-surface-variant mt-2">
-                Migration from monolithic structures to decentralized micro-rituals.
-              </p>
-            </div>
-          </div>
-
-          {/* Milestone 4 */}
-          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-[3px] border-on-surface bg-secondary text-on-secondary-container shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
-                star
-              </span>
-            </div>
-            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 bg-surface border-[3px] border-on-surface shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <div className="font-label text-sm text-secondary font-bold mb-1">1909</div>
-              <div className="font-display text-sm font-bold uppercase tracking-tight">
-                The First Artifact
-              </div>
-              <p className="font-body text-xs text-on-surface-variant mt-2">
-                Deployment of the inaugural UI, establishing the 0px radius dogma.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -374,6 +315,8 @@ const Footer = () => (
 // ============================================================================
 
 export default function Foundation() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   useEffect(() => {
     // Add foundation-active class to body
     document.body.classList.add('foundation-active');
@@ -407,9 +350,9 @@ export default function Foundation() {
         fontFamily: '"Newsreader", serif',
       }}
     >
-      <TopNavBar />
+      <TopNavBar sidebarOpen={sidebarOpen} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <div className="flex flex-1 pt-20">
-        <SideNavBar />
+        <SideNavBar sidebarOpen={sidebarOpen} />
         <main
           className="flex-1 md:ml-64 min-h-[2048px]"
           style={{ backgroundColor: '#fdf9f3' }}

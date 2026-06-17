@@ -41,15 +41,17 @@ body {
   border-color: var(--on-surface);
 }
 
-/* Foundation Route Styles */
+/* Foundation Route Styles with !important to override everything */
 body.foundation-active {
-  font-family: "Newsreader", serif;
+  font-family: "Newsreader", serif !important;
   background-color: #fdf9f3 !important;
   background-image: none !important;
   color: #1c1c18 !important;
   height: auto !important;
   width: 100% !important;
   overflow: auto !important;
+  background-attachment: unset !important;
+  background-size: unset !important;
 }
 #root {
   width: 100vw;
