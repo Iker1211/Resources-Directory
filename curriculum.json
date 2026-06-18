@@ -72,6 +72,14 @@
       "url": "https://ocw.mit.edu/courses/6-858-computer-systems-security-fall-2014/",
       "description": "Aislamiento, criptografía aplicada y seguridad en redes.",
       "status": "available"
+    },
+    {
+      "id": "adhd",
+      "title": "ADHD",
+      "category": "ADHD",
+      "url": "https://youtu.be/SzJ46YA_RaA?si=0dcZaFv1-cZFQHko",
+      "description": "https://youtu.be/SzJ46YA_RaA?si=0dcZaFv1-cZFQHko, https://youtu.be/CxGSnA-RTsA?si=g1gxF59ZoGFUJU-N, https://youtu.be/ML3q7Ok4hJg?si=TZPchmFwEOCOOfCy",
+      "status": "available"
     }
   ],
   "edges": [
