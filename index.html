@@ -3,109 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diorama Medieval Coherente</title>
+    <title>Diorama Jerárquico</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #1a252c;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #ecf0f1;
-        }
-
-        /* === PANTALLA DE INICIO === */
-        #landing {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1e272c 0%, #070b0d 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            transition: opacity 1s ease-in-out;
-        }
-
-        #landing.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .landing-content {
-            max-width: 600px;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .landing-content h1 {
-            font-size: 2.8rem;
-            font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            color: #f1c40f;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .landing-content p {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: #a6b1b9;
-            margin-bottom: 40px;
-        }
-
-        #start-btn {
-            padding: 15px 45px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #fff;
-            background-color: #27ae60; /* Verde elegante de éxito */
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        #start-btn:hover {
-            background-color: #219653;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6);
-        }
-
-        /* === INTERFAZ DEL VISOR === */
-        #info-overlay {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            text-align: center;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 1s ease 1s;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.9);
-            z-index: 50;
-        }
-        #info-overlay h2 {
-            margin: 0;
-            font-weight: 400;
-            color: #f39c12;
-        }
+        body { margin: 0; overflow: hidden; background-color: #1a252c; font-family: 'Segoe UI', sans-serif; color: #ecf0f1; }
+        #landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1e272c 0%, #070b0d 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 1s ease-in-out; }
+        #landing.fade-out { opacity: 0; pointer-events: none; }
+        .landing-content { max-width: 600px; text-align: center; padding: 0 20px; }
+        .landing-content h1 { font-size: 2.8rem; font-weight: 300; letter-spacing: 3px; margin-bottom: 20px; color: #2ecc71; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .landing-content p { font-size: 1.05rem; line-height: 1.6; color: #a6b1b9; margin-bottom: 40px; }
+        #start-btn { padding: 15px 45px; font-size: 1.1rem; font-weight: bold; color: #fff; background-color: #27ae60; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4); transition: all 0.3s ease; }
+        #start-btn:hover { background-color: #219653; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6); }
+        #info-overlay { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; opacity: 0; transition: opacity 1s ease 1s; text-shadow: 0 2px 5px rgba(0,0,0,0.9); z-index: 50; }
+        #info-overlay h2 { margin: 0; font-weight: 400; color: #2ecc71; }
     </style>
 </head>
 <body>
 
     <div id="landing">
         <div class="landing-content">
-            <h1>Mundo Medieval 3D</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <button id="start-btn">Generar Diorama</button>
+            <h1>El Reino del Castillo Verde</h1>
+            <p>Descubre este diorama estructurado por capas. Hexágonos base, decoración natural, construcciones humanas y nubes flotantes conforman este hermoso paisaje interactivo.</p>
+            <button id="start-btn">Cargar Reino</button>
         </div>
     </div>
 
     <div id="info-overlay">
-        <h2>Diorama Medieval Conectado</h2>
+        <h2>Jerarquía de Capas Activa</h2>
     </div>
 
     <script type="importmap">
@@ -122,27 +45,19 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        // Elementos de la interfaz
-        const startBtn = document.getElementById('start-btn');
-        const landingDiv = document.getElementById('landing');
-        const infoOverlay = document.getElementById('info-overlay');
-
-        startBtn.addEventListener('click', () => {
-            startBtn.textContent = "Cargando componentes...";
-            startBtn.style.pointerEvents = "none";
+        document.getElementById('start-btn').addEventListener('click', (e) => {
+            e.target.textContent = "Cargando componentes...";
+            e.target.style.pointerEvents = "none";
             initDiorama();
         });
 
         const initDiorama = () => {
-            // 1. Crear Escena con Niebla de ambiente
             const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x1a252c, 0.04);
+            scene.fog = new THREE.FogExp2(0x1a252c, 0.03);
 
-            // 2. Cámara colocada en un ángulo isométrico ideal para dioramas
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 8, 11); 
+            camera.position.set(0, 10, 14); // Cámara más alta para ver las montañas y nubes
 
-            // 3. Renderizador eficiente
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -150,29 +65,28 @@
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             document.body.appendChild(renderer.domElement);
 
-            // 4. Controles de órbita suaves
             const controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
-            controls.maxPolarAngle = Math.PI / 2.1; // Evita que la cámara se mueva por debajo del suelo
+            controls.maxPolarAngle = Math.PI / 2.1;
 
-            // 5. Luces equilibradas para resaltar los volúmenes
             const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
             scene.add(ambientLight);
 
             const sunLight = new THREE.DirectionalLight(0xfff4e0, 2.5);
-            sunLight.position.set(6, 12, 8);
+            sunLight.position.set(8, 15, 10);
             scene.add(sunLight);
 
-            // 6. Lista de los 8 archivos únicos a precargar en memoria
+            // Lista actualizada de assets a precargar
             const uniqueFiles = [
-                'hex_grass.gltf', 'hex_river_A.gltf',
-                'building_bridge_A.gltf', 'building_bridge_B.gltf',
-                'building_grain.gltf', 'building_dirt.gltf',
-                'building_destroyed.gltf', 'coin_stack_large.gltf'
+                'hex_grass.gltf', 'hex_river_A.gltf', 'hex_road_A.gltf', // Nivel 1: Tiles
+                'mountain_B_grass_trees.gltf', // Nivel 2: Naturaleza
+                'building_bridge_A.gltf', 'building_grain.gltf', 'building_destroyed.gltf', 
+                'building_castle_green.gltf', 'coin_stack_large.gltf', // Nivel 3: Edificios
+                'cloud_big.gltf' // Extra: Cielo
             ];
 
-            const cache = new Map(); // Aquí guardaremos los moldes originales
+            const cache = new Map();
             const loader = new GLTFLoader();
             let loadedFilesCount = 0;
 
@@ -180,8 +94,6 @@
                 loader.load(fileName, (gltf) => {
                     cache.set(fileName, gltf.scene);
                     loadedFilesCount++;
-
-                    // Una vez que todos los archivos únicos están en memoria, armamos el mundo
                     if (loadedFilesCount === uniqueFiles.length) {
                         buildWorld(scene, cache);
                         revelarInterfaz();
@@ -189,63 +101,72 @@
                 }, undefined, (err) => console.error("Error al precargar:", fileName, err));
             });
 
-            // 7. Función interna para construir el mapa con lógica de capas
+            // --- LÓGICA DE JERARQUÍA Y CONSTRUCCIÓN ---
             function buildWorld(targetScene, templates) {
                 
-                // Definimos el mapa de suelos (Capa inferior)
-                // Formamos un río central en X: 0, fluyendo en el eje Z. Pastos a los lados (X: -2 y X: 2)
-                const floorLayout = [
-                    { key: 'hex_river_A.gltf', x: 0,  z: -1.7 },
-                    { key: 'hex_river_A.gltf', x: 0,  z: 1.7 },
-                    
-                    { key: 'hex_grass.gltf',   x: -2, z: -1.7 },
-                    { key: 'hex_grass.gltf',   x: 2,  z: -1.7 },
-                    { key: 'hex_grass.gltf',   x: -2, z: 1.7 },
-                    { key: 'hex_grass.gltf',   x: 2,  z: 1.7 }
+                // MAPA DE CELDAS: Estructura de capas
+                const mapData = [
+                    // Fila Posterior (Montañas y Castillo)
+                    { x: -2, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf' },
+                    { x:  0, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf', building: 'building_castle_green.gltf', buildingY: 0.8 }, // ¡Jerarquía Completa! Elevamos el castillo para que suba a la montaña
+                    { x:  2, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf' },
+
+                    // Fila Media-Atrás (Caminos y ruinas)
+                    { x: -2, z: -1.7, tile: 'hex_grass.gltf', building: 'building_destroyed.gltf' },
+                    { x:  0, z: -1.7, tile: 'hex_road_A.gltf' }, // Un camino hacia el castillo
+                    { x:  2, z: -1.7, tile: 'hex_grass.gltf', building: 'building_grain.gltf' },
+
+                    // Fila Central (El Río)
+                    { x: -2, z: 0, tile: 'hex_river_A.gltf' },
+                    { x:  0, z: 0, tile: 'hex_river_A.gltf', building: 'building_bridge_A.gltf' }, // Puente sobre el río
+                    { x:  2, z: 0, tile: 'hex_river_A.gltf' },
+
+                    // Fila Delantera (Inicio del camino)
+                    { x: -2, z: 1.7, tile: 'hex_grass.gltf' },
+                    { x:  0, z: 1.7, tile: 'hex_road_A.gltf' },
+                    { x:  2, z: 1.7, tile: 'hex_grass.gltf', building: 'coin_stack_large.gltf' }
                 ];
 
-                // Definimos los objetos que van encima (Capa superior)
-                // Se ubican exactamente en las mismas coordenadas X y Z que los suelos
-                const propLayout = [
-                    { key: 'building_bridge_A.gltf', x: 0,  z: -1.7 }, // En el río de atrás
-                    { key: 'building_bridge_B.gltf', x: 0,  z: 1.7 },  // En el río de adelante
-                    
-                    { key: 'building_grain.gltf',     x: -2, z: -1.7 }, // En el pasto izquierdo atrás
-                    { key: 'building_dirt.gltf',      x: 2,  z: -1.7 }, // En el pasto derecho atrás
-                    { key: 'building_destroyed.gltf', x: -2, z: 1.7 },  // En el pasto izquierdo adelante
-                    { key: 'coin_stack_large.gltf',   x: 2,  z: 1.7 }   // En el pasto derecho adelante
-                ];
-
-                // Posicionamos los suelos clonándolos
-                floorLayout.forEach(item => {
-                    const instance = templates.get(item.key).clone();
-                    instance.position.set(item.x, 0, item.z);
+                // Función auxiliar para colocar clones en la escena
+                const placeItem = (key, x, y, z) => {
+                    if(!key) return; // Si no hay modelo, ignoramos
+                    const instance = templates.get(key).clone();
+                    instance.position.set(x, y, z);
                     targetScene.add(instance);
+                };
+
+                // Iteramos por nuestra estructura de jerarquías
+                mapData.forEach(cell => {
+                    // 1. Nivel Base (Tiles siempre en Y=0)
+                    placeItem(cell.tile, cell.x, 0, cell.z);
+
+                    // 2. Nivel Naturaleza (Decoración sobre los tiles)
+                    placeItem(cell.deco, cell.x, 0, cell.z);
+
+                    // 3. Nivel Construcción (Edificios. Si tienen "buildingY", los elevamos. Si no, en Y=0)
+                    const bY = cell.buildingY !== undefined ? cell.buildingY : 0;
+                    placeItem(cell.building, cell.x, bY, cell.z);
                 });
 
-                // Posicionamos los objetos encima de manera exacta (Y: 0)
-                propLayout.forEach(item => {
-                    const instance = templates.get(item.key).clone();
-                    instance.position.set(item.x, 0, item.z);
-                    targetScene.add(instance);
-                });
+                // NUBES: Capa especial flotante (Eje Y alto)
+                placeItem('cloud_big.gltf', -3.5, 4.0, -1.0);
+                placeItem('cloud_big.gltf',  3.5, 4.5, -2.5);
+                placeItem('cloud_big.gltf', -1.0, 5.0,  3.0);
             }
 
-            // Transición elegante
             function revelarInterfaz() {
-                landingDiv.classList.add('fade-out');
-                infoOverlay.style.opacity = "1";
-                setTimeout(() => landingDiv.remove(), 1000);
+                const landing = document.getElementById('landing');
+                landing.classList.add('fade-out');
+                document.getElementById('info-overlay').style.opacity = "1";
+                setTimeout(() => landing.remove(), 1000);
             }
 
-            // Ajuste de pantalla reactivo
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
 
-            // Bucle de renderizado continuo
             const animate = () => {
                 requestAnimationFrame(animate);
                 controls.update();
