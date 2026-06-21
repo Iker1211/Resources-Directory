@@ -3,32 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diorama Jerárquico</title>
+    <title>Reino Medieval Interactivo</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #1a252c; font-family: 'Segoe UI', sans-serif; color: #ecf0f1; }
-        #landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1e272c 0%, #070b0d 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 1s ease-in-out; }
+        body { margin: 0; overflow: hidden; background-color: #1a252c; font-family: 'Segoe UI', Tahoma, sans-serif; color: #ecf0f1; user-select: none; }
+        
+        /* === PANTALLA DE INICIO === */
+        #landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1e272c 0%, #070b0d 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.8s ease; }
         #landing.fade-out { opacity: 0; pointer-events: none; }
         .landing-content { max-width: 600px; text-align: center; padding: 0 20px; }
-        .landing-content h1 { font-size: 2.8rem; font-weight: 300; letter-spacing: 3px; margin-bottom: 20px; color: #2ecc71; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .landing-content p { font-size: 1.05rem; line-height: 1.6; color: #a6b1b9; margin-bottom: 40px; }
-        #start-btn { padding: 15px 45px; font-size: 1.1rem; font-weight: bold; color: #fff; background-color: #27ae60; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4); transition: all 0.3s ease; }
-        #start-btn:hover { background-color: #219653; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6); }
-        #info-overlay { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; opacity: 0; transition: opacity 1s ease 1s; text-shadow: 0 2px 5px rgba(0,0,0,0.9); z-index: 50; }
-        #info-overlay h2 { margin: 0; font-weight: 400; color: #2ecc71; }
+        .landing-content h1 { font-size: 2.8rem; font-weight: 300; color: #f1c40f; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        #start-btn { padding: 15px 45px; font-size: 1.1rem; font-weight: bold; color: #fff; background-color: #27ae60; border: none; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
+        #start-btn:hover { background-color: #219653; transform: translateY(-2px); }
+
+        /* === INTERFAZ GENERAL === */
+        #info-overlay { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; opacity: 0; transition: opacity 1s ease 1s; text-shadow: 0 2px 5px rgba(0,0,0,0.9); z-index: 10; }
+        #info-overlay h2 { margin: 0; font-weight: 400; color: #f1c40f; }
+        #info-overlay p { margin: 5px 0 0 0; color: #bdc3c7; font-size: 0.9rem; }
+
+        /* === MODAL HOJA MEDIEVAL === */
+        #modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Fondo oscurecido */
+            backdrop-filter: blur(3px); /* Ligero desenfoque elegante */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        /* Estado activo del modal */
+        #modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* La tarjeta de Pergamino */
+        #parchment-sheet {
+            background-color: #f4eccf; /* Color pergamino antiguo */
+            color: #2c3e50;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            border: 8px double #8e44ad; /* Borde doble estilo manuscrito antiguo */
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            transform: scale(0.7);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote pop-in */
+        }
+        #modal-overlay.active #parchment-sheet {
+            transform: scale(1);
+        }
+
+        #close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: color 0.2s;
+        }
+        #close-btn:hover { color: #c0392b; }
+
+        #parchment-title { font-family: 'Georgia', serif; font-size: 1.8rem; margin-top: 0; border-bottom: 2px solid #bdc3c7; padding-bottom: 10px; color: #7f8c8d; }
+        #parchment-desc { font-style: italic; line-height: 1.5; margin: 15px 0; color: #34495e; }
+
+        /* Tabla de estadísticas de rol medieval */
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.95rem; }
+        .stats-table tr { border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .stats-table td { padding: 8px 4px; }
+        .stats-table td.stat-val { font-weight: bold; text-align: right; color: #8e44ad; }
     </style>
 </head>
 <body>
 
     <div id="landing">
         <div class="landing-content">
-            <h1>El Reino del Castillo Verde</h1>
-            <p>Descubre este diorama estructurado por capas. Hexágonos base, decoración natural, construcciones humanas y nubes flotantes conforman este hermoso paisaje interactivo.</p>
-            <button id="start-btn">Cargar Reino</button>
+            <h1>El Reino Interactivo</h1>
+            <p>Explora el mapa en tres dimensiones. Haz clic sobre cualquier edificación o elemento natural para inspeccionar sus registros y estadísticas de reino.</p>
+            <button id="start-btn">Entrar al Reino</button>
         </div>
     </div>
 
     <div id="info-overlay">
-        <h2>Jerarquía de Capas Activa</h2>
+        <h2>Reino de Capas Interactivo</h2>
+        <p>Usa el ratón para orbitar. Haz clic en un objeto para inspeccionarlo.</p>
+    </div>
+
+    <div id="modal-overlay" id="modal-bg">
+        <div id="parchment-sheet">
+            <span id="close-btn">&times;</span>
+            <h3 id="parchment-title">Nombre del Asset</h3>
+            <p id="parchment-desc">Descripción detallada antigua...</p>
+            
+            <table class="stats-table">
+                <tbody id="parchment-stats">
+                    </tbody>
+            </table>
+        </div>
     </div>
 
     <script type="importmap">
@@ -45,45 +125,72 @@
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        document.getElementById('start-btn').addEventListener('click', (e) => {
-            e.target.textContent = "Cargando componentes...";
-            e.target.style.pointerEvents = "none";
+        // Base de datos medieval para los contenidos del pergamino
+        const assetDatabase = {
+            'building_castle_green.gltf': { title: 'Castillo Esmeralda', desc: 'Gran bastión central gobernado por el alto consejo. Defendido por muros fortificados e imponentes torreones mágicos.', stats: { 'Defensa': '98/100', 'Guarnición': '450 Soldados', 'Oro por Minuto': '+150 💰' } },
+            'building_grain.gltf': { title: 'Molino de Grano', desc: 'Estructura económica clave. Procesa el trigo cosechado de los campos aledaños para asegurar el alimento del invierno.', stats: { 'Producción': '80/100', 'Trabajadores': '12 Aldeanos', 'Sustento': '+200 Alimento 🌾' } },
+            'building_dirt.gltf': { title: 'Casa de Barro', desc: 'Hogar humilde de los siervos y artesanos del reino. Aunque sencilla, mantiene el motor de la economía activo.', stats: { 'Capacidad': '4 Habitantes', 'Felicidad': '75%', 'Impuestos': '15 Monedas 🪙' } },
+            'building_destroyed.gltf': { title: 'Torre Derruida', desc: 'Vestigios de la gran guerra del siglo pasado. Los historiadores dicen que albergaba secretos que no debieron ser descubiertos.', stats: { 'Peligro': 'Alta 💀', 'Reliquias': '1 Oculta 📜', 'Explorado': '12%' } },
+            'building_bridge_A.gltf': { title: 'Puente Imperial de Piedra', desc: 'Arco arquitectónico macizo que permite el cruce comercial seguro de las tropas imperiales sobre las bravas aguas.', stats: { 'Integridad': '100%', 'Peaje Comercial': '45 Monedas', 'Capacidad Peso': 'Excelente 🐎' } },
+            'coin_stack_large.gltf': { title: 'Tesoro de la Corona', desc: 'Montones de relucientes monedas de oro recuperadas de las mazmorras subterráneas profundas.', stats: { 'Valor Total': '15,000 Monedas', 'Pureza': '24 Quilates ✨', 'Riesgo Saqueo': 'Crítico ⚔️' } },
+            'mountain_B_grass_trees.gltf': { title: 'Montañas Boreales', desc: 'Picos rocosos repletos de vegetación salvaje y densos árboles. Actúan como una muralla de contención natural.', stats: { 'Madera Disponible': 'Abundante 🌲', 'Fauna': 'Lobos y Osos 🐻', 'Minerales': 'Hierro Oculto' } },
+            'hex_road_A.gltf': { title: 'Camino Real', desc: 'Sendero de piedra y tierra estabilizada que conecta los distritos comerciales con la ciudadela principal.', stats: { 'Velocidad de Marcha': '+25% 👟', 'Patrullas': 'Frecuentes', 'Estado': 'Despejado' } },
+            'hex_river_A.gltf': { title: 'Río de la Vida', desc: 'Canal natural de agua dulce que cruza el feudo. Provee pesca constante y fertilidad extrema a la tierra.', stats: { 'Caudal': 'Estable', 'Recurso Agua': 'Invalorable 💧', 'Navegable': 'Solo barcas pequeñas' } },
+            'hex_grass.gltf': { title: 'Parcela de Pasto', desc: 'Tierras fértiles listas para el pastoreo de ganado o expansión de nuevas fortificaciones medievales.', stats: { 'Fertilidad': 'Máxima Green', 'Espacios Libres': '1 Hexágono', 'Tipo Suelo': 'Pradera' } }
+        };
+
+        const startBtn = document.getElementById('start-btn');
+        const landingDiv = document.getElementById('landing');
+        const infoOverlay = document.getElementById('info-overlay');
+        const modalOverlay = document.getElementById('modal-overlay');
+
+        // Variables de interacción técnica
+        let scene, camera, renderer, controls;
+        let raycaster, mouse;
+
+        startBtn.addEventListener('click', () => {
+            startBtn.textContent = "Invocando el mapa...";
+            startBtn.style.pointerEvents = "none";
             initDiorama();
         });
 
         const initDiorama = () => {
-            const scene = new THREE.Scene();
+            scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(0x1a252c, 0.03);
 
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 10, 14); // Cámara más alta para ver las montañas y nubes
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 10, 14); 
 
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.outputColorSpace = THREE.SRGBColorSpace;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             document.body.appendChild(renderer.domElement);
 
-            const controls = new OrbitControls(camera, renderer.domElement);
+            controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.maxPolarAngle = Math.PI / 2.1;
 
+            // Preparación del Raycasting para clics
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+
+            // Luces
             const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
             scene.add(ambientLight);
-
             const sunLight = new THREE.DirectionalLight(0xfff4e0, 2.5);
             sunLight.position.set(8, 15, 10);
             scene.add(sunLight);
 
-            // Lista actualizada de assets a precargar
+            // Carga y Caché
             const uniqueFiles = [
-                'hex_grass.gltf', 'hex_river_A.gltf', 'hex_road_A.gltf', // Nivel 1: Tiles
-                'mountain_B_grass_trees.gltf', // Nivel 2: Naturaleza
+                'hex_grass.gltf', 'hex_river_A.gltf', 'hex_road_A.gltf',
+                'mountain_B_grass_trees.gltf',
                 'building_bridge_A.gltf', 'building_grain.gltf', 'building_destroyed.gltf', 
-                'building_castle_green.gltf', 'coin_stack_large.gltf', // Nivel 3: Edificios
-                'cloud_big.gltf' // Extra: Cielo
+                'building_castle_green.gltf', 'coin_stack_large.gltf',
+                'cloud_big.gltf'
             ];
 
             const cache = new Map();
@@ -97,68 +204,126 @@
                     if (loadedFilesCount === uniqueFiles.length) {
                         buildWorld(scene, cache);
                         revelarInterfaz();
+                        setupInteractions(); // Activamos los eventos de clic una vez construido todo
                     }
-                }, undefined, (err) => console.error("Error al precargar:", fileName, err));
+                }, undefined, (err) => console.error("Error:", fileName, err));
             });
 
-            // --- LÓGICA DE JERARQUÍA Y CONSTRUCCIÓN ---
+            // Construcción del Mundo por Jerarquías
             function buildWorld(targetScene, templates) {
-                
-                // MAPA DE CELDAS: Estructura de capas
                 const mapData = [
-                    // Fila Posterior (Montañas y Castillo)
                     { x: -2, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf' },
-                    { x:  0, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf', building: 'building_castle_green.gltf', buildingY: 0.8 }, // ¡Jerarquía Completa! Elevamos el castillo para que suba a la montaña
+                    { x:  0, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf', building: 'building_castle_green.gltf', buildingY: 0.8 },
                     { x:  2, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf' },
 
-                    // Fila Media-Atrás (Caminos y ruinas)
                     { x: -2, z: -1.7, tile: 'hex_grass.gltf', building: 'building_destroyed.gltf' },
-                    { x:  0, z: -1.7, tile: 'hex_road_A.gltf' }, // Un camino hacia el castillo
+                    { x:  0, z: -1.7, tile: 'hex_road_A.gltf' }, 
                     { x:  2, z: -1.7, tile: 'hex_grass.gltf', building: 'building_grain.gltf' },
 
-                    // Fila Central (El Río)
                     { x: -2, z: 0, tile: 'hex_river_A.gltf' },
-                    { x:  0, z: 0, tile: 'hex_river_A.gltf', building: 'building_bridge_A.gltf' }, // Puente sobre el río
+                    { x:  0, z: 0, tile: 'hex_river_A.gltf', building: 'building_bridge_A.gltf' }, 
                     { x:  2, z: 0, tile: 'hex_river_A.gltf' },
 
-                    // Fila Delantera (Inicio del camino)
                     { x: -2, z: 1.7, tile: 'hex_grass.gltf' },
                     { x:  0, z: 1.7, tile: 'hex_road_A.gltf' },
                     { x:  2, z: 1.7, tile: 'hex_grass.gltf', building: 'coin_stack_large.gltf' }
                 ];
 
-                // Función auxiliar para colocar clones en la escena
                 const placeItem = (key, x, y, z) => {
-                    if(!key) return; // Si no hay modelo, ignoramos
+                    if(!key) return;
                     const instance = templates.get(key).clone();
                     instance.position.set(x, y, z);
+                    
+                    // CRUCIAL: Inyectamos el nombre del archivo en la propiedad userData del clon
+                    // para saber qué tipo de asset es cuando el Raycaster colisione con él.
+                    instance.userData = { assetKey: key };
+                    
                     targetScene.add(instance);
                 };
 
-                // Iteramos por nuestra estructura de jerarquías
                 mapData.forEach(cell => {
-                    // 1. Nivel Base (Tiles siempre en Y=0)
                     placeItem(cell.tile, cell.x, 0, cell.z);
-
-                    // 2. Nivel Naturaleza (Decoración sobre los tiles)
                     placeItem(cell.deco, cell.x, 0, cell.z);
-
-                    // 3. Nivel Construcción (Edificios. Si tienen "buildingY", los elevamos. Si no, en Y=0)
                     const bY = cell.buildingY !== undefined ? cell.buildingY : 0;
                     placeItem(cell.building, cell.x, bY, cell.z);
                 });
 
-                // NUBES: Capa especial flotante (Eje Y alto)
+                // Nubes puramente estéticas (les ponemos una clave inexistente para ignorar sus clics)
                 placeItem('cloud_big.gltf', -3.5, 4.0, -1.0);
                 placeItem('cloud_big.gltf',  3.5, 4.5, -2.5);
-                placeItem('cloud_big.gltf', -1.0, 5.0,  3.0);
             }
 
             function revelarInterfaz() {
-                const landing = document.getElementById('landing');
-                landing.classList.add('fade-out');
-                document.getElementById('info-overlay').style.opacity = "1";
-                setTimeout(() => landing.remove(), 1000);
+                landingDiv.classList.add('fade-out');
+                infoOverlay.style.opacity = "1";
+                setTimeout(() => landingDiv.remove(), 800);
+            }
+
+            // Configuración del sistema de clics interactivos
+            function setupInteractions() {
+                // Evento de clic en el canvas 3D
+                window.addEventListener('click', (event) => {
+                    // Ignorar clics si la hoja de información ya está abierta
+                    if(modalOverlay.classList.contains('active')) return;
+
+                    // Convertir las coordenadas del ratón a formato normalizado 3D (-1 a +1)
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                    // Apuntar nuestro rayo invisible desde la cámara al ratón
+                    raycaster.setFromCamera(mouse, camera);
+
+                    // Calcular colisiones con los hijos de la escena
+                    const intersects = raycaster.intersectObjects(scene.children, true);
+
+                    if (intersects.length > 0) {
+                        // Viajar hacia arriba en la jerarquía del objeto colisionado hasta encontrar el contenedor raíz clonado
+                        let rootObj = intersects[0].object;
+                        while(rootObj && rootObj.parent && !rootObj.userData.assetKey) {
+                            rootObj = rootObj.parent;
+                        }
+
+                        // Si encontramos un objeto válido con base de datos, mostramos el Pergamino
+                        if(rootObj && rootObj.userData && rootObj.userData.assetKey) {
+                            const key = rootObj.userData.assetKey;
+                            if(assetDatabase[key]) {
+                                displayMedievalSheet(assetDatabase[key]);
+                            }
+                        }
+                    }
+                });
+
+                // LÓGICA DE CIERRE DEL MODAL
+                const cerrarModal = () => modalOverlay.classList.remove('active');
+                
+                // Opción 1: Botón X
+                document.getElementById('close-btn').addEventListener('click', cerrarModal);
+                
+                // Opción 2: Clic fuera del pergamino (en el fondo oscuro)
+                modalOverlay.addEventListener('click', (e) => {
+                    if(e.target === modalOverlay) {
+                        cerrarModal();
+                    }
+                });
+            }
+
+            // Rellenar dinámicamente y abrir la hoja medieval
+            function displayMedievalSheet(data) {
+                document.getElementById('parchment-title').textContent = data.title;
+                document.getElementById('parchment-desc').textContent = data.desc;
+                
+                const statsBody = document.getElementById('parchment-stats');
+                statsBody.innerHTML = ''; // Vaciar tabla anterior
+
+                // Crear filas de estadísticas dinámicamente
+                for (const [statName, statVal] of Object.entries(data.stats)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${statName}</td><td class="stat-val">${statVal}</td>`;
+                    statsBody.appendChild(row);
+                }
+
+                // Disparar la transición CSS activa
+                modalOverlay.classList.add('active');
             }
 
             window.addEventListener('resize', () => {
