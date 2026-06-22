@@ -8,59 +8,41 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0d0f1a; overflow: hidden; font-family: 'Courier New', monospace; }
     canvas { display: block; }
-
     #hud {
       position: fixed; top: 16px; left: 16px; z-index: 10;
-      background: rgba(0,0,0,0.75);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      padding: 14px 18px;
-      font-size: 12px;
-      line-height: 2;
-      min-width: 300px;
-      max-width: 360px;
-      color: #c9d1d9;
+      background: rgba(0,0,0,0.78); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 12px; line-height: 2;
+      min-width: 300px; max-width: 360px; color: #c9d1d9;
     }
-    #hud b { color: #e6edf3; font-size: 13px; letter-spacing: 0.03em; }
+    #hud b { color: #e6edf3; font-size: 13px; }
     .ok   { color: #3fb950; }
     .warn { color: #d29922; }
     .err  { color: #f85149; }
     .dim  { color: #6e7681; }
-
-    #fps-badge {
+    #fps {
       position: fixed; top: 16px; right: 16px; z-index: 10;
-      background: rgba(0,0,0,0.75);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px;
-      padding: 6px 14px;
-      font-family: 'Courier New', monospace;
-      font-size: 13px;
-      color: #3fb950;
+      background: rgba(0,0,0,0.78); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px; padding: 6px 14px;
+      font-family: 'Courier New', monospace; font-size: 13px; color: #3fb950;
     }
     #hint {
       position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
       font-size: 11px; color: rgba(255,255,255,0.2);
-      font-family: 'Courier New', monospace;
-      white-space: nowrap;
+      font-family: 'Courier New', monospace; white-space: nowrap;
     }
   </style>
 </head>
 <body>
-
-<div id="hud">
-  <b>KayKit PoC — InstancedMesh</b>
-  <div id="log"><span class="dim">Inicializando…</span></div>
-</div>
-<div id="fps-badge">-- fps</div>
+<div id="hud"><b>KayKit PoC — InstancedMesh</b><div id="log"><span class="dim">Inicializando…</span></div></div>
+<div id="fps">-- fps</div>
 <div id="hint">Orbitar: clic · Zoom: scroll · Pan: clic der</div>
 
 <script type="importmap">
-{
-  "imports": {
+{ "imports": {
     "three":         "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
-  }
-}
+} }
 </script>
 
 <script type="module">
@@ -68,41 +50,27 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 
-/* ═══════════════════════════════════════════════════════════
-   ASSETS — adaptado a la estructura real del repo
-   Los .gltf + .bin están en la raíz, igual que este poc.html
-   ═══════════════════════════════════════════════════════════ */
-
-// Tiles que van a InstancedMesh (el test que importa)
+// ── ASSETS (rutas relativas desde la raíz del repo) ──────
 const HEX_TILES = [
   { gltf: 'hex_grass.gltf',   bin: 'hex_grass.bin',   label: 'hex_grass'   },
   { gltf: 'hex_river_A.gltf', bin: 'hex_river_A.bin', label: 'hex_river_A' },
   { gltf: 'hex_road_A.gltf',  bin: 'hex_road_A.bin',  label: 'hex_road_A'  },
 ];
-
-// Buildings que van a Mesh normal (1-2 instancias para ver la composición)
 const BUILDINGS = [
-  { gltf: 'building_castle_green.gltf', bin: 'building_castle_green.bin', label: 'castle_green' },
+  { gltf: 'building_castle_green.gltf', bin: 'building_castle_green.bin', label: 'castle_green'  },
   { gltf: 'building_dirt.gltf',         bin: 'building_dirt.bin',         label: 'building_dirt' },
   { gltf: 'mountain_B_grass_trees.gltf',bin: 'mountain_B_grass_trees.bin',label: 'mountain_B'    },
 ];
-
-const INSTANCES_PER_TILE = 80;   // instancias de cada hex tile
-const GRID_COLS           = 10;
-const HEX_W               = 1.82;  // espaciado horizontal
-const HEX_H               = 1.575; // espaciado vertical
-/* ══════════════════════════════════════════════════════════ */
-
+const INSTANCES = 80;
+const COLS      = 10;
+const HEX_W     = 1.82;
+const HEX_H     = 1.575;
 
 // ── LOG ──────────────────────────────────────────────────
 const logEl = document.getElementById('log');
-let logLines = [];
-function L(text, cls = '') {
-  logLines.push(`<span class="${cls}">${text}</span>`);
-  logEl.innerHTML = logLines.join('<br>');
-}
+const lines = [];
+function L(t, c = '') { lines.push(`<span class="${c}">${t}</span>`); logEl.innerHTML = lines.join('<br>'); }
 function SEP() { L('<span style="color:#30363d">──────────────────────────</span>'); }
-
 
 // ── SCENE ────────────────────────────────────────────────
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -112,7 +80,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
+const scene  = new THREE.Scene();
 scene.background = new THREE.Color(0x0d0f1a);
 scene.fog = new THREE.FogExp2(0x0d0f1a, 0.022);
 
@@ -122,15 +90,25 @@ camera.position.set(0, 14, 18);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.06;
-controls.target.set(0, 0, 0);
 
-scene.add(new THREE.AmbientLight(0x8fb0d0, 0.9));
+// Luces — sin Object.assign, todo explícito
+const ambient = new THREE.AmbientLight(0x8fb0d0, 0.9);
+scene.add(ambient);
+
 const sun = new THREE.DirectionalLight(0xffe5b0, 1.6);
 sun.position.set(10, 20, 12);
 sun.castShadow = true;
-sun.shadow.mapSize.set(1024, 1024);
-Object.assign(sun.shadow.camera, { left:-22, right:22, top:22, bottom:-22, near:1, far:60 });
+sun.shadow.mapSize.width  = 1024;
+sun.shadow.mapSize.height = 1024;
+sun.shadow.camera.left   = -22;
+sun.shadow.camera.right  =  22;
+sun.shadow.camera.top    =  22;
+sun.shadow.camera.bottom = -22;
+sun.shadow.camera.near   =  1;
+sun.shadow.camera.far    =  60;
+sun.shadow.camera.updateProjectionMatrix();
 scene.add(sun);
+
 const fill = new THREE.DirectionalLight(0x5580a0, 0.35);
 fill.position.set(-6, 6, -10);
 scene.add(fill);
@@ -141,9 +119,8 @@ window.addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
 });
 
-
 // ── HEX GRID ─────────────────────────────────────────────
-function hexGrid(count, cols, offsetZ = 0) {
+function hexGrid(count, cols, offsetZ) {
   const pts = [];
   for (let i = 0; i < count; i++) {
     const col = i % cols;
@@ -151,59 +128,45 @@ function hexGrid(count, cols, offsetZ = 0) {
     pts.push(new THREE.Vector3(
       (col - cols / 2) * HEX_W + (row % 2 === 0 ? 0 : HEX_W * 0.5),
       0,
-      (row - Math.floor(count / cols) / 2) * HEX_H + offsetZ
+      row * HEX_H + (offsetZ || 0)
     ));
   }
   return pts;
 }
 
-
-// ── MEDIR PESO (gltf + bin) ──────────────────────────────
-// Para GLTF partidos en .gltf + .bin, medimos los dos archivos
-// para obtener el peso real de carga (el .bin es el grueso del dato)
+// ── MEDIR PESO ───────────────────────────────────────────
 async function measurePair(gltfPath, binPath) {
-  const [gltfRes, binRes] = await Promise.all([
-    fetch(gltfPath), fetch(binPath)
-  ]);
-  const [gltfBuf, binBuf] = await Promise.all([
-    gltfRes.arrayBuffer(), binRes.arrayBuffer()
-  ]);
-  return gltfBuf.byteLength + binBuf.byteLength;
+  try {
+    const [a, b] = await Promise.all([fetch(gltfPath), fetch(binPath)]);
+    const [ab, bb] = await Promise.all([a.arrayBuffer(), b.arrayBuffer()]);
+    return ab.byteLength + bb.byteLength;
+  } catch (_) { return 0; }
 }
-
 
 // ── LOAD GLTF ────────────────────────────────────────────
 const loader = new GLTFLoader();
 function loadGLTF(path) {
-  return new Promise((res, rej) => {
-    loader.load(path, res, undefined, e => rej(new Error(e.message || 'load error')));
-  });
+  return new Promise((res, rej) =>
+    loader.load(path, res, undefined, e => rej(new Error(e.message || 'load error')))
+  );
 }
 
-
-// ── INSTANCED MESH desde GLTF ────────────────────────────
-// Crea un InstancedMesh por sub-mesh del tile.
-// KayKit hexes típicamente tienen 1-3 sub-meshes (base + detalle).
-function buildInstancedTile(gltf, positions) {
-  const subMeshes = [];
-  gltf.scene.traverse(c => { if (c.isMesh) subMeshes.push(c); });
-  if (!subMeshes.length) throw new Error('0 meshes en la escena');
+// ── INSTANCED MESH ───────────────────────────────────────
+function buildInstanced(gltf, positions) {
+  const meshes = [];
+  gltf.scene.traverse(c => { if (c.isMesh) meshes.push(c); });
+  if (!meshes.length) throw new Error('0 meshes en la escena');
 
   const group = new THREE.Group();
   const dummy = new THREE.Object3D();
 
-  subMeshes.forEach(src => {
-    const inst = new THREE.InstancedMesh(
-      src.geometry,
-      Array.isArray(src.material) ? src.material : src.material,
-      positions.length
-    );
-    inst.castShadow = true;
+  meshes.forEach(src => {
+    const inst = new THREE.InstancedMesh(src.geometry, src.material, positions.length);
+    inst.castShadow    = true;
     inst.receiveShadow = true;
-
     positions.forEach((pos, i) => {
       dummy.position.copy(pos);
-      dummy.rotation.y = ((i * 7) % 6) * (Math.PI / 3); // rotación hex discreta
+      dummy.rotation.y = ((i * 7) % 6) * (Math.PI / 3);
       dummy.updateMatrix();
       inst.setMatrixAt(i, dummy.matrix);
     });
@@ -212,117 +175,86 @@ function buildInstancedTile(gltf, positions) {
   });
 
   scene.add(group);
-  return subMeshes.length;
+  return meshes.length;
 }
 
-
-// ── BUILDING MESH ─────────────────────────────────────────
-function placeBuildingMesh(gltf, position) {
-  const clone = gltf.scene.clone(true);
-  clone.position.copy(position);
-  clone.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
-  scene.add(clone);
+// ── BUILDING MESH ────────────────────────────────────────
+function placeBuilding(gltf, pos) {
+  const obj = gltf.scene.clone(true);
+  obj.position.copy(pos);
+  obj.position.y += 0.14;
+  obj.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  scene.add(obj);
 }
-
 
 // ── MAIN ─────────────────────────────────────────────────
 async function main() {
   const t0 = performance.now();
-  let totalBytes    = 0;
-  let totalTris     = 0;
-  let totalDrawCalls = 0;
+  let totalBytes = 0, totalDrawCalls = 0;
 
-  // ─── 1. HEX TILES → InstancedMesh ───────────────────
+  // 1. HEX TILES → InstancedMesh
   L('Cargando hex tiles → InstancedMesh…', 'dim');
-
   const hexResults = await Promise.allSettled(
     HEX_TILES.map(async (m, i) => {
       const t1 = performance.now();
-      const [bytes, gltf] = await Promise.all([
-        measurePair(m.gltf, m.bin),
-        loadGLTF(m.gltf)
-      ]);
+      const [bytes, gltf] = await Promise.all([measurePair(m.gltf, m.bin), loadGLTF(m.gltf)]);
       const ms = (performance.now() - t1).toFixed(0);
-      // banda vertical para separar visualmente los 3 tipos
-      const offsetZ = (i - 1) * (Math.ceil(INSTANCES_PER_TILE / GRID_COLS) * HEX_H + 1.5);
-      const positions = hexGrid(INSTANCES_PER_TILE, GRID_COLS, offsetZ);
-      const subCount  = buildInstancedTile(gltf, positions);
+      const offsetZ = (i - 1) * (Math.ceil(INSTANCES / COLS) * HEX_H + 2);
+      const positions = hexGrid(INSTANCES, COLS, offsetZ);
+      const subCount = buildInstanced(gltf, positions);
       return { label: m.label, bytes, ms, subCount, positions };
     })
   );
 
   SEP();
-  let hexPositionSamples = []; // para poner edificios encima
-
+  let samplePositions = [];
   hexResults.forEach((r, i) => {
-    if (r.status === 'rejected') {
-      L(`✗ ${HEX_TILES[i].label}: ${r.reason.message}`, 'err');
-      return;
-    }
+    if (r.status === 'rejected') { L(`✗ ${HEX_TILES[i].label}: ${r.reason.message}`, 'err'); return; }
     const { label, bytes, ms, subCount, positions } = r.value;
-    const kb = (bytes / 1024).toFixed(1);
     totalBytes += bytes;
-    // 1 InstancedMesh por sub-mesh = subCount draw calls en vez de subCount*INSTANCES
     totalDrawCalls += subCount;
-    // tris aproximados: necesitamos recorrer la geometría, lo estimamos
+    if (!samplePositions.length) samplePositions = positions;
     L(`✔ ${label}`, 'ok');
-    L(`  ${kb} KB · ${ms}ms · ${subCount} sub-mesh(es) · ${INSTANCES_PER_TILE} instancias`, 'dim');
-    if (hexPositionSamples.length === 0) hexPositionSamples = positions;
+    L(`  ${(bytes/1024).toFixed(1)} KB · ${ms}ms · ${subCount} sub-mesh(es)`, 'dim');
   });
 
-  // ─── 2. BUILDINGS → Mesh normal ──────────────────────
+  // 2. BUILDINGS → Mesh normal
   SEP();
-  L('Cargando buildings → Mesh normal…', 'dim');
-
+  L('Cargando buildings…', 'dim');
   const bldResults = await Promise.allSettled(
     BUILDINGS.map(async (m, i) => {
       const t1 = performance.now();
-      const [bytes, gltf] = await Promise.all([
-        measurePair(m.gltf, m.bin),
-        loadGLTF(m.gltf)
-      ]);
+      const [bytes, gltf] = await Promise.all([measurePair(m.gltf, m.bin), loadGLTF(m.gltf)]);
       const ms = (performance.now() - t1).toFixed(0);
-      // coloca el edificio encima de un hex del primer tile
-      if (hexPositionSamples[i * 15]) {
-        const p = hexPositionSamples[i * 15].clone();
-        p.y += 0.14; // levanta ligeramente sobre el tile
-        placeBuildingMesh(gltf, p);
-      }
-      totalDrawCalls += 1; // 1 draw call por building (Mesh normal)
+      if (samplePositions[i * 15]) placeBuilding(gltf, samplePositions[i * 15]);
       totalBytes += bytes;
+      totalDrawCalls += 1;
       return { label: m.label, bytes, ms };
     })
   );
 
+  SEP();
   bldResults.forEach((r, i) => {
-    if (r.status === 'rejected') {
-      L(`✗ ${BUILDINGS[i].label}: ${r.reason.message}`, 'err');
-      return;
-    }
+    if (r.status === 'rejected') { L(`✗ ${BUILDINGS[i].label}: ${r.reason.message}`, 'err'); return; }
     const { label, bytes, ms } = r.value;
     L(`✔ ${label} — ${(bytes/1024).toFixed(1)} KB · ${ms}ms`, 'ok');
   });
 
-  // ─── 3. RESUMEN ───────────────────────────────────────
+  // 3. RESUMEN
   SEP();
-  const tTotal = (performance.now() - t0).toFixed(0);
   const hexOk = hexResults.filter(r => r.status === 'fulfilled').length;
   const bldOk = bldResults.filter(r => r.status === 'fulfilled').length;
+  const wouldBe = hexOk * INSTANCES * 3;
+  L(`Tiempo total:   ${(performance.now() - t0).toFixed(0)} ms`, 'ok');
+  L(`Peso total:     ${(totalBytes/1024).toFixed(0)} KB`, 'ok');
+  L(`Hex ok: ${hexOk}/${HEX_TILES.length}  ·  Buildings ok: ${bldOk}/${BUILDINGS.length}`, hexOk === HEX_TILES.length ? 'ok' : 'warn');
+  SEP();
+  L(`Draw calls reales:  ${totalDrawCalls}`, 'ok');
+  L(`Sin instancing:     ~${wouldBe}`, 'dim');
+  L(`Reducción:          ${Math.round((1 - totalDrawCalls/wouldBe)*100)}%`, 'ok');
+  SEP();
+  L('renderer.info detallado → F12 consola', 'dim');
 
-  L(`Tiempo total carga:  ${tTotal} ms`, 'ok');
-  L(`Peso total (.gltf+.bin): ${(totalBytes/1024).toFixed(0)} KB`, 'ok');
-  SEP();
-  L(`Hex tiles ok:   ${hexOk}/${HEX_TILES.length}`,   hexOk   === HEX_TILES.length   ? 'ok' : 'warn');
-  L(`Buildings ok:   ${bldOk}/${BUILDINGS.length}`,    bldOk   === BUILDINGS.length   ? 'ok' : 'warn');
-  SEP();
-  const wouldBe = hexOk * INSTANCES_PER_TILE * 3; // estimado sin instancing
-  L(`Draw calls actuales:  ${totalDrawCalls}`, 'ok');
-  L(`Sin instancing:       ~${wouldBe}`, 'dim');
-  L(`Reducción:            ${Math.round((1 - totalDrawCalls / wouldBe) * 100)}%`, 'ok');
-  SEP();
-  L('renderer.info → consola (F12)', 'dim');
-
-  // dump en consola para inspección detallada
   setTimeout(() => {
     console.group('%cKayKit PoC — renderer.info', 'color:#3fb950;font-weight:bold');
     console.log('render.calls      :', renderer.info.render.calls);
@@ -330,12 +262,11 @@ async function main() {
     console.log('memory.geometries :', renderer.info.memory.geometries);
     console.log('memory.textures   :', renderer.info.memory.textures);
     console.groupEnd();
-  }, 800);
+  }, 1000);
 }
 
-
-// ── RENDER LOOP + FPS ────────────────────────────────────
-const fpsBadge = document.getElementById('fps-badge');
+// ── RENDER LOOP ──────────────────────────────────────────
+const fpsBadge = document.getElementById('fps');
 let lastT = performance.now(), frames = 0;
 renderer.setAnimationLoop(() => {
   controls.update();
@@ -349,11 +280,7 @@ renderer.setAnimationLoop(() => {
   }
 });
 
-main().catch(err => {
-  SEP();
-  L(`Error fatal: ${err.message}`, 'err');
-  console.error(err);
-});
+main().catch(err => { SEP(); L(`Error fatal: ${err.message}`, 'err'); console.error(err); });
 </script>
 </body>
 </html>
