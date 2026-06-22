@@ -131,9 +131,9 @@ sun.castShadow = true;
 sun.shadow.mapSize.set(1024, 1024);
 Object.assign(sun.shadow.camera, { left:-22, right:22, top:22, bottom:-22, near:1, far:60 });
 scene.add(sun);
-scene.add(Object.assign(new THREE.DirectionalLight(0x5580a0, 0.35), {
-  position: new THREE.Vector3(-6, 6, -10)
-}));
+const fill = new THREE.DirectionalLight(0x5580a0, 0.35);
+fill.position.set(-6, 6, -10);
+scene.add(fill);
 
 window.addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
