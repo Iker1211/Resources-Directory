@@ -6,7 +6,7 @@
     <title>Reino Medieval Interactivo</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #1a252c; font-family: 'Segoe UI', Tahoma, sans-serif; color: #ecf0f1; user-select: none; }
-        
+
         /* === PANTALLA DE INICIO === */
         #landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #1e272c 0%, #070b0d 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.8s ease; }
         #landing.fade-out { opacity: 0; pointer-events: none; }
@@ -22,61 +22,32 @@
 
         /* === MODAL HOJA MEDIEVAL === */
         #modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Fondo oscurecido */
-            backdrop-filter: blur(3px); /* Ligero desenfoque elegante */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 50;
-            opacity: 0;
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 50; opacity: 0; pointer-events: none;
             transition: opacity 0.4s ease;
         }
-        /* Estado activo del modal */
-        #modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        #modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-        /* La tarjeta de Pergamino */
         #parchment-sheet {
-            background-color: #f4eccf; /* Color pergamino antiguo */
-            color: #2c3e50;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            border: 8px double #8e44ad; /* Borde doble estilo manuscrito antiguo */
-            border-radius: 4px;
+            background-color: #f4eccf; color: #2c3e50;
+            padding: 30px; width: 90%; max-width: 400px;
+            border: 8px double #8e44ad; border-radius: 4px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             position: relative;
             transform: scale(0.7);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote pop-in */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #modal-overlay.active #parchment-sheet {
-            transform: scale(1);
-        }
+        #modal-overlay.active #parchment-sheet { transform: scale(1); }
 
-        #close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            color: #7f8c8d;
-            transition: color 0.2s;
-        }
+        #close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; font-weight: bold; cursor: pointer; color: #7f8c8d; transition: color 0.2s; }
         #close-btn:hover { color: #c0392b; }
 
         #parchment-title { font-family: 'Georgia', serif; font-size: 1.8rem; margin-top: 0; border-bottom: 2px solid #bdc3c7; padding-bottom: 10px; color: #7f8c8d; }
         #parchment-desc { font-style: italic; line-height: 1.5; margin: 15px 0; color: #34495e; }
 
-        /* Tabla de estadísticas de rol medieval */
         .stats-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.95rem; }
         .stats-table tr { border-bottom: 1px solid rgba(0,0,0,0.1); }
         .stats-table td { padding: 8px 4px; }
@@ -85,260 +56,380 @@
 </head>
 <body>
 
-    <div id="landing">
-        <div class="landing-content">
-            <h1>El Reino Interactivo</h1>
-            <p>Explora el mapa en tres dimensiones. Haz clic sobre cualquier edificación o elemento natural para inspeccionar sus registros y estadísticas de reino.</p>
-            <button id="start-btn">Entrar al Reino</button>
-        </div>
+<div id="landing">
+    <div class="landing-content">
+        <h1>El Reino Interactivo</h1>
+        <p>Explora el mapa en tres dimensiones. Haz clic sobre cualquier edificación o elemento natural para inspeccionar sus registros y estadísticas de reino.</p>
+        <button id="start-btn">Entrar al Reino</button>
     </div>
+</div>
 
-    <div id="info-overlay">
-        <h2>Reino de Capas Interactivo</h2>
-        <p>Usa el ratón para orbitar. Haz clic en un objeto para inspeccionarlo.</p>
+<div id="info-overlay">
+    <h2>Reino de Capas Interactivo</h2>
+    <p>Usa el ratón para orbitar. Haz clic en un objeto para inspeccionarlo.</p>
+</div>
+
+<div id="modal-overlay">
+    <div id="parchment-sheet">
+        <span id="close-btn">&times;</span>
+        <h3 id="parchment-title">Nombre del Asset</h3>
+        <p id="parchment-desc">Descripción detallada antigua...</p>
+        <table class="stats-table">
+            <tbody id="parchment-stats"></tbody>
+        </table>
     </div>
+</div>
 
-    <div id="modal-overlay" id="modal-bg">
-        <div id="parchment-sheet">
-            <span id="close-btn">&times;</span>
-            <h3 id="parchment-title">Nombre del Asset</h3>
-            <p id="parchment-desc">Descripción detallada antigua...</p>
-            
-            <table class="stats-table">
-                <tbody id="parchment-stats">
-                    </tbody>
-            </table>
-        </div>
-    </div>
+<script type="importmap">
+{
+    "imports": {
+        "three":         "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+    }
+}
+</script>
 
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// ═══════════════════════════════════════════════════════
+// HEX GRID CONSTANTS
+// Medidos empíricamente en el PoC con los assets de KayKit
+// ═══════════════════════════════════════════════════════
+const HEX_W = 1.82;   // spacing horizontal
+const HEX_H = 1.575;  // spacing vertical
 
-        // Base de datos medieval para los contenidos del pergamino
-        const assetDatabase = {
-            'building_castle_green.gltf': { title: 'Castillo Esmeralda', desc: 'Gran bastión central gobernado por el alto consejo. Defendido por muros fortificados e imponentes torreones mágicos.', stats: { 'Defensa': '98/100', 'Guarnición': '450 Soldados', 'Oro por Minuto': '+150 💰' } },
-            'building_grain.gltf': { title: 'Molino de Grano', desc: 'Estructura económica clave. Procesa el trigo cosechado de los campos aledaños para asegurar el alimento del invierno.', stats: { 'Producción': '80/100', 'Trabajadores': '12 Aldeanos', 'Sustento': '+200 Alimento 🌾' } },
-            'building_dirt.gltf': { title: 'Casa de Barro', desc: 'Hogar humilde de los siervos y artesanos del reino. Aunque sencilla, mantiene el motor de la economía activo.', stats: { 'Capacidad': '4 Habitantes', 'Felicidad': '75%', 'Impuestos': '15 Monedas 🪙' } },
-            'building_destroyed.gltf': { title: 'Torre Derruida', desc: 'Vestigios de la gran guerra del siglo pasado. Los historiadores dicen que albergaba secretos que no debieron ser descubiertos.', stats: { 'Peligro': 'Alta 💀', 'Reliquias': '1 Oculta 📜', 'Explorado': '12%' } },
-            'building_bridge_A.gltf': { title: 'Puente Imperial de Piedra', desc: 'Arco arquitectónico macizo que permite el cruce comercial seguro de las tropas imperiales sobre las bravas aguas.', stats: { 'Integridad': '100%', 'Peaje Comercial': '45 Monedas', 'Capacidad Peso': 'Excelente 🐎' } },
-            'coin_stack_large.gltf': { title: 'Tesoro de la Corona', desc: 'Montones de relucientes monedas de oro recuperadas de las mazmorras subterráneas profundas.', stats: { 'Valor Total': '15,000 Monedas', 'Pureza': '24 Quilates ✨', 'Riesgo Saqueo': 'Crítico ⚔️' } },
-            'mountain_B_grass_trees.gltf': { title: 'Montañas Boreales', desc: 'Picos rocosos repletos de vegetación salvaje y densos árboles. Actúan como una muralla de contención natural.', stats: { 'Madera Disponible': 'Abundante 🌲', 'Fauna': 'Lobos y Osos 🐻', 'Minerales': 'Hierro Oculto' } },
-            'hex_road_A.gltf': { title: 'Camino Real', desc: 'Sendero de piedra y tierra estabilizada que conecta los distritos comerciales con la ciudadela principal.', stats: { 'Velocidad de Marcha': '+25% 👟', 'Patrullas': 'Frecuentes', 'Estado': 'Despejado' } },
-            'hex_river_A.gltf': { title: 'Río de la Vida', desc: 'Canal natural de agua dulce que cruza el feudo. Provee pesca constante y fertilidad extrema a la tierra.', stats: { 'Caudal': 'Estable', 'Recurso Agua': 'Invalorable 💧', 'Navegable': 'Solo barcas pequeñas' } },
-            'hex_grass.gltf': { title: 'Parcela de Pasto', desc: 'Tierras fértiles listas para el pastoreo de ganado o expansión de nuevas fortificaciones medievales.', stats: { 'Fertilidad': 'Máxima Green', 'Espacios Libres': '1 Hexágono', 'Tipo Suelo': 'Pradera' } }
-        };
+// Axial (q, r) → posición Three.js
+// Fórmula para hexágonos pointy-top:
+//   x = HEX_W * (q + r * 0.5)
+//   z = HEX_H * r
+function axialToWorld(q, r) {
+    return new THREE.Vector3(HEX_W * (q + r * 0.5), 0, HEX_H * r);
+}
 
-        const startBtn = document.getElementById('start-btn');
-        const landingDiv = document.getElementById('landing');
-        const infoOverlay = document.getElementById('info-overlay');
-        const modalOverlay = document.getElementById('modal-overlay');
+// ═══════════════════════════════════════════════════════
+// TILE TYPE → ARCHIVO GLTF
+// ═══════════════════════════════════════════════════════
+const TILE_FILES = {
+    grass: 'hex_grass.gltf',
+    river: 'hex_river_A.gltf',
+    road:  'hex_road_A.gltf',
+};
 
-        // Variables de interacción técnica
-        let scene, camera, renderer, controls;
-        let raycaster, mouse;
+// ═══════════════════════════════════════════════════════
+// WORLD DATA  (world.json inlined)
+// 25 celdas en coordenadas axiales (q, r)
+// Layer 0: tileType  → InstancedMesh
+// Layer 2: occupant  → Mesh clone
+// ═══════════════════════════════════════════════════════
+const WORLD_CELLS = [
+    { q: -2, r: -2, tileType: 'grass', occupant: 'mountain_B_grass_trees' },
+    { q: -1, r: -2, tileType: 'grass', occupant: null },
+    { q:  0, r: -2, tileType: 'grass', occupant: 'building_destroyed' },
+    { q:  1, r: -2, tileType: 'grass', occupant: null },
+    { q:  2, r: -2, tileType: 'grass', occupant: null },
 
-        startBtn.addEventListener('click', () => {
-            startBtn.textContent = "Invocando el mapa...";
-            startBtn.style.pointerEvents = "none";
-            initDiorama();
+    { q: -2, r: -1, tileType: 'grass', occupant: null },
+    { q: -1, r: -1, tileType: 'grass', occupant: 'building_castle_green' },
+    { q:  0, r: -1, tileType: 'grass', occupant: null },
+    { q:  1, r: -1, tileType: 'road',  occupant: 'building_bridge_A' },
+    { q:  2, r: -1, tileType: 'river', occupant: null },
+
+    { q: -2, r:  0, tileType: 'grass', occupant: null },
+    { q: -1, r:  0, tileType: 'grass', occupant: 'building_dirt' },
+    { q:  0, r:  0, tileType: 'road',  occupant: null },
+    { q:  1, r:  0, tileType: 'road',  occupant: null },
+    { q:  2, r:  0, tileType: 'river', occupant: null },
+
+    { q: -2, r:  1, tileType: 'grass', occupant: null },
+    { q: -1, r:  1, tileType: 'grass', occupant: 'building_grain' },
+    { q:  0, r:  1, tileType: 'grass', occupant: null },
+    { q:  1, r:  1, tileType: 'road',  occupant: null },
+    { q:  2, r:  1, tileType: 'river', occupant: null },
+
+    { q: -2, r:  2, tileType: 'grass', occupant: null },
+    { q: -1, r:  2, tileType: 'grass', occupant: null },
+    { q:  0, r:  2, tileType: 'grass', occupant: null },
+    { q:  1, r:  2, tileType: 'grass', occupant: null },
+    { q:  2, r:  2, tileType: 'grass', occupant: null },
+];
+
+// ═══════════════════════════════════════════════════════
+// ASSET DATABASE — contenido del pergamino por asset
+// ═══════════════════════════════════════════════════════
+const assetDatabase = {
+    'building_castle_green.gltf': {
+        title: 'Castillo Esmeralda',
+        desc: 'Gran bastión central gobernado por el alto consejo. Defendido por muros fortificados e imponentes torreones mágicos.',
+        stats: { 'Defensa': '98/100', 'Guarnición': '450 Soldados', 'Oro por Minuto': '+150 💰' }
+    },
+    'building_grain.gltf': {
+        title: 'Molino de Grano',
+        desc: 'Estructura económica clave. Procesa el trigo cosechado de los campos aledaños para asegurar el alimento del invierno.',
+        stats: { 'Producción': '80/100', 'Trabajadores': '12 Aldeanos', 'Sustento': '+200 Alimento 🌾' }
+    },
+    'building_dirt.gltf': {
+        title: 'Casa de Barro',
+        desc: 'Hogar humilde de los siervos y artesanos del reino. Aunque sencilla, mantiene el motor de la economía activo.',
+        stats: { 'Capacidad': '4 Habitantes', 'Felicidad': '75%', 'Impuestos': '15 Monedas 🪙' }
+    },
+    'building_destroyed.gltf': {
+        title: 'Torre Derruida',
+        desc: 'Vestigios de la gran guerra del siglo pasado. Los historiadores dicen que albergaba secretos que no debieron ser descubiertos.',
+        stats: { 'Peligro': 'Alta 💀', 'Reliquias': '1 Oculta 📜', 'Explorado': '12%' }
+    },
+    'building_bridge_A.gltf': {
+        title: 'Puente Imperial de Piedra',
+        desc: 'Arco arquitectónico macizo que permite el cruce comercial seguro de las tropas imperiales sobre las bravas aguas.',
+        stats: { 'Integridad': '100%', 'Peaje Comercial': '45 Monedas', 'Capacidad Peso': 'Excelente 🐎' }
+    },
+    'mountain_B_grass_trees.gltf': {
+        title: 'Montañas Boreales',
+        desc: 'Picos rocosos repletos de vegetación salvaje y densos árboles. Actúan como una muralla de contención natural.',
+        stats: { 'Madera Disponible': 'Abundante 🌲', 'Fauna': 'Lobos y Osos 🐻', 'Minerales': 'Hierro Oculto' }
+    },
+    'hex_road_A.gltf': {
+        title: 'Camino Real',
+        desc: 'Sendero de piedra y tierra estabilizada que conecta los distritos comerciales con la ciudadela principal.',
+        stats: { 'Velocidad de Marcha': '+25% 👟', 'Patrullas': 'Frecuentes', 'Estado': 'Despejado' }
+    },
+    'hex_river_A.gltf': {
+        title: 'Río de la Vida',
+        desc: 'Canal natural de agua dulce que cruza el feudo. Provee pesca constante y fertilidad extrema a la tierra.',
+        stats: { 'Caudal': 'Estable', 'Recurso Agua': 'Invalorable 💧', 'Navegable': 'Solo barcas pequeñas' }
+    },
+    'hex_grass.gltf': {
+        title: 'Parcela de Pasto',
+        desc: 'Tierras fértiles listas para el pastoreo de ganado o expansión de nuevas fortificaciones medievales.',
+        stats: { 'Fertilidad': 'Máxima 🌿', 'Espacios Libres': '1 Hexágono', 'Tipo Suelo': 'Pradera' }
+    },
+};
+
+// ═══════════════════════════════════════════════════════
+// DOM REFS
+// ═══════════════════════════════════════════════════════
+const startBtn    = document.getElementById('start-btn');
+const landingDiv  = document.getElementById('landing');
+const infoOverlay = document.getElementById('info-overlay');
+const modalOverlay = document.getElementById('modal-overlay');
+
+let scene, camera, renderer, controls, raycaster, mouse;
+
+startBtn.addEventListener('click', () => {
+    startBtn.textContent = 'Invocando el mapa...';
+    startBtn.style.pointerEvents = 'none';
+    initWorld();
+});
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+async function initWorld() {
+    // ── Scene ─────────────────────────────────────────
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x1a252c, 0.03);
+
+    camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(0, 12, 16);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    document.body.appendChild(renderer.domElement);
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2.1;
+
+    raycaster = new THREE.Raycaster();
+    mouse     = new THREE.Vector2();
+
+    // ── Luces ─────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+    const sun = new THREE.DirectionalLight(0xfff4e0, 2.5);
+    sun.position.set(8, 15, 10);
+    scene.add(sun);
+
+    // ── Cargar assets ─────────────────────────────────
+    // Derivamos el set mínimo de archivos necesarios desde WORLD_CELLS
+    const filesToLoad = new Set(['cloud_big.gltf']);
+    WORLD_CELLS.forEach(cell => {
+        filesToLoad.add(TILE_FILES[cell.tileType]);
+        if (cell.occupant) filesToLoad.add(cell.occupant + '.gltf');
+    });
+
+    const loader = new GLTFLoader();
+    const cache  = new Map();
+
+    await Promise.all([...filesToLoad].map(file =>
+        new Promise(res =>
+            loader.load(
+                file,
+                gltf => { cache.set(file, gltf); res(); },
+                undefined,
+                err  => { console.warn('No se pudo cargar:', file, err); res(); }
+            )
+        )
+    ));
+
+    // ── Construir mundo ───────────────────────────────
+    buildTileLayers(cache);   // Layer 0 → InstancedMesh por tipo de tile
+    buildOccupants(cache);    // Layer 2 → Mesh clone por occupant
+
+    // Nubes decorativas (no clicables)
+    placeCloud(cache, -4.5, 4.5, -1.5);
+    placeCloud(cache,  4.5, 5.0, -2.5);
+
+    // ── Revelar UI ────────────────────────────────────
+    landingDiv.classList.add('fade-out');
+    infoOverlay.style.opacity = '1';
+    setTimeout(() => landingDiv.remove(), 800);
+
+    setupInteractions();
+
+    // ── Loop ──────────────────────────────────────────
+    renderer.setAnimationLoop(() => {
+        controls.update();
+        renderer.render(scene, camera);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+// LAYER 0 — InstancedMesh por tipo de tile
+// Un InstancedMesh por tileType (confirmado: 1 sub-mesh
+// por tile de KayKit en el PoC → exactamente 1 draw call
+// por tipo de tile sin importar cuántas instancias haya)
+// ═══════════════════════════════════════════════════════
+function buildTileLayers(cache) {
+    // Agrupar celdas por tileType
+    const byType = {};
+    WORLD_CELLS.forEach(cell => {
+        if (!byType[cell.tileType]) byType[cell.tileType] = [];
+        byType[cell.tileType].push(cell);
+    });
+
+    for (const [tileType, cells] of Object.entries(byType)) {
+        const file = TILE_FILES[tileType];
+        const gltf = cache.get(file);
+        if (!gltf) { console.warn('Tile no cargado:', file); continue; }
+
+        // Extraer geometría y material del sub-mesh raíz
+        let geo = null, mat = null;
+        gltf.scene.traverse(child => {
+            if (child.isMesh && !geo) { geo = child.geometry; mat = child.material; }
         });
+        if (!geo) { console.warn('Sin geometría en:', file); continue; }
 
-        const initDiorama = () => {
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x1a252c, 0.03);
+        const inst = new THREE.InstancedMesh(geo, mat, cells.length);
+        // assetKey para el sistema de clics
+        inst.userData = { assetKey: file };
 
-            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.set(0, 10, 14); 
+        const dummy = new THREE.Object3D();
+        cells.forEach((cell, i) => {
+            dummy.position.copy(axialToWorld(cell.q, cell.r));
+            dummy.rotation.y = 0;
+            dummy.updateMatrix();
+            inst.setMatrixAt(i, dummy.matrix);
+        });
+        inst.instanceMatrix.needsUpdate = true;
+        scene.add(inst);
+    }
+}
 
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.outputColorSpace = THREE.SRGBColorSpace;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            document.body.appendChild(renderer.domElement);
+// ═══════════════════════════════════════════════════════
+// LAYER 2 — Mesh clone por occupant
+// Cada ocupante es único → clone de la escena GLTF
+// assetKey propagado a todos los nodos para raycasting
+// ═══════════════════════════════════════════════════════
+function buildOccupants(cache) {
+    WORLD_CELLS.forEach(cell => {
+        if (!cell.occupant) return;
+        const file = cell.occupant + '.gltf';
+        const gltf = cache.get(file);
+        if (!gltf) { console.warn('Occupant no cargado:', file); return; }
 
-            controls = new OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.maxPolarAngle = Math.PI / 2.1;
+        const obj = gltf.scene.clone(true);
+        const pos = axialToWorld(cell.q, cell.r);
+        obj.position.set(pos.x, 0, pos.z);
 
-            // Preparación del Raycasting para clics
-            raycaster = new THREE.Raycaster();
-            mouse = new THREE.Vector2();
+        // Propagar assetKey a todo el árbol del objeto
+        // para que el raycaster lo encuentre en cualquier nivel
+        obj.traverse(node => { node.userData.assetKey = file; });
 
-            // Luces
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-            scene.add(ambientLight);
-            const sunLight = new THREE.DirectionalLight(0xfff4e0, 2.5);
-            sunLight.position.set(8, 15, 10);
-            scene.add(sunLight);
+        scene.add(obj);
+    });
+}
 
-            // Carga y Caché
-            const uniqueFiles = [
-                'hex_grass.gltf', 'hex_river_A.gltf', 'hex_road_A.gltf',
-                'mountain_B_grass_trees.gltf',
-                'building_bridge_A.gltf', 'building_grain.gltf', 'building_destroyed.gltf', 
-                'building_castle_green.gltf', 'coin_stack_large.gltf',
-                'cloud_big.gltf'
-            ];
+// ═══════════════════════════════════════════════════════
+// DECORACIÓN — nubes (no interactivas)
+// ═══════════════════════════════════════════════════════
+function placeCloud(cache, x, y, z) {
+    const gltf = cache.get('cloud_big.gltf');
+    if (!gltf) return;
+    const obj = gltf.scene.clone(true);
+    obj.position.set(x, y, z);
+    // Sin assetKey → el raycaster las ignora silenciosamente
+    scene.add(obj);
+}
 
-            const cache = new Map();
-            const loader = new GLTFLoader();
-            let loadedFilesCount = 0;
+// ═══════════════════════════════════════════════════════
+// INTERACCIONES — raycasting + modal
+// ═══════════════════════════════════════════════════════
+function setupInteractions() {
+    window.addEventListener('click', event => {
+        if (modalOverlay.classList.contains('active')) return;
 
-            uniqueFiles.forEach(fileName => {
-                loader.load(fileName, (gltf) => {
-                    cache.set(fileName, gltf.scene);
-                    loadedFilesCount++;
-                    if (loadedFilesCount === uniqueFiles.length) {
-                        buildWorld(scene, cache);
-                        revelarInterfaz();
-                        setupInteractions(); // Activamos los eventos de clic una vez construido todo
-                    }
-                }, undefined, (err) => console.error("Error:", fileName, err));
-            });
+        mouse.x =  (event.clientX / innerWidth)  * 2 - 1;
+        mouse.y = -(event.clientY / innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
 
-            // Construcción del Mundo por Jerarquías
-            function buildWorld(targetScene, templates) {
-                const mapData = [
-                    { x: -2, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf' },
-                    { x:  0, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf', building: 'building_castle_green.gltf', buildingY: 0.8 },
-                    { x:  2, z: -3.4, tile: 'hex_grass.gltf', deco: 'mountain_B_grass_trees.gltf' },
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        if (!intersects.length) return;
 
-                    { x: -2, z: -1.7, tile: 'hex_grass.gltf', building: 'building_destroyed.gltf' },
-                    { x:  0, z: -1.7, tile: 'hex_road_A.gltf' }, 
-                    { x:  2, z: -1.7, tile: 'hex_grass.gltf', building: 'building_grain.gltf' },
+        // Buscar el primer nodo con assetKey válido
+        let node = intersects[0].object;
+        while (node && node.parent && !node.userData.assetKey) {
+            node = node.parent;
+        }
 
-                    { x: -2, z: 0, tile: 'hex_river_A.gltf' },
-                    { x:  0, z: 0, tile: 'hex_river_A.gltf', building: 'building_bridge_A.gltf' }, 
-                    { x:  2, z: 0, tile: 'hex_river_A.gltf' },
+        if (node?.userData?.assetKey && assetDatabase[node.userData.assetKey]) {
+            displayParchment(assetDatabase[node.userData.assetKey]);
+        }
+    });
 
-                    { x: -2, z: 1.7, tile: 'hex_grass.gltf' },
-                    { x:  0, z: 1.7, tile: 'hex_road_A.gltf' },
-                    { x:  2, z: 1.7, tile: 'hex_grass.gltf', building: 'coin_stack_large.gltf' }
-                ];
+    const closeModal = () => modalOverlay.classList.remove('active');
+    document.getElementById('close-btn').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+}
 
-                const placeItem = (key, x, y, z) => {
-                    if(!key) return;
-                    const instance = templates.get(key).clone();
-                    instance.position.set(x, y, z);
-                    
-                    // CRUCIAL: Inyectamos el nombre del archivo en la propiedad userData del clon
-                    // para saber qué tipo de asset es cuando el Raycaster colisione con él.
-                    instance.userData = { assetKey: key };
-                    
-                    targetScene.add(instance);
-                };
+function displayParchment(data) {
+    document.getElementById('parchment-title').textContent = data.title;
+    document.getElementById('parchment-desc').textContent  = data.desc;
 
-                mapData.forEach(cell => {
-                    placeItem(cell.tile, cell.x, 0, cell.z);
-                    placeItem(cell.deco, cell.x, 0, cell.z);
-                    const bY = cell.buildingY !== undefined ? cell.buildingY : 0;
-                    placeItem(cell.building, cell.x, bY, cell.z);
-                });
+    const tbody = document.getElementById('parchment-stats');
+    tbody.innerHTML = '';
+    for (const [name, val] of Object.entries(data.stats)) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${name}</td><td class="stat-val">${val}</td>`;
+        tbody.appendChild(row);
+    }
+    modalOverlay.classList.add('active');
+}
 
-                // Nubes puramente estéticas (les ponemos una clave inexistente para ignorar sus clics)
-                placeItem('cloud_big.gltf', -3.5, 4.0, -1.0);
-                placeItem('cloud_big.gltf',  3.5, 4.5, -2.5);
-            }
-
-            function revelarInterfaz() {
-                landingDiv.classList.add('fade-out');
-                infoOverlay.style.opacity = "1";
-                setTimeout(() => landingDiv.remove(), 800);
-            }
-
-            // Configuración del sistema de clics interactivos
-            function setupInteractions() {
-                // Evento de clic en el canvas 3D
-                window.addEventListener('click', (event) => {
-                    // Ignorar clics si la hoja de información ya está abierta
-                    if(modalOverlay.classList.contains('active')) return;
-
-                    // Convertir las coordenadas del ratón a formato normalizado 3D (-1 a +1)
-                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-                    // Apuntar nuestro rayo invisible desde la cámara al ratón
-                    raycaster.setFromCamera(mouse, camera);
-
-                    // Calcular colisiones con los hijos de la escena
-                    const intersects = raycaster.intersectObjects(scene.children, true);
-
-                    if (intersects.length > 0) {
-                        // Viajar hacia arriba en la jerarquía del objeto colisionado hasta encontrar el contenedor raíz clonado
-                        let rootObj = intersects[0].object;
-                        while(rootObj && rootObj.parent && !rootObj.userData.assetKey) {
-                            rootObj = rootObj.parent;
-                        }
-
-                        // Si encontramos un objeto válido con base de datos, mostramos el Pergamino
-                        if(rootObj && rootObj.userData && rootObj.userData.assetKey) {
-                            const key = rootObj.userData.assetKey;
-                            if(assetDatabase[key]) {
-                                displayMedievalSheet(assetDatabase[key]);
-                            }
-                        }
-                    }
-                });
-
-                // LÓGICA DE CIERRE DEL MODAL
-                const cerrarModal = () => modalOverlay.classList.remove('active');
-                
-                // Opción 1: Botón X
-                document.getElementById('close-btn').addEventListener('click', cerrarModal);
-                
-                // Opción 2: Clic fuera del pergamino (en el fondo oscuro)
-                modalOverlay.addEventListener('click', (e) => {
-                    if(e.target === modalOverlay) {
-                        cerrarModal();
-                    }
-                });
-            }
-
-            // Rellenar dinámicamente y abrir la hoja medieval
-            function displayMedievalSheet(data) {
-                document.getElementById('parchment-title').textContent = data.title;
-                document.getElementById('parchment-desc').textContent = data.desc;
-                
-                const statsBody = document.getElementById('parchment-stats');
-                statsBody.innerHTML = ''; // Vaciar tabla anterior
-
-                // Crear filas de estadísticas dinámicamente
-                for (const [statName, statVal] of Object.entries(data.stats)) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${statName}</td><td class="stat-val">${statVal}</td>`;
-                    statsBody.appendChild(row);
-                }
-
-                // Disparar la transición CSS activa
-                modalOverlay.classList.add('active');
-            }
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-
-            const animate = () => {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
-            };
-            animate();
-        };
-    </script>
+// ═══════════════════════════════════════════════════════
+// RESIZE
+// ═══════════════════════════════════════════════════════
+window.addEventListener('resize', () => {
+    if (!camera || !renderer) return;
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+});
+</script>
 </body>
 </html>
