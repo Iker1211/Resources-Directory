@@ -70,32 +70,32 @@
     "sizeKB": 37.1
   },
   "dagger": {
-    "layer": "unknown",
     "file": "assets/KayKit_Adventurers_2.0_FREE/KayKit_Adventurers_2.0_FREE/Assets/gltf/dagger.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "mug_empty": {
-    "layer": "unknown",
     "file": "assets/KayKit_Adventurers_2.0_FREE/KayKit_Adventurers_2.0_FREE/Assets/gltf/mug_empty.gltf",
     "hasBin": true,
     "sizeKB": 17.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "mug_full": {
-    "layer": "unknown",
     "file": "assets/KayKit_Adventurers_2.0_FREE/KayKit_Adventurers_2.0_FREE/Assets/gltf/mug_full.gltf",
     "hasBin": true,
     "sizeKB": 18.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "quiver": {
-    "layer": "unknown",
     "file": "assets/KayKit_Adventurers_2.0_FREE/KayKit_Adventurers_2.0_FREE/Assets/gltf/quiver.gltf",
     "hasBin": true,
     "sizeKB": 16.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shield_badge": {
     "layer": "ui",
@@ -161,11 +161,11 @@
     "sizeKB": 13.5
   },
   "smokebomb": {
-    "layer": "unknown",
     "file": "assets/KayKit_Adventurers_2.0_FREE/KayKit_Adventurers_2.0_FREE/Assets/gltf/smokebomb.gltf",
     "hasBin": true,
     "sizeKB": 14.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "spellbook_closed": {
     "layer": "ui",
@@ -210,88 +210,88 @@
     "sizeKB": 22.4
   },
   "wand": {
-    "layer": "unknown",
     "file": "assets/KayKit_Adventurers_2.0_FREE/KayKit_Adventurers_2.0_FREE/Assets/gltf/wand.gltf",
     "hasBin": true,
     "sizeKB": 8.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bricks_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/bricks_A.gltf",
     "hasBin": true,
     "sizeKB": 37.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "bricks_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/bricks_B.gltf",
     "hasBin": true,
     "sizeKB": 37.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "colored_block_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/colored_block_blue.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "colored_block_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/colored_block_green.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "colored_block_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/colored_block_red.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "colored_block_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/colored_block_yellow.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "decorative_block_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/decorative_block_blue.gltf",
     "hasBin": true,
     "sizeKB": 91.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "decorative_block_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/decorative_block_green.gltf",
     "hasBin": true,
     "sizeKB": 91.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "decorative_block_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/decorative_block_red.gltf",
     "hasBin": true,
     "sizeKB": 91.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "decorative_block_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/decorative_block_yellow.gltf",
     "hasBin": true,
     "sizeKB": 91.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "dirt": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/dirt.gltf",
     "hasBin": true,
     "sizeKB": 64.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "dirt_with_grass": {
     "layer": 1,
@@ -305,18 +305,18 @@
     "sizeKB": 43.4
   },
   "dirt_with_snow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/dirt_with_snow.gltf",
     "hasBin": true,
     "sizeKB": 55.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "glass": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/glass.gltf",
     "hasBin": true,
     "sizeKB": 11.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "grass": {
     "layer": 1,
@@ -341,11 +341,11 @@
     "sizeKB": 31.2
   },
   "gravel": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/gravel.gltf",
     "hasBin": true,
     "sizeKB": 64.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "gravel_with_grass": {
     "layer": 1,
@@ -359,46 +359,46 @@
     "sizeKB": 43.4
   },
   "gravel_with_snow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/gravel_with_snow.gltf",
     "hasBin": true,
     "sizeKB": 55.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "lava": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/lava.gltf",
     "hasBin": true,
     "sizeKB": 84.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "metal": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/metal.gltf",
     "hasBin": true,
     "sizeKB": 33.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "prototype": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/prototype.gltf",
     "hasBin": true,
     "sizeKB": 10.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "sand_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/sand_A.gltf",
     "hasBin": true,
     "sizeKB": 64.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "sand_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/sand_B.gltf",
     "hasBin": true,
     "sizeKB": 44.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "sand_with_grass": {
     "layer": 1,
@@ -412,18 +412,18 @@
     "sizeKB": 43.4
   },
   "sand_with_snow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/sand_with_snow.gltf",
     "hasBin": true,
     "sizeKB": 55.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "snow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/snow.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stone": {
     "layer": 1,
@@ -481,32 +481,32 @@
     "sizeKB": 63.7
   },
   "striped_block_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/striped_block_blue.gltf",
     "hasBin": true,
     "sizeKB": 8.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "striped_block_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/striped_block_green.gltf",
     "hasBin": true,
     "sizeKB": 8.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "striped_block_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/striped_block_red.gltf",
     "hasBin": true,
     "sizeKB": 8.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "striped_block_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/striped_block_yellow.gltf",
     "hasBin": true,
     "sizeKB": 8.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "tree": {
     "layer": 1,
@@ -531,172 +531,238 @@
     "sizeKB": 31.2
   },
   "water": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/water.gltf",
     "hasBin": true,
     "sizeKB": 23.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "wood": {
-    "layer": "unknown",
     "file": "assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/wood.gltf",
     "hasBin": true,
     "sizeKB": 56.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "banner_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_blue.gltf",
     "hasBin": true,
     "sizeKB": 9.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_brown.gltf",
     "hasBin": true,
     "sizeKB": 9.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_green.gltf",
     "hasBin": true,
     "sizeKB": 9.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternA_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternA_blue.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternA_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternA_brown.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternA_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternA_green.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternA_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternA_red.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternA_white": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternA_white.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternA_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternA_yellow.gltf",
     "hasBin": true,
     "sizeKB": 10.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternB_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternB_blue.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternB_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternB_brown.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternB_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternB_green.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternB_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternB_red.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternB_white": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternB_white.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternB_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternB_yellow.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternC_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternC_blue.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternC_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternC_brown.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternC_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternC_green.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternC_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternC_red.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternC_white": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternC_white.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_patternC_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_patternC_yellow.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_red.gltf",
     "hasBin": true,
     "sizeKB": 9.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_shield_blue": {
     "layer": "ui",
@@ -741,165 +807,239 @@
     "sizeKB": 38.7
   },
   "banner_thin_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_thin_blue.gltf",
     "hasBin": true,
     "sizeKB": 8.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_thin_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_thin_brown.gltf",
     "hasBin": true,
     "sizeKB": 8.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_thin_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_thin_green.gltf",
     "hasBin": true,
     "sizeKB": 8.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_thin_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_thin_red.gltf",
     "hasBin": true,
     "sizeKB": 8.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_thin_white": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_thin_white.gltf",
     "hasBin": true,
     "sizeKB": 8.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_thin_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_thin_yellow.gltf",
     "hasBin": true,
     "sizeKB": 8.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_triple_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_triple_blue.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_triple_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_triple_brown.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_triple_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_triple_green.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_triple_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_triple_red.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_triple_white": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_triple_white.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_triple_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_triple_yellow.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_white": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_white.gltf",
     "hasBin": true,
     "sizeKB": 9.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "banner_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/banner_yellow.gltf",
     "hasBin": true,
     "sizeKB": 9.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "barrel_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel_large.gltf",
     "hasBin": true,
     "sizeKB": 28.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "barrel_large_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel_large_decorated.gltf",
     "hasBin": true,
     "sizeKB": 53.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "barrel_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel_small.gltf",
     "hasBin": true,
     "sizeKB": 17.2,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "barrel_small_stack": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel_small_stack.gltf",
     "hasBin": true,
     "sizeKB": 74.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "barrier": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrier.gltf",
     "hasBin": true,
     "sizeKB": 9.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "barrier_colum_half": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrier_colum_half.gltf",
     "hasBin": true,
     "sizeKB": 9.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "barrier_column": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrier_column.gltf",
     "hasBin": true,
     "sizeKB": 10.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "barrier_corner": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrier_corner.gltf",
     "hasBin": true,
     "sizeKB": 11.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "barrier_half": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrier_half.gltf",
     "hasBin": true,
     "sizeKB": 5.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "bed_decorated": {
     "layer": "ui",
@@ -923,88 +1063,100 @@
     "sizeKB": 15.3
   },
   "bottle_A_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_A_brown.gltf",
     "hasBin": true,
     "sizeKB": 10.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_A_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_A_green.gltf",
     "hasBin": true,
     "sizeKB": 11.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_A_labeled_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_A_labeled_brown.gltf",
     "hasBin": true,
     "sizeKB": 10.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_A_labeled_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_A_labeled_green.gltf",
     "hasBin": true,
     "sizeKB": 11.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_B_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_B_brown.gltf",
     "hasBin": true,
     "sizeKB": 10.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_B_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_B_green.gltf",
     "hasBin": true,
     "sizeKB": 11.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_C_brown": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_C_brown.gltf",
     "hasBin": true,
     "sizeKB": 10.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bottle_C_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/bottle_C_green.gltf",
     "hasBin": true,
     "sizeKB": 11.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "box_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/box_large.gltf",
     "hasBin": true,
     "sizeKB": 14.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "box_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/box_small.gltf",
     "hasBin": true,
     "sizeKB": 14.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "box_small_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/box_small_decorated.gltf",
     "hasBin": true,
     "sizeKB": 56.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "box_stacked": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/box_stacked.gltf",
     "hasBin": true,
     "sizeKB": 123.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "candle": {
     "layer": "ui",
@@ -1049,11 +1201,11 @@
     "sizeKB": 12.7
   },
   "ceiling_tile": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/ceiling_tile.gltf",
     "hasBin": true,
     "sizeKB": 6.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "chair": {
     "layer": "ui",
@@ -1105,25 +1257,25 @@
     "sizeKB": 23.3
   },
   "column": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/column.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "crates_stacked": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/crates_stacked.gltf",
     "hasBin": true,
     "sizeKB": 83.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_large.gltf",
     "hasBin": true,
     "sizeKB": 9.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_large_rocky": {
     "layer": 1,
@@ -1137,144 +1289,144 @@
     "sizeKB": 14.7
   },
   "floor_dirt_small_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_small_A.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_small_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_small_B.gltf",
     "hasBin": true,
     "sizeKB": 5.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_small_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_small_C.gltf",
     "hasBin": true,
     "sizeKB": 5.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_small_D": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_small_D.gltf",
     "hasBin": true,
     "sizeKB": 4.3,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_small_corner": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_small_corner.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_dirt_small_weeds": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_dirt_small_weeds.gltf",
     "hasBin": true,
     "sizeKB": 22.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_foundation_allsides": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_foundation_allsides.gltf",
     "hasBin": true,
     "sizeKB": 29.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_foundation_corner": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_foundation_corner.gltf",
     "hasBin": true,
     "sizeKB": 17.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_foundation_diagonal_corner": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_foundation_diagonal_corner.gltf",
     "hasBin": true,
     "sizeKB": 10.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_foundation_front": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_foundation_front.gltf",
     "hasBin": true,
     "sizeKB": 11.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_foundation_front_and_back": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_foundation_front_and_back.gltf",
     "hasBin": true,
     "sizeKB": 17.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_foundation_front_and_sides": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_foundation_front_and_sides.gltf",
     "hasBin": true,
     "sizeKB": 23.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_big_grate": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_big_grate.gltf",
     "hasBin": true,
     "sizeKB": 21.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_big_grate_open": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_big_grate_open.gltf",
     "hasBin": true,
     "sizeKB": 21.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_big_spikes": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_big_spikes.gltf",
     "hasBin": true,
     "sizeKB": 45.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_extralarge_grates": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_extralarge_grates.gltf",
     "hasBin": true,
     "sizeKB": 49.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_extralarge_grates_open": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_extralarge_grates_open.gltf",
     "hasBin": true,
     "sizeKB": 49.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_grate": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_grate.gltf",
     "hasBin": true,
     "sizeKB": 12.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_grate_open": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_grate_open.gltf",
     "hasBin": true,
     "sizeKB": 12.3,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_large.gltf",
     "hasBin": true,
     "sizeKB": 12.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_large_rocks": {
     "layer": 1,
@@ -1288,193 +1440,193 @@
     "sizeKB": 22.1
   },
   "floor_tile_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small.gltf",
     "hasBin": true,
     "sizeKB": 6.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_small_broken_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small_broken_A.gltf",
     "hasBin": true,
     "sizeKB": 7.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_small_broken_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small_broken_B.gltf",
     "hasBin": true,
     "sizeKB": 6.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_small_corner": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small_corner.gltf",
     "hasBin": true,
     "sizeKB": 4.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_small_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small_decorated.gltf",
     "hasBin": true,
     "sizeKB": 24.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_small_weeds_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small_weeds_A.gltf",
     "hasBin": true,
     "sizeKB": 29.3,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_tile_small_weeds_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_tile_small_weeds_B.gltf",
     "hasBin": true,
     "sizeKB": 23.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_wood_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_wood_large.gltf",
     "hasBin": true,
     "sizeKB": 21.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_wood_large_dark": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_wood_large_dark.gltf",
     "hasBin": true,
     "sizeKB": 21.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_wood_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_wood_small.gltf",
     "hasBin": true,
     "sizeKB": 7.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "floor_wood_small_dark": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/floor_wood_small_dark.gltf",
     "hasBin": true,
     "sizeKB": 8.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "keg": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/keg.gltf",
     "hasBin": true,
     "sizeKB": 41.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "keg_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/keg_decorated.gltf",
     "hasBin": true,
     "sizeKB": 115.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "key": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/key.gltf",
     "hasBin": true,
     "sizeKB": 8.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "keyring": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/keyring.gltf",
     "hasBin": true,
     "sizeKB": 29.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "keyring_hanging": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/keyring_hanging.gltf",
     "hasBin": true,
     "sizeKB": 29.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "pillar": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/pillar.gltf",
     "hasBin": true,
     "sizeKB": 11.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "pillar_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/pillar_decorated.gltf",
     "hasBin": true,
     "sizeKB": 45.9,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "plate": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate.gltf",
     "hasBin": true,
     "sizeKB": 8.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "plate_food_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_food_A.gltf",
     "hasBin": true,
     "sizeKB": 23.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "plate_food_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_food_B.gltf",
     "hasBin": true,
     "sizeKB": 15.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "plate_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_small.gltf",
     "hasBin": true,
     "sizeKB": 8.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "plate_stack": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_stack.gltf",
     "hasBin": true,
     "sizeKB": 18.4,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "rubble_half": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/rubble_half.gltf",
     "hasBin": true,
     "sizeKB": 24.2,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "rubble_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/rubble_large.gltf",
     "hasBin": true,
     "sizeKB": 45.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "shelf_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/shelf_large.gltf",
     "hasBin": true,
     "sizeKB": 7.8,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "shelf_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/shelf_small.gltf",
     "hasBin": true,
     "sizeKB": 6.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "shelf_small_candles": {
     "layer": "ui",
@@ -1484,74 +1636,74 @@
     "sizeKB": 14.6
   },
   "shelves": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/shelves.gltf",
     "hasBin": true,
     "sizeKB": 12.7,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs.gltf",
     "hasBin": true,
     "sizeKB": 28.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_long": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_long.gltf",
     "hasBin": true,
     "sizeKB": 34.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_long_modular_center": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_long_modular_center.gltf",
     "hasBin": true,
     "sizeKB": 6.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_long_modular_left": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_long_modular_left.gltf",
     "hasBin": true,
     "sizeKB": 20.6,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_long_modular_right": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_long_modular_right.gltf",
     "hasBin": true,
     "sizeKB": 20.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_modular_center": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_modular_center.gltf",
     "hasBin": true,
     "sizeKB": 6.5,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_modular_left": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_modular_left.gltf",
     "hasBin": true,
     "sizeKB": 17.3,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_modular_right": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_modular_right.gltf",
     "hasBin": true,
     "sizeKB": 17.3,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_narrow": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_narrow.gltf",
     "hasBin": true,
     "sizeKB": 28.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_wall_left": {
     "layer": 2,
@@ -1587,32 +1739,32 @@
     "sizeKB": 55.2
   },
   "stairs_wide": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_wide.gltf",
     "hasBin": true,
     "sizeKB": 28.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_wood": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_wood.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stairs_wood_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stairs_wood_decorated.gltf",
     "hasBin": true,
     "sizeKB": 139.0,
-    "_review": true
+    "layer": "dungeon",
+    "context": "dungeon"
   },
   "stool": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/stool.gltf",
     "hasBin": true,
     "sizeKB": 13.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "sword_shield": {
     "layer": "ui",
@@ -1770,67 +1922,67 @@
     "sizeKB": 16.8
   },
   "trunk_large_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_large_A.gltf",
     "hasBin": true,
     "sizeKB": 15.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_large_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_large_B.gltf",
     "hasBin": true,
     "sizeKB": 15.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_large_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_large_C.gltf",
     "hasBin": true,
     "sizeKB": 15.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_medium_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_medium_A.gltf",
     "hasBin": true,
     "sizeKB": 11.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_medium_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_medium_B.gltf",
     "hasBin": true,
     "sizeKB": 11.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_medium_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_medium_C.gltf",
     "hasBin": true,
     "sizeKB": 11.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_small_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_small_A.gltf",
     "hasBin": true,
     "sizeKB": 15.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_small_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_small_B.gltf",
     "hasBin": true,
     "sizeKB": 15.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "trunk_small_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/trunk_small_C.gltf",
     "hasBin": true,
     "sizeKB": 15.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "wall": {
     "layer": 2,
@@ -2185,18 +2337,18 @@
     "sizeKB": 46.7
   },
   "arrow_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/arrow_A.gltf",
     "hasBin": true,
     "sizeKB": 6.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "arrow_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/arrow_B.gltf",
     "hasBin": true,
     "sizeKB": 28.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "axe_A": {
     "layer": "ui",
@@ -2248,18 +2400,18 @@
     "sizeKB": 173.6
   },
   "dagger_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/dagger_A.gltf",
     "hasBin": true,
     "sizeKB": 20.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "dagger_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/dagger_B.gltf",
     "hasBin": true,
     "sizeKB": 22.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "fistweapon_A": {
     "layer": "ui",
@@ -2290,32 +2442,32 @@
     "sizeKB": 24.2
   },
   "halberd": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/halberd.gltf",
     "hasBin": true,
     "sizeKB": 65.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "hammer_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/hammer_A.gltf",
     "hasBin": true,
     "sizeKB": 25.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "hammer_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/hammer_B.gltf",
     "hasBin": true,
     "sizeKB": 31.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "hammer_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/hammer_C.gltf",
     "hasBin": true,
     "sizeKB": 34.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shield_A": {
     "layer": "ui",
@@ -2339,11 +2491,11 @@
     "sizeKB": 30.2
   },
   "spear_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/spear_A.gltf",
     "hasBin": true,
     "sizeKB": 54.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "staff_A": {
     "layer": "ui",
@@ -2395,11 +2547,11 @@
     "sizeKB": 32.1
   },
   "wand_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_FantasyWeaponsBits_1.0_FREE/KayKit_FantasyWeaponsBits_1.0_FREE/Assets/gltf/wand_A.gltf",
     "hasBin": true,
     "sizeKB": 22.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Bush_1_A_Color1": {
     "layer": 1,
@@ -3613,60 +3765,76 @@
     "sizeKB": 6.9
   },
   "cabinet_medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cabinet_medium.gltf",
     "hasBin": true,
     "sizeKB": 25.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "cabinet_medium_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cabinet_medium_decorated.gltf",
     "hasBin": true,
     "sizeKB": 50.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "cabinet_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cabinet_small.gltf",
     "hasBin": true,
     "sizeKB": 21.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "cabinet_small_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cabinet_small_decorated.gltf",
     "hasBin": true,
     "sizeKB": 29.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "cactus_medium_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cactus_medium_A.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "sand",
+      "dirt"
+    ]
   },
   "cactus_medium_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cactus_medium_B.gltf",
     "hasBin": true,
     "sizeKB": 20.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "sand",
+      "dirt"
+    ]
   },
   "cactus_small_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cactus_small_A.gltf",
     "hasBin": true,
     "sizeKB": 12.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "sand",
+      "dirt"
+    ]
   },
   "cactus_small_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/cactus_small_B.gltf",
     "hasBin": true,
     "sizeKB": 12.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "sand",
+      "dirt"
+    ]
   },
   "chair_A": {
     "layer": "ui",
@@ -3718,25 +3886,25 @@
     "sizeKB": 13.6
   },
   "couch": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/couch.gltf",
     "hasBin": true,
     "sizeKB": 23.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "couch_pillows": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/couch_pillows.gltf",
     "hasBin": true,
     "sizeKB": 29.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "lamp_standing": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/lamp_standing.gltf",
     "hasBin": true,
     "sizeKB": 14.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "lamp_table": {
     "layer": "ui",
@@ -3746,158 +3914,158 @@
     "sizeKB": 15.5
   },
   "pictureframe_large_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_large_A.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_large_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_large_B.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_medium.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_small_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_small_A.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_small_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_small_B.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_small_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_small_C.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_standing_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_standing_A.gltf",
     "hasBin": true,
     "sizeKB": 7.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pictureframe_standing_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pictureframe_standing_B.gltf",
     "hasBin": true,
     "sizeKB": 7.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pillow_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pillow_A.gltf",
     "hasBin": true,
     "sizeKB": 5.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pillow_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/pillow_B.gltf",
     "hasBin": true,
     "sizeKB": 5.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rug_oval_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/rug_oval_A.gltf",
     "hasBin": true,
     "sizeKB": 9.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rug_oval_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/rug_oval_B.gltf",
     "hasBin": true,
     "sizeKB": 9.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rug_rectangle_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/rug_rectangle_A.gltf",
     "hasBin": true,
     "sizeKB": 4.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rug_rectangle_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/rug_rectangle_B.gltf",
     "hasBin": true,
     "sizeKB": 4.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rug_rectangle_stripes_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/rug_rectangle_stripes_A.gltf",
     "hasBin": true,
     "sizeKB": 5.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rug_rectangle_stripes_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/rug_rectangle_stripes_B.gltf",
     "hasBin": true,
     "sizeKB": 5.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shelf_A_big": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/shelf_A_big.gltf",
     "hasBin": true,
     "sizeKB": 12.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shelf_A_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/shelf_A_small.gltf",
     "hasBin": true,
     "sizeKB": 12.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shelf_B_large": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/shelf_B_large.gltf",
     "hasBin": true,
     "sizeKB": 12.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shelf_B_large_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/shelf_B_large_decorated.gltf",
     "hasBin": true,
     "sizeKB": 28.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shelf_B_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/shelf_B_small.gltf",
     "hasBin": true,
     "sizeKB": 12.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "shelf_B_small_decorated": {
-    "layer": "unknown",
     "file": "assets/KayKit_Furniture_Bits_1.0_FREE/KayKit_Furniture_Bits_1.0_FREE/Assets/gltf/shelf_B_small_decorated.gltf",
     "hasBin": true,
     "sizeKB": 25.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "table_low": {
     "layer": "ui",
@@ -4863,11 +5031,15 @@
     "sizeKB": 24.0
   },
   "projectile_catapult": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/projectile_catapult.gltf",
     "hasBin": true,
     "sizeKB": 15.0,
-    "_review": true
+    "layer": 2,
+    "subtype": "building",
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "wall_corner_A_gate": {
     "layer": 2,
@@ -5409,144 +5581,208 @@
     "sizeKB": 14.6
   },
   "barrel": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/barrel.gltf",
     "hasBin": true,
     "sizeKB": 18.2,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "bucket_arrows": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/bucket_arrows.gltf",
     "hasBin": true,
     "sizeKB": 18.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "bucket_empty": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/bucket_empty.gltf",
     "hasBin": true,
     "sizeKB": 9.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "bucket_water": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/bucket_water.gltf",
     "hasBin": true,
     "sizeKB": 9.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_A_big": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_A_big.gltf",
     "hasBin": true,
     "sizeKB": 9.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_A_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_A_small.gltf",
     "hasBin": true,
     "sizeKB": 9.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_B_big": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_B_big.gltf",
     "hasBin": true,
     "sizeKB": 9.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_B_small": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_B_small.gltf",
     "hasBin": true,
     "sizeKB": 9.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_long_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_long_A.gltf",
     "hasBin": true,
     "sizeKB": 16.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_long_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_long_B.gltf",
     "hasBin": true,
     "sizeKB": 16.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_long_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_long_C.gltf",
     "hasBin": true,
     "sizeKB": 13.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_long_empty": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_long_empty.gltf",
     "hasBin": true,
     "sizeKB": 5.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "crate_open": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_open.gltf",
     "hasBin": true,
     "sizeKB": 14.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "flag_blue": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/flag_blue.gltf",
     "hasBin": true,
     "sizeKB": 5.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "flag_green": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/flag_green.gltf",
     "hasBin": true,
     "sizeKB": 5.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "flag_red": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/flag_red.gltf",
     "hasBin": true,
     "sizeKB": 5.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "flag_yellow": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/flag_yellow.gltf",
     "hasBin": true,
     "sizeKB": 5.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt",
+      "road"
+    ]
   },
   "ladder": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/ladder.gltf",
     "hasBin": true,
     "sizeKB": 8.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "pallet": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/pallet.gltf",
     "hasBin": true,
     "sizeKB": 7.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "resource_lumber": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/resource_lumber.gltf",
     "hasBin": true,
     "sizeKB": 14.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "resource_stone": {
     "layer": 1,
@@ -5560,25 +5796,35 @@
     "sizeKB": 14.3
   },
   "sack": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/sack.gltf",
     "hasBin": true,
     "sizeKB": 6.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "target": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/target.gltf",
     "hasBin": true,
     "sizeKB": 9.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "tent": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/tent.gltf",
     "hasBin": true,
     "sizeKB": 8.9,
-    "_review": true
+    "layer": 2,
+    "subtype": "building",
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "weaponrack": {
     "layer": "ui",
@@ -5588,11 +5834,14 @@
     "sizeKB": 5.8
   },
   "wheelbarrow": {
-    "layer": "unknown",
     "file": "assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/wheelbarrow.gltf",
     "hasBin": true,
     "sizeKB": 21.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "hex_grass": {
     "layer": 0,
@@ -6135,11 +6384,14 @@
     "sizeKB": 7.6
   },
   "anvil": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/anvil.gltf",
     "hasBin": true,
     "sizeKB": 17.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "axe": {
     "layer": "ui",
@@ -6149,53 +6401,53 @@
     "sizeKB": 24.5
   },
   "blueprint": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/blueprint.gltf",
     "hasBin": true,
     "sizeKB": 13.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "blueprint_stacked": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/blueprint_stacked.gltf",
     "hasBin": true,
     "sizeKB": 31.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "bucket_metal": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/bucket_metal.gltf",
     "hasBin": true,
     "sizeKB": 23.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "chisel": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/chisel.gltf",
     "hasBin": true,
     "sizeKB": 13.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "compass_base": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/compass_base.gltf",
     "hasBin": true,
     "sizeKB": 63.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "drafting_compass": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/drafting_compass.gltf",
     "hasBin": true,
     "sizeKB": 67.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "file": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/file.gltf",
     "hasBin": true,
     "sizeKB": 14.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "grindstone": {
     "layer": 1,
@@ -6209,46 +6461,46 @@
     "sizeKB": 56.5
   },
   "hammer": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/hammer.gltf",
     "hasBin": true,
     "sizeKB": 17.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "handdrill": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/handdrill.gltf",
     "hasBin": true,
     "sizeKB": 34.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "handplane": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/handplane.gltf",
     "hasBin": true,
     "sizeKB": 27.3,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "journal_closed": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/journal_closed.gltf",
     "hasBin": true,
     "sizeKB": 35.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "journal_open": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/journal_open.gltf",
     "hasBin": true,
     "sizeKB": 27.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "knife": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/knife.gltf",
     "hasBin": true,
     "sizeKB": 13.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "lantern": {
     "layer": "ui",
@@ -6258,74 +6510,74 @@
     "sizeKB": 39.3
   },
   "magnifying_glass": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/magnifying_glass.gltf",
     "hasBin": true,
     "sizeKB": 27.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "mallet": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/mallet.gltf",
     "hasBin": true,
     "sizeKB": 18.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "map": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/map.gltf",
     "hasBin": true,
     "sizeKB": 27.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "map_empty": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/map_empty.gltf",
     "hasBin": true,
     "sizeKB": 27.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "map_rolled": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/map_rolled.gltf",
     "hasBin": true,
     "sizeKB": 13.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "nail": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/nail.gltf",
     "hasBin": true,
     "sizeKB": 5.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pencil_A_long": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/pencil_A_long.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pencil_A_short": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/pencil_A_short.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pencil_B_long": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/pencil_B_long.gltf",
     "hasBin": true,
     "sizeKB": 15.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pencil_B_short": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/pencil_B_short.gltf",
     "hasBin": true,
     "sizeKB": 15.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "pickaxe": {
     "layer": "ui",
@@ -6335,46 +6587,46 @@
     "sizeKB": 23.4
   },
   "rope_bundle_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/rope_bundle_A.gltf",
     "hasBin": true,
     "sizeKB": 33.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "rope_bundle_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/rope_bundle_B.gltf",
     "hasBin": true,
     "sizeKB": 24.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "saw": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/saw.gltf",
     "hasBin": true,
     "sizeKB": 27.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "scissors": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/scissors.gltf",
     "hasBin": true,
     "sizeKB": 32.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "screw_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/screw_A.gltf",
     "hasBin": true,
     "sizeKB": 13.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "screw_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/screw_B.gltf",
     "hasBin": true,
     "sizeKB": 14.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "screwdriver_A_long": {
     "layer": 1,
@@ -6465,18 +6717,18 @@
     "sizeKB": 13.2
   },
   "shovel": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/shovel.gltf",
     "hasBin": true,
     "sizeKB": 31.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "tongs": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/tongs.gltf",
     "hasBin": true,
     "sizeKB": 19.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "torch__gltf": {
     "layer": 2,
@@ -6503,410 +6755,575 @@
     "sizeKB": 20.2
   },
   "trowel": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/trowel.gltf",
     "hasBin": true,
     "sizeKB": 13.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "wrench_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/wrench_A.gltf",
     "hasBin": true,
     "sizeKB": 19.2,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "wrench_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/wrench_B.gltf",
     "hasBin": true,
     "sizeKB": 13.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Copper_Bar": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Bar.gltf",
     "hasBin": true,
     "sizeKB": 6.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Bars": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Bars.gltf",
     "hasBin": true,
     "sizeKB": 36.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Bars_Stack_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Bars_Stack_Large.gltf",
     "hasBin": true,
     "sizeKB": 183.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Bars_Stack_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Bars_Stack_Medium.gltf",
     "hasBin": true,
     "sizeKB": 48.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Bars_Stack_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Bars_Stack_Small.gltf",
     "hasBin": true,
     "sizeKB": 25.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Nugget_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Nugget_Large.gltf",
     "hasBin": true,
     "sizeKB": 10.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Nugget_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Nugget_Medium.gltf",
     "hasBin": true,
     "sizeKB": 5.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Nugget_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Nugget_Small.gltf",
     "hasBin": true,
     "sizeKB": 5.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Copper_Nuggets": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Copper_Nuggets.gltf",
     "hasBin": true,
     "sizeKB": 28.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_A_Barrel": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_A_Barrel.gltf",
     "hasBin": true,
     "sizeKB": 32.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_A_Barrel_Dirty": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_A_Barrel_Dirty.gltf",
     "hasBin": true,
     "sizeKB": 40.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_A_Barrels": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_A_Barrels.gltf",
     "hasBin": true,
     "sizeKB": 155.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_A_Jerrycan": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_A_Jerrycan.gltf",
     "hasBin": true,
     "sizeKB": 28.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_B_Barrel": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_B_Barrel.gltf",
     "hasBin": true,
     "sizeKB": 32.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_B_Barrel_Dirty": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_B_Barrel_Dirty.gltf",
     "hasBin": true,
     "sizeKB": 40.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_B_Barrels": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_B_Barrels.gltf",
     "hasBin": true,
     "sizeKB": 155.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_B_Jerrycan": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_B_Jerrycan.gltf",
     "hasBin": true,
     "sizeKB": 28.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_C_Barrel": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_C_Barrel.gltf",
     "hasBin": true,
     "sizeKB": 32.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_C_Barrel_Dirty": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_C_Barrel_Dirty.gltf",
     "hasBin": true,
     "sizeKB": 40.3,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_C_Barrels": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_C_Barrels.gltf",
     "hasBin": true,
     "sizeKB": 155.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Fuel_C_Jerrycan": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_C_Jerrycan.gltf",
     "hasBin": true,
     "sizeKB": 28.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Bar": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Bar.gltf",
     "hasBin": true,
     "sizeKB": 6.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Bars": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Bars.gltf",
     "hasBin": true,
     "sizeKB": 36.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Bars_Stack_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Bars_Stack_Large.gltf",
     "hasBin": true,
     "sizeKB": 183.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Bars_Stack_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Bars_Stack_Medium.gltf",
     "hasBin": true,
     "sizeKB": 48.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Bars_Stack_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Bars_Stack_Small.gltf",
     "hasBin": true,
     "sizeKB": 25.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Nugget_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Nugget_Large.gltf",
     "hasBin": true,
     "sizeKB": 10.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Nugget_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Nugget_Medium.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Nugget_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Nugget_Small.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Gold_Nuggets": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Gold_Nuggets.gltf",
     "hasBin": true,
     "sizeKB": 28.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Bar": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Bar.gltf",
     "hasBin": true,
     "sizeKB": 6.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Bars": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Bars.gltf",
     "hasBin": true,
     "sizeKB": 36.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Bars_Stack_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Bars_Stack_Large.gltf",
     "hasBin": true,
     "sizeKB": 183.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Bars_Stack_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Bars_Stack_Medium.gltf",
     "hasBin": true,
     "sizeKB": 48.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Bars_Stack_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Bars_Stack_Small.gltf",
     "hasBin": true,
     "sizeKB": 25.5,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Nugget_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Nugget_Large.gltf",
     "hasBin": true,
     "sizeKB": 10.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Nugget_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Nugget_Medium.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Nugget_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Nugget_Small.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Iron_Nuggets": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Iron_Nuggets.gltf",
     "hasBin": true,
     "sizeKB": 28.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Pallet_Wood": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Pallet_Wood.gltf",
     "hasBin": true,
     "sizeKB": 15.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Pallet_Wood_Covered_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Pallet_Wood_Covered_A.gltf",
     "hasBin": true,
     "sizeKB": 18.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Pallet_Wood_Covered_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Pallet_Wood_Covered_B.gltf",
     "hasBin": true,
     "sizeKB": 18.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Parts_Cog": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Parts_Cog.gltf",
     "hasBin": true,
     "sizeKB": 11.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Parts_Pile_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Parts_Pile_Large.gltf",
     "hasBin": true,
     "sizeKB": 126.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Parts_Pile_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Parts_Pile_Medium.gltf",
     "hasBin": true,
     "sizeKB": 83.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Parts_Pile_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Parts_Pile_Small.gltf",
     "hasBin": true,
     "sizeKB": 52.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Bar": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Bar.gltf",
     "hasBin": true,
     "sizeKB": 6.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Bars": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Bars.gltf",
     "hasBin": true,
     "sizeKB": 36.8,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Bars_Stack_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Bars_Stack_Large.gltf",
     "hasBin": true,
     "sizeKB": 183.4,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Bars_Stack_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Bars_Stack_Medium.gltf",
     "hasBin": true,
     "sizeKB": 48.1,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Bars_Stack_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Bars_Stack_Small.gltf",
     "hasBin": true,
     "sizeKB": 25.6,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Nugget_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Nugget_Large.gltf",
     "hasBin": true,
     "sizeKB": 10.0,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Nugget_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Nugget_Medium.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Nugget_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Nugget_Small.gltf",
     "hasBin": true,
     "sizeKB": 5.9,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Silver_Nuggets": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Silver_Nuggets.gltf",
     "hasBin": true,
     "sizeKB": 28.7,
-    "_review": true
+    "layer": 1,
+    "validOn": [
+      "grass",
+      "dirt"
+    ]
   },
   "Stone_Brick": {
     "layer": 1,
@@ -6975,46 +7392,46 @@
     "sizeKB": 34.4
   },
   "Textiles_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Textiles_A.gltf",
     "hasBin": true,
     "sizeKB": 18.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Textiles_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Textiles_B.gltf",
     "hasBin": true,
     "sizeKB": 35.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Textiles_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Textiles_C.gltf",
     "hasBin": true,
     "sizeKB": 30.6,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Textiles_Stack_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Textiles_Stack_Large.gltf",
     "hasBin": true,
     "sizeKB": 70.5,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Textiles_Stack_Large_Colored": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Textiles_Stack_Large_Colored.gltf",
     "hasBin": true,
     "sizeKB": 82.7,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Textiles_Stack_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Textiles_Stack_Small.gltf",
     "hasBin": true,
     "sizeKB": 66.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Wood_Log_A": {
     "layer": 1,
@@ -7050,46 +7467,46 @@
     "sizeKB": 190.1
   },
   "Wood_Plank_A": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Plank_A.gltf",
     "hasBin": true,
     "sizeKB": 4.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Wood_Plank_B": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Plank_B.gltf",
     "hasBin": true,
     "sizeKB": 6.4,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Wood_Plank_C": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Plank_C.gltf",
     "hasBin": true,
     "sizeKB": 8.1,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Wood_Planks_Stack_Large": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Planks_Stack_Large.gltf",
     "hasBin": true,
     "sizeKB": 80.9,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Wood_Planks_Stack_Medium": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Planks_Stack_Medium.gltf",
     "hasBin": true,
     "sizeKB": 48.8,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Wood_Planks_Stack_Small": {
-    "layer": "unknown",
     "file": "assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Planks_Stack_Small.gltf",
     "hasBin": true,
     "sizeKB": 18.0,
-    "_review": true
+    "layer": "ui",
+    "context": "ui"
   },
   "Skeleton_Arrow": {
     "layer": 2,
