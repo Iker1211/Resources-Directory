@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odyssey Hex World - Sistema de Ontología de Assets</title>
+    <style>
+        /* CSS Variables para personalización rápida y Adaptive Quality */
+        :root {
+            --bg-principal: #0d1117;
+            --bg-tarjeta: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-epic: #f0e6d2; /* Tono pergamino clásico */
+            --accent-gold: #d4af37;
+            --accent-layer-0: #2ea043; /* Base / Terreno */
+            --accent-layer-1: #1f6feb; /* Props / Entorno */
+            --accent-layer-2: #ff7b72; /* Construcciones / Entidades */
+            --accent-ui: #ab7df6;      /* Interfaces y Armas */
+            --transicion-suave: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset y estilos base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: var(--bg-principal);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-epic);
+            font-family: 'Georgia', serif;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Contenedor Principal Balanceado */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        /* Buscador / Filtros Rápidos */
+        .filter-box {
+            background-color: var(--bg-tarjeta);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-input {
+            background-color: var(--bg-principal);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 15px;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s var(--transicion-suave);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        /* Leyenda de Capas Interactiva */
+        .legend-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge-layer {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .layer-0 { background-color: rgba(46, 160, 67, 0.15); color: var(--accent-layer-0); border: 1px solid var(--accent-layer-0); }
+        .layer-1 { background-color: rgba(31, 111, 235, 0.15); color: var(--accent-layer-1); border: 1px solid var(--accent-layer-1); }
+        .layer-2 { background-color: rgba(255, 123, 114, 0.15); color: var(--accent-layer-2); border: 1px solid var(--accent-layer-2); }
+        .layer-ui { background-color: rgba(171, 125, 246, 0.15); color: var(--accent-ui); border: 1px solid var(--accent-ui); }
+
+        /* Contenedor de la Tabla con scroll optimizado */
+        .table-responsive {
+            background-color: var(--bg-tarjeta);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow-x: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: rgba(22, 27, 34, 0.85);
+            color: var(--accent-epic);
+            font-family: 'Georgia', serif;
+            font-weight: 600;
+            padding: 16px;
+            border-bottom: 2px solid var(--border-color);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+            transition: background-color 0.2s ease;
+        }
+
+        tr:hover td {
+            background-color: rgba(48, 54, 61, 0.3);
+        }
+
+        /* Estilos de filas específicas basadas en Ontología */
+        .meta-id {
+            font-family: monospace;
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .epico-tag {
+            font-style: italic;
+            color: #e4e6eb;
+            font-weight: 500;
+        }
+
+        .file-path {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            max-width: 280px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        /* Elementos de Calidad Adaptativa (Aislamiento de Animaciones para GPU) */
+        .animated-icon {
+            display: inline-block;
+            will-change: transform;
+            transition: transform 0.3s var(--transicion-suave);
+        }
+
+        tr:hover .animated-icon {
+            transform: scale(1.18) rotate(5deg);
+        }
+
+        /* Optimizaciones para Dispositivos de Gama Baja (Adaptive Quality por CSS Media) */
+        @media (prefers-reduced-motion: reduce) {
+            .animated-icon, tr:hover .animated-icon {
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            .filter-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ONTOLOGÍA ÉPICA: DE LA ODISEA A KAYKIT</h1>
+        <p>HexGridContext Registry — Sistema de Mapeo Conceptual y Catalogación de Assets</p>
+    </header>
+
+    <div class="dashboard-container">
+        
+        <!-- Módulo de Filtros y Control de Flujo -->
+        <div class="filter-box">
+            <input type="text" id="assetSearch" class="search-input" placeholder="Buscar por Asset ID, Canto u Ontología..." onkeyup="filtrarTabla()">
+            <div class="legend-container">
+                <span class="badge-layer layer-0">Capa 0: Base</span>
+                <span class="badge-layer layer-1">Capa 1: Entorno</span>
+                <span class="badge-layer layer-2">Capa 2: Estructura</span>
+                <span class="badge-layer layer-ui">Capa UI: Item/Icono</span>
+            </div>
+        </div>
+
+        <!-- Tabla de Mapeo Sistematizado -->
+        <div class="table-responsive">
+            <table id="ontologyTable">
+                <thead>
+                    <tr>
+                        <th>Asset ID Original</th>
+                        <th>Capa</th>
+                        <th>Dimensión de la Odisea</th>
+                        <th>Mapeo Conceptual Ontológico</th>
+                        <th>Peso</th>
+                        <th>Ruta del Archivo GLTF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- PAQUETE: MEDIEVAL HEXAGON PACK (Mundo Base y Geografía) -->
+                    <tr>
+                        <td class="meta-id">hex_grass</td>
+                        <td><span class="badge-layer layer-0">0 (Base)</span></td>
+                        <td class="epico-tag">Cantos I-IV / Ítaca</td>
+                        <td><span class="animated-icon">🌱</span> Praderas iniciales de Ítaca bajo el reinado ausente.</td>
+                        <td>5.3 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/.../hex_grass.gltf">.../tiles/base/hex_grass.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">hex_water</td>
+                        <td><span class="badge-layer layer-0">0 (Base)</span></td>
+                        <td class="epico-tag">Cantos V-XII / El Ponto</td>
+                        <td><span class="animated-icon">🌊</span> El mar dominado por la implacable furia de Poseidón.</td>
+                        <td>4.4 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/.../hex_water.gltf">.../tiles/base/hex_water.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">hex_coast_A</td>
+                        <td><span class="badge-layer layer-0">0 (Base)</span></td>
+                        <td class="epico-tag">Canto V / Ogigia</td>
+                        <td><span class="animated-icon">🏖️</span> Litoral de confinamiento donde Calipso retiene al héroe.</td>
+                        <td>8.5 KB</td>
+                        <td><span class="file-path" title=".../tiles/coast/hex_coast_A.gltf">.../tiles/coast/hex_coast_A.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">hex_river_A</td>
+                        <td><span class="badge-layer layer-0">0 (Base)</span></td>
+                        <td class="epico-tag">Canto VI / Esqueria</td>
+                        <td><span class="animated-icon">💧</span> Desembocadura del río fluvial donde Nausícaa halla a Odiseo.</td>
+                        <td>7.6 KB</td>
+                        <td><span class="file-path" title=".../tiles/rivers/hex_river_A.gltf">.../tiles/rivers/hex_river_A.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">hex_road_A</td>
+                        <td><span class="badge-layer layer-0">0 (Base)</span></td>
+                        <td class="epico-tag">Cantos III-IV / Pilos</td>
+                        <td><span class="animated-icon">🛣️</span> Senderos recorridos por Telémaco buscando noticias de su padre.</td>
+                        <td>6.5 KB</td>
+                        <td><span class="file-path" title=".../tiles/roads/hex_road_A.gltf">.../tiles/roads/hex_road_A.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">building_castle_blue</td>
+                        <td><span class="badge-layer layer-2">2 (Build)</span></td>
+                        <td class="epico-tag">Cantos I-II / Palacio real</td>
+                        <td><span class="animated-icon">🏰</span> Palacio de Odiseo sitiado por la soberbia de los pretendientes.</td>
+                        <td>313.3 KB</td>
+                        <td><span class="file-path" title=".../colour blue/building_castle_blue.gltf">.../building_castle_blue.gltf</span></td>
+                    </tr>
+
+                    <!-- PAQUETE: ADVENTURERS & FANTASY WEAPONS (Arquetipos e Items UI) -->
+                    <tr>
+                        <td class="meta-id">bow_withString</td>
+                        <td><span class="badge-layer layer-ui">UI / Item</span></td>
+                        <td class="epico-tag">Canto XXI / El Gran Reto</td>
+                        <td><span class="animated-icon">🏹</span> El arco sagrado de Eurito, ejecutor de la venganza justa.</td>
+                        <td>52.1 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_Adventurers_2.0_FREE/.../bow_withString.gltf">.../gltf/bow_withString.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">sword_2handed</td>
+                        <td><span class="badge-layer layer-ui">UI / Item</span></td>
+                        <td class="epico-tag">Canto XXII / La Muerte</td>
+                        <td><span class="animated-icon">⚔️</span> Espada heráldica utilizada en la purga del salón real de Ítaca.</td>
+                        <td>22.4 KB</td>
+                        <td><span class="file-path" title=".../gltf/sword_2handed.gltf">.../gltf/sword_2handed.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">mug_full</td>
+                        <td><span class="badge-layer layer-ui">UI / Item</span></td>
+                        <td class="epico-tag">Canto IX / Ismaro</td>
+                        <td><span class="animated-icon">🍺</span> El vino dulce de Marón que adormeció la mente de Polifemo.</td>
+                        <td>18.4 KB</td>
+                        <td><span class="file-path" title=".../gltf/mug_full.gltf">.../gltf/mug_full.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">spellbook_open</td>
+                        <td><span class="badge-layer layer-ui">UI / Item</span></td>
+                        <td class="epico-tag">Canto X / Eea</td>
+                        <td><span class="animated-icon">📖</span> Grimorio con las fórmulas e inmunidades provistas por Hermes.</td>
+                        <td>17.8 KB</td>
+                        <td><span class="file-path" title=".../gltf/spellbook_open.gltf">.../gltf/spellbook_open.gltf</span></td>
+                    </tr>
+
+                    <!-- PAQUETE: FOREST NATURE & BLOCK BITS (Entorno de Viajes Épicos) -->
+                    <tr>
+                        <td class="meta-id">Tree_3_C_Color1</td>
+                        <td><span class="badge-layer layer-1">1 (Env)</span></td>
+                        <td class="epico-tag">Canto IX / Lotófagos</td>
+                        <td><span class="animated-icon">🌳</span> Arboleda exótica cuyo fruto induce el olvido de la patria.</td>
+                        <td>72.6 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_Forest_Nature_Pack_1.0_FREE/.../Tree_3_C_Color1.gltf">.../gltf/Tree_3_C_Color1.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">lava</td>
+                        <td><span class="badge-layer layer-0">0 (Base)</span></td>
+                        <td class="epico-tag">Canto XII / Inframundo</td>
+                        <td><span class="animated-icon">🌋</span> Grietas incandescentes en los confines del Hades sombrío.</td>
+                        <td>84.4 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_BlockBits_1.0_FREE/.../lava.gltf">.../gltf/lava.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">stone_with_gold</td>
+                        <td><span class="badge-layer layer-1">1 (Env)</span></td>
+                        <td class="epico-tag">Canto X / Isla de Eolo</td>
+                        <td><span class="animated-icon">🪙</span> Yacimientos metálicos de la fortaleza flotante de bronce.</td>
+                        <td>63.7 KB</td>
+                        <td><span class="file-path" title=".../gltf/stone_with_gold.gltf">.../gltf/stone_with_gold.gltf</span></td>
+                    </tr>
+
+                    <!-- PAQUETE: DUNGEON REMASTERED & FURNITURE (Escenografía Interna) -->
+                    <tr>
+                        <td class="meta-id">table_long_decorated_C</td>
+                        <td><span class="badge-layer layer-ui">UI / Prop</span></td>
+                        <td class="epico-tag">Cantos I-II / El Festín</td>
+                        <td><span class="animated-icon">🪵</span> Mesas del banquete profanadas constantemente por los pretendientes.</td>
+                        <td>189.8 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_DungeonRemastered_1.1_FREE/.../table_long_decorated_C.gltf">.../table_long_decorated_C.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">chest_gold</td>
+                        <td><span class="badge-layer layer-ui">UI / Prop</span></td>
+                        <td class="epico-tag">Canto XIII / Regreso</td>
+                        <td><span class="animated-icon">🪙</span> Cofre con los suntuosos dones otorgados por los reyes Feacios.</td>
+                        <td>83.7 KB</td>
+                        <td><span class="file-path" title=".../gltf/chest_gold.gltf">.../gltf/chest_gold.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">bed_decorated</td>
+                        <td><span class="badge-layer layer-ui">UI / Prop</span></td>
+                        <td class="epico-tag">Canto XXIII / El Secreto</td>
+                        <td><span class="animated-icon">🛏️</span> El lecho nupcial labrado sobre las raíces de un olivo vivo.</td>
+                        <td>71.4 KB</td>
+                        <td><span class="file-path" title=".../gltf/bed_decorated.gltf">.../bed_decorated.gltf</span></td>
+                    </tr>
+
+                    <!-- PAQUETE: SKELETONS & RPG TOOLS (Enemigos y Navegación) -->
+                    <tr>
+                        <td class="meta-id">Skeleton_Staff</td>
+                        <td><span class="badge-layer layer-2">2 (Char)</span></td>
+                        <td class="epico-tag">Canto XI / Nekyia</td>
+                        <td><span class="animated-icon">💀</span> Sombra espectral de Tirésias guiando al héroe en el averno.</td>
+                        <td>70.6 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_Skeletons_1.1_FREE/.../Skeleton_Staff.gltf">.../assets/gltf/Skeleton_Staff.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">compass_base</td>
+                        <td><span class="badge-layer layer-ui">UI / Item</span></td>
+                        <td class="epico-tag">Cantos V-XIII / Derrota</td>
+                        <td><span class="animated-icon">🧭</span> El astrolabio mental y guía estelar del sabio Odiseo.</td>
+                        <td>63.9 KB</td>
+                        <td><span class="file-path" title="assets/KayKit_RPGToolsBits_1.0_FREE/.../compass_base.gltf">.../gltf/compass_base.gltf</span></td>
+                    </tr>
+                    <tr>
+                        <td class="meta-id">map</td>
+                        <td><span class="badge-layer layer-ui">UI / Item</span></td>
+                        <td class="epico-tag">Épico / Cosmografía</td>
+                        <td><span class="animated-icon">🗺️</span> El mapa náutico del Mediterráneo mítico y sus peligros.</td>
+                        <td>27.2 KB</td>
+                        <td><span class="file-path" title=".../gltf/map.gltf">.../gltf/map.gltf</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Script de Control de Filtrado Ligero (Sin dependencias externas) -->
+    <script>
+        function filtrarTabla() {
+            const input = document.getElementById("assetSearch");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("ontologyTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let visible = false;
+                const tds = tr[i].getElementsByTagName("td");
+                
+                for (let j = 0; j < tds.length; j++) {
+                    if (tds[j] && tds[j].innerText.toLowerCase().indexOf(filter) > -1) {
+                        visible = true;
+                        break;
+                    }
+                }
+                tr[i].style.display = visible ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>
