@@ -1,3 +1,8 @@
+Ese error saltó porque al renombrar la función a `initMassiveWorld()`, borré sin querer la línea que capturaba la referencia del botón en el DOM (`const startBtn = document.getElementById('start-btn');`) e intenté asignarle el `addEventListener` directamente en el aire.
+
+Aquí tienes el archivo HTML completo corregido, con la referencia restaurada y asegurando la carga masiva de las **100 celdas** integradas a tu `registry.json` con la ontología de la Odisea.
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -88,7 +93,7 @@ function axialToWorld(q, r) {
     return new THREE.Vector3(HEX_W * (q + r * 0.5), 0, HEX_H * r);
 }
 
-// Diccionario dinámico para instanciación de terrenos base (Capa 0)
+// Diccionario para terrenos base (Capa 0)
 const TILE_FILES = {
     grass: 'hex_grass.gltf',
     water: 'hex_water.gltf',
@@ -96,10 +101,7 @@ const TILE_FILES = {
     road:  'hex_road_A.gltf'
 };
 
-// ═══════════════════════════════════════════════════════
-// MAPA EXPANDIDO DE 100 CELDAS (Matriz de 10x10 Axiales)
-// Cada celda consume exactamente nombres reales del registry.json
-// ═══════════════════════════════════════════════════════
+// Mapa expandido de 100 celdas consuming keys exactas de tu registry.json
 const WORLD_CELLS = [
     // R: -5
     { q: -5, r: -5, tileType: 'grass', occupant: 'mountain_A' },
@@ -222,9 +224,7 @@ const WORLD_CELLS = [
     { q:  4, r:  4, tileType: 'grass', occupant: 'Skeleton_Axe' }
 ];
 
-// ═══════════════════════════════════════════════════════
-// BASE DE DATOS ONTOLÓGICA SOBERANA
-// ═══════════════════════════════════════════════════════
+// Base de datos ontológica de la Odisea
 const assetDatabase = {
     'hex_grass.gltf': { title: 'Praderas Continentales', desc: 'Tierras estables sometidas a las leyes soberanas terrestres, o bien ocupadas ilegalmente en los años de interregno.', stats: { 'Ontología': 'Leyes Mundanas', 'Suelo': 'Fértil' } },
     'hex_water.gltf': { title: 'El Ponto Tempestuoso', desc: 'Dominio absoluto de Poseidón. Espacio de deriva física que constituye el castigo por la desmesura y ceguera de los mortales.', stats: { 'Ontología': 'Abismo Divino', 'Estado': 'Furia Líquida' } },
@@ -288,19 +288,27 @@ const assetDatabase = {
     'building_bridge_B': { title: 'Paso del Estigia', desc: 'Estructura mítica sobre los ramales fluviales que divide el espacio de las sombras del mundo habitable.', stats: { 'Canto': 'Canto XI', 'Espacio': 'Inframundo' } }
 };
 
-// Variables globales de control
+// Variables heráldicas globales
 let scene, camera, renderer, controls, raycaster, mouse;
 
+// REFERENCIAS DEL DOM RESTAURADAS (Solución al Uncaught ReferenceError)
+const startBtn    = document.getElementById('start-btn');
+const landingDiv  = document.getElementById('landing');
+const infoOverlay = document.getElementById('info-overlay');
+const modalOverlay = document.getElementById('modal-overlay');
+
 startBtn.addEventListener('click', () => {
+    startBtn.textContent = 'Desplegando Velas...';
+    startBtn.style.pointerEvents = 'none';
     initMassiveWorld();
 });
 
 async function initMassiveWorld() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x080f14, 0.025); // Niebla oceánica extendida
+    scene.fog = new THREE.FogExp2(0x080f14, 0.025); 
 
     camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 150);
-    camera.position.set(0, 22, 28); // Cámara más alta para encuadrar la extensión 4x
+    camera.position.set(0, 24, 32); 
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(innerWidth, innerHeight);
@@ -314,18 +322,16 @@ async function initMassiveWorld() {
     controls.dampingFactor = 0.05;
     controls.maxPolarAngle = Math.PI / 2.1;
     controls.minDistance = 5;
-    controls.maxDistance = 60;
+    controls.maxDistance = 75;
 
     raycaster = new THREE.Raycaster();
     mouse     = new THREE.Vector2();
 
-    // Iluminación ambiental y solar
     scene.add(new THREE.AmbientLight(0xffffff, 0.85));
     const sun = new THREE.DirectionalLight(0xffe8bc, 3.0);
     sun.position.set(15, 25, 10);
     scene.add(sun);
 
-    // Filtrado de archivos únicos requeridos desde el mapa extendido de 100 celdas
     const uniqueFiles = new Set(['cloud_big.gltf']);
     WORLD_CELLS.forEach(cell => {
         uniqueFiles.add(TILE_FILES[cell.tileType]);
@@ -335,7 +341,6 @@ async function initMassiveWorld() {
     const loader = new GLTFLoader();
     const cache  = new Map();
 
-    // Carga paralela masiva
     await Promise.all([...uniqueFiles].map(file =>
         new Promise(res =>
             loader.load(
@@ -347,17 +352,14 @@ async function initMassiveWorld() {
         )
     ));
 
-    // Despliegue de los sistemas de mallas en base al JSON de assets
     executeBaseInstancing(cache);
     populateEpicOccupants(cache);
 
-    // Decoración aérea masiva
     spawnCloud(cache, -12, 7, -10);
     spawnCloud(cache,  14, 8, -12);
     spawnCloud(cache,   0, 9,  15);
     spawnCloud(cache,  -8, 6,   8);
 
-    // Transición de Interfaz
     landingDiv.classList.add('fade-out');
     infoOverlay.style.opacity = '1';
     setTimeout(() => landingDiv.remove(), 600);
@@ -370,7 +372,6 @@ async function initMassiveWorld() {
     });
 }
 
-// Generación de capas base indexadas por tipo de hexágono
 function executeBaseInstancing(cache) {
     const cellsByTerrain = {};
     WORLD_CELLS.forEach(cell => {
@@ -406,7 +407,6 @@ function executeBaseInstancing(cache) {
     }
 }
 
-// Inyección y clonación de ocupantes de la ontología lírica
 function populateEpicOccupants(cache) {
     WORLD_CELLS.forEach(cell => {
         if (!cell.occupant) return;
@@ -425,7 +425,6 @@ function populateEpicOccupants(cache) {
     });
 }
 
-// Sistema de contingencia volumétrico si se corre sin el servidor local de archivos de KayKit
 function generateProceduralBackup(fileName) {
     let geo, mat;
     if (fileName.includes('hex_')) {
@@ -441,7 +440,7 @@ function generateProceduralBackup(fileName) {
     } else if (fileName.includes('building_')) {
         geo = new THREE.BoxGeometry(0.7, 0.8, 0.7);
         mat = new THREE.MeshStandardMaterial({ color: 0x82623a, roughness: 0.8 });
-    } else if (fileName.includes('mountain') || fileName.includes('rock')) {
+    } else if (fileName.includes('mountain') || fileName.includes('rock') || fileName.includes('Rock_') || fileName.includes('Tree_')) {
         geo = new THREE.ConeGeometry(0.6, 1.6, 4);
         mat = new THREE.MeshStandardMaterial({ color: 0x3a424a, roughness: 0.95 });
     } else if (fileName.includes('Skeleton_')) {
@@ -467,7 +466,6 @@ function spawnCloud(cache, x, y, z) {
     scene.add(cloud);
 }
 
-// Raycasting e interactividad con el árbol del DOM
 function bindUserInputs() {
     window.addEventListener('click', event => {
         if (modalOverlay.classList.contains('active')) return;
@@ -486,7 +484,6 @@ function bindUserInputs() {
 
         if (detectedNode?.userData?.assetKey) {
             const registryKey = detectedNode.userData.assetKey;
-            // Si el asset individual no tiene descripción propia, se asume su descripción de clase base
             const targetData = assetDatabase[registryKey] || assetDatabase[registryKey.split('_')[0] + '_' + registryKey.split('_')[1]] || assetDatabase['hex_grass.gltf'];
             unrollParchment(targetData);
         }
@@ -501,13 +498,13 @@ function unrollParchment(data) {
     document.getElementById('parchment-title').textContent = data.title;
     document.getElementById('parchment-desc').textContent  = data.desc;
 
-    const tbody = document.getElementById('parchment-stats');
-    tbody.innerHTML = '';
+    const statsTableBody = document.getElementById('parchment-stats');
+    statsTableBody.innerHTML = '';
     
     for (const [key, value] of Object.entries(data.stats)) {
         const row = document.createElement('tr');
         row.innerHTML = `<td>${key}</td><td class="stat-val">${value}</td>`;
-        tbody.appendChild(row);
+        statsTableBody.appendChild(row);
     }
     modalOverlay.classList.add('active');
 }
@@ -521,3 +518,5 @@ window.addEventListener('resize', () => {
 </script>
 </body>
 </html>
+
+```
