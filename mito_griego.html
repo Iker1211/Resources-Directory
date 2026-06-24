@@ -3,144 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Odisea - Mundo Hexagonal 3D</title>
+    <title>La Odisea - Archipiélago Hexagonal Masivo 3D</title>
     <style>
-        body { 
-            margin: 0; 
-            overflow: hidden; 
-            background-color: #0d131a; 
-            font-family: 'Georgia', serif; 
-            color: #f1e7d0; 
-            user-select: none; 
-        }
+        body { margin: 0; overflow: hidden; background-color: #080f14; font-family: 'Georgia', serif; color: #f6edd9; user-select: none; }
 
-        /* === PANTALLA DE INICIO (ESTILO ÉPICO) === */
-        #landing { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: linear-gradient(135deg, #111a24 0%, #05080c 100%); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 100; 
-            transition: opacity 0.8s ease; 
-        }
+        /* === PANTALLA DE INICIO === */
+        #landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f171e 0%, #030508 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.6s ease; }
         #landing.fade-out { opacity: 0; pointer-events: none; }
-        
-        .landing-content { max-width: 650px; text-align: center; padding: 0 20px; }
-        .landing-content h1 { 
-            font-size: 3rem; 
-            font-weight: normal; 
-            color: #dfb743; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.6); 
-            margin-bottom: 15px;
-        }
-        .landing-content p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #a3b8cc;
-            margin-bottom: 30px;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        #start-btn { 
-            padding: 16px 50px; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            color: #0d131a; 
-            background-color: #dfb743; 
-            border: none; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            transition: all 0.3s ease; 
-        }
-        #start-btn:hover { background-color: #f3cb57; transform: translateY(-2px); }
+        .landing-content { max-width: 700px; text-align: center; padding: 0 20px; }
+        .landing-content h1 { font-size: 3.2rem; color: #e5ba42; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 4px 20px rgba(0,0,0,0.7); margin-bottom: 20px; }
+        .landing-content p { font-size: 1.15rem; line-height: 1.7; color: #a5bccc; margin-bottom: 35px; font-family: 'Segoe UI', sans-serif; }
+        #start-btn { padding: 18px 60px; font-size: 1.2rem; font-weight: bold; color: #080f14; background-color: #e5ba42; border: none; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 6px 15px rgba(0,0,0,0.5); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #start-btn:hover { background-color: #ffd256; transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.7); }
 
-        /* === INTERFAZ GENERAL / OVERLAY === */
-        #info-overlay { 
-            position: absolute; 
-            top: 25px; 
-            width: 100%; 
-            text-align: center; 
-            pointer-events: none; 
-            opacity: 0; 
-            transition: opacity 1s ease 0.5s; 
-            text-shadow: 0 2px 6px rgba(0,0,0,0.9); 
-            z-index: 10; 
-        }
-        #info-overlay h2 { margin: 0; font-weight: normal; color: #dfb743; letter-spacing: 1px; }
-        #info-overlay p { margin: 6px 0 0 0; color: #a3b8cc; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; }
+        /* === OVERLAY DE SEGUIMIENTO === */
+        #info-overlay { position: absolute; top: 25px; width: 100%; text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.8s ease; text-shadow: 0 2px 8px rgba(0,0,0,0.95); z-index: 10; }
+        #info-overlay h2 { margin: 0; font-weight: normal; color: #e5ba42; letter-spacing: 2px; font-size: 2rem; }
+        #info-overlay p { margin: 8px 0 0 0; color: #a5bccc; font-family: 'Segoe UI', sans-serif; font-size: 0.95rem; }
 
-        /* === MODAL: PERGAMINO DE LA ODISEA === */
-        #modal-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 50; opacity: 0; pointer-events: none;
-            transition: opacity 0.4s ease;
-        }
+        /* === EL PERGAMINO REAL DE INSPECCIÓN === */
+        #modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         #modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-        #parchment-sheet {
-            background-color: #f2e6c9; color: #2b2214;
-            padding: 35px; width: 90%; max-width: 440px;
-            border: 5px double #5c4017; border-radius: 2px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            position: relative;
-            transform: scale(0.7);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        #parchment-sheet { background-color: #f6edd9; color: #281e13; padding: 40px; width: 92%; max-width: 500px; border: 6px double #4a341a; border-radius: 1px; box-shadow: 0 20px 50px rgba(0,0,0,0.7); position: relative; transform: scale(0.75); transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #modal-overlay.active #parchment-sheet { transform: scale(1); }
 
-        #close-btn { 
-            position: absolute; 
-            top: 10px; 
-            right: 18px; 
-            font-size: 1.8rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            color: #7a613b; 
-            transition: color 0.2s; 
-        }
-        #close-btn:hover { color: #a62b2b; }
+        #close-btn { position: absolute; top: 12px; right: 20px; font-size: 2rem; font-weight: bold; cursor: pointer; color: #6e5231; transition: color 0.2s; }
+        #close-btn:hover { color: #b52a2a; }
 
-        #parchment-title { font-size: 1.9rem; margin-top: 0; border-bottom: 2px solid #cdb893; padding-bottom: 12px; color: #3d2b14; font-weight: normal; }
-        #parchment-desc { font-style: italic; line-height: 1.6; margin: 18px 0; color: #423521; font-size: 1.05rem; }
+        #parchment-title { font-size: 2.1rem; margin-top: 0; border-bottom: 2px solid #dcd1b5; padding-bottom: 14px; color: #3a2715; font-weight: normal; letter-spacing: 0.5px; }
+        #parchment-desc { font-style: italic; line-height: 1.65; margin: 20px 0; color: #40301d; font-size: 1.1rem; text-align: justify; }
 
-        .stats-table { width: 100%; border-collapse: collapse; margin-top: 25px; font-size: 0.95rem; font-family: 'Segoe UI', sans-serif; }
-        .stats-table tr { border-bottom: 1px solid rgba(61,43,20,0.15); }
-        .stats-table td { padding: 10px 4px; }
-        .stats-table td.stat-val { font-weight: bold; text-align: right; color: #8c5b16; }
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 30px; font-size: 0.95rem; font-family: 'Segoe UI', sans-serif; }
+        .stats-table tr { border-bottom: 1px solid rgba(58,39,21,0.15); }
+        .stats-table td { padding: 12px 6px; }
+        .stats-table td.stat-val { font-weight: bold; text-align: right; color: #8a5312; }
     </style>
 </head>
 <body>
 
 <div id="landing">
     <div class="landing-content">
-        <h1>Mundo Épico de la Odisea</h1>
-        <p>Explora la cosmografía mítica en tres dimensiones basada en los cantos de Homero. Interactúa con las islas, deidades, amenazas de ultramar y reinos haciendo clic directo sobre las estructuras.</p>
-        <button id="start-btn">Zarpar en la Nave</button>
+        <h1>Mundo Épico: La Odisea Masiva</h1>
+        <p>Estás ante un archipiélago expandido de 100 celdas que integra la totalidad del ecosistema tridimensional de tus registros. Navega a través de las distancias geográficas del mito y haz clic sobre las estructuras o relieves para abrir los pergaminos ontológicos.</p>
+        <button id="start-btn">Zarpar en la Nave de Odiseo</button>
     </div>
 </div>
 
 <div id="info-overlay">
-    <h2>Navegación del Archipiélago Mítico</h2>
-    <p>Arrastra para orbitar el mar. Haz clic sobre un elemento del terreno o edificación para consultar sus cantos y ontología.</p>
+    <h2>Mar de la Odisea — 100 Regiones Clicables</h2>
+    <p>Usa el ratón para orbitar. Haz clic en terrenos u ocupantes para desvelar el canto homérico y datos del asset.</p>
 </div>
 
 <div id="modal-overlay">
     <div id="parchment-sheet">
         <span id="close-btn">&times;</span>
-        <h3 id="parchment-title">Cargando Ontología...</h3>
-        <p id="parchment-desc">Descripción épica...</p>
+        <h3 id="parchment-title">Cargando Tablilla...</h3>
+        <p id="parchment-desc">Procesando traducción...</p>
         <table class="stats-table">
             <tbody id="parchment-stats"></tbody>
         </table>
@@ -161,9 +80,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 
-// ═══════════════════════════════════════════════════════
-// DISTRIBUCIÓN ESPACIAL DEL HEX GRID (Pointy-Top)
-// ═══════════════════════════════════════════════════════
+// Constantes empíricas del Hex-Grid pointy-top
 const HEX_W = 1.82;   
 const HEX_H = 1.575;  
 
@@ -171,9 +88,7 @@ function axialToWorld(q, r) {
     return new THREE.Vector3(HEX_W * (q + r * 0.5), 0, HEX_H * r);
 }
 
-// ═══════════════════════════════════════════════════════
-// CAPA 0: MAPEO TERRENOS BASE (registry.json -> TILE_FILES)
-// ═══════════════════════════════════════════════════════
+// Diccionario dinámico para instanciación de terrenos base (Capa 0)
 const TILE_FILES = {
     grass: 'hex_grass.gltf',
     water: 'hex_water.gltf',
@@ -182,195 +97,210 @@ const TILE_FILES = {
 };
 
 // ═══════════════════════════════════════════════════════
-// WORLD COMPOSITION (world.json Estructurado con la Ontología)
-// 25 celdas axiales distribuidas según el viaje épico de Odiseo
+// MAPA EXPANDIDO DE 100 CELDAS (Matriz de 10x10 Axiales)
+// Cada celda consume exactamente nombres reales del registry.json
 // ═══════════════════════════════════════════════════════
 const WORLD_CELLS = [
-    // Fila r: -2 (Mundo Superior / Ítaca Inicial y Reinos)
-    { q: -2, r: -2, tileType: 'grass', occupant: 'mountain_C_grass_trees' },
-    { q: -1, r: -2, tileType: 'grass', occupant: 'building_well_blue' },
-    { q:  0, r: -2, tileType: 'grass', occupant: 'building_destroyed' },
-    { q:  1, r: -2, tileType: 'grass', occupant: 'building_church_blue' },
-    { q:  2, r: -2, tileType: 'grass', occupant: 'building_home_A_blue' },
+    // R: -5
+    { q: -5, r: -5, tileType: 'grass', occupant: 'mountain_A' },
+    { q: -4, r: -5, tileType: 'grass', occupant: 'Tree_1_A_Color1' },
+    { q: -3, r: -5, tileType: 'grass', occupant: 'building_tower_A_blue' },
+    { q: -2, r: -5, tileType: 'grass', occupant: 'Bush_1_A_Color1' },
+    { q: -1, r: -5, tileType: 'grass', occupant: null },
+    { q:  0, r: -5, tileType: 'road',  occupant: 'building_well_blue' },
+    { q:  1, r: -5, tileType: 'grass', occupant: 'building_home_A_blue' },
+    { q:  2, r: -5, tileType: 'grass', occupant: 'Tree_2_B_Color1' },
+    { q:  3, r: -5, tileType: 'grass', occupant: 'Rock_1_A_Color1' },
+    { q:  4, r: -5, tileType: 'grass', occupant: 'mountain_C_grass_trees' },
 
-    // Fila r: -1 (Palacio de Ítaca y la Costa)
-    { q: -2, r: -1, tileType: 'grass', occupant: 'tree_single_B' },
-    { q: -1, r: -1, tileType: 'grass', occupant: 'building_castle_blue' },
-    { q:  0, r: -1, tileType: 'grass', occupant: 'building_tavern_blue' },
-    { q:  1, r: -1, tileType: 'road',  occupant: 'building_bridge_A' },
-    { q:  2, r: -1, tileType: 'water', occupant: null },
+    // R: -4
+    { q: -5, r: -4, tileType: 'grass', occupant: 'building_barracks_blue' },
+    { q: -4, r: -4, tileType: 'grass', occupant: 'Tree_3_C_Color1' },
+    { q: -3, r: -4, tileType: 'grass', occupant: 'building_church_blue' },
+    { q: -2, r: -4, tileType: 'road',  occupant: null },
+    { q: -1, r: -4, tileType: 'road',  occupant: null },
+    { q:  0, r: -4, tileType: 'road',  occupant: 'building_market_blue' },
+    { q:  1, r: -4, tileType: 'grass', occupant: 'building_home_B_blue' },
+    { q:  2, r: -4, tileType: 'grass', occupant: 'Bush_2_A_Color1' },
+    { q:  3, r: -4, tileType: 'grass', occupant: 'Tree_4_A_Color1' },
+    { q:  4, r: -4, tileType: 'grass', occupant: 'building_castle_blue' },
 
-    // Fila r:  0 (Rutas de Comercio Náutico y Mar Adentro)
-    { q: -2, r:  0, tileType: 'grass', occupant: 'building_lumbermill_blue' },
-    { q: -1, r:  0, tileType: 'grass', occupant: 'building_dirt' },
-    { q:  0, r:  0, tileType: 'road',  occupant: 'building_market_blue' },
-    { q:  1, r:  0, tileType: 'water', occupant: 'hex_coast_A' },
+    // R: -3
+    { q: -5, r: -3, tileType: 'grass', occupant: 'building_blacksmith_blue' },
+    { q: -4, r: -3, tileType: 'grass', occupant: 'Tree_1_B_Color1' },
+    { q: -3, r: -3, tileType: 'grass', occupant: null },
+    { q: -2, r: -3, tileType: 'road',  occupant: null },
+    { q: -1, r: -3, tileType: 'water', occupant: 'building_bridge_A' },
+    { q:  0, r: -3, tileType: 'water', occupant: null },
+    { q:  1, r: -3, tileType: 'water', occupant: 'hex_coast_A' },
+    { q:  2, r: -3, tileType: 'water', occupant: null },
+    { q:  3, r: -3, tileType: 'grass', occupant: 'building_tavern_blue' },
+    { q:  4, r: -3, tileType: 'grass', occupant: 'building_tower_B_blue' },
+
+    // R: -2
+    { q: -5, r: -2, tileType: 'grass', occupant: 'building_lumbermill_blue' },
+    { q: -4, r: -2, tileType: 'grass', occupant: 'Bush_1_B_Color1' },
+    { q: -3, r: -2, tileType: 'grass', occupant: null },
+    { q: -2, r: -2, tileType: 'water', occupant: null },
+    { q: -1, r: -2, tileType: 'water', occupant: null },
+    { q:  0, r: -2, tileType: 'water', occupant: null },
+    { q:  1, r: -2, tileType: 'water', occupant: 'hex_coast_B' },
+    { q:  2, r: -2, tileType: 'water', occupant: null },
+    { q:  3, r: -2, tileType: 'grass', occupant: 'building_dirt' },
+    { q:  4, r: -2, tileType: 'grass', occupant: 'building_destroyed' },
+
+    // R: -1
+    { q: -5, r: -1, tileType: 'grass', occupant: 'building_windmill_blue' },
+    { q: -4, r: -1, tileType: 'grass', occupant: 'building_grain' },
+    { q: -3, r: -1, tileType: 'water', occupant: null },
+    { q: -2, r: -1, tileType: 'water', occupant: null },
+    { q: -1, r: -1, tileType: 'water', occupant: 'projectile_catapult' },
+    { q:  0, r: -1, tileType: 'water', occupant: null },
+    { q:  1, r: -1, tileType: 'water', occupant: null },
+    { q:  2, r: -1, tileType: 'water', occupant: 'hex_coast_C' },
+    { q:  3, r: -1, tileType: 'water', occupant: null },
+    { q:  4, r: -1, tileType: 'grass', occupant: 'trees_A_large' },
+
+    // R: 0
+    { q: -5, r:  0, tileType: 'grass', occupant: 'Tree_2_A_Color1' },
+    { q: -4, r:  0, tileType: 'water', occupant: null },
+    { q: -3, r:  0, tileType: 'water', occupant: null },
+    { q: -2, r:  0, tileType: 'water', occupant: 'building_destroyed' },
+    { q: -1, r:  0, tileType: 'water', occupant: null },
+    { q:  0, r:  0, tileType: 'water', occupant: null },
+    { q:  1, r:  0, tileType: 'water', occupant: null },
     { q:  2, r:  0, tileType: 'water', occupant: null },
+    { q:  3, r:  0, tileType: 'water', occupant: 'hex_coast_D' },
+    { q:  4, r:  0, tileType: 'grass', occupant: 'mountain_B' },
 
-    // Fila r:  1 (Islas Salvajes y Rutas Fluviales Peligrosas)
-    { q: -2, r:  1, tileType: 'grass', occupant: 'building_windmill_blue' },
-    { q: -1, r:  1, tileType: 'grass', occupant: 'building_grain' },
-    { q:  0, r:  1, tileType: 'grass', occupant: 'trees_A_large' },
-    { q:  1, r:  1, tileType: 'river', occupant: null },
+    // R: 1
+    { q: -5, r:  1, tileType: 'grass', occupant: 'building_mine_blue' },
+    { q: -4, r:  1, tileType: 'water', occupant: null },
+    { q: -3, r:  1, tileType: 'water', occupant: null },
+    { q: -2, r:  1, tileType: 'water', occupant: null },
+    { q: -1, r:  1, tileType: 'water', occupant: 'building_stage_A' },
+    { q:  0, r:  1, tileType: 'water', occupant: null },
+    { q:  1, r:  1, tileType: 'water', occupant: null },
     { q:  2, r:  1, tileType: 'water', occupant: null },
+    { q:  3, r:  1, tileType: 'water', occupant: 'hex_coast_E' },
+    { q:  4, r:  1, tileType: 'river', occupant: null },
 
-    // Fila r:  2 (Límites del Mundo Mítico / Inframundo)
-    { q: -2, r:  2, tileType: 'grass', occupant: 'rock_single_E' },
-    { q: -1, r:  2, tileType: 'grass', occupant: 'mountain_A' },
-    { q:  0, r:  2, tileType: 'grass', occupant: 'lava' },
-    { q:  1, r:  2, tileType: 'river', occupant: 'hex_river_crossing_A' },
-    { q:  2, r:  2, tileType: 'water', occupant: null },
+    // R: 2
+    { q: -5, r:  2, tileType: 'grass', occupant: 'Rock_1_B_Color1' },
+    { q: -4, r:  2, tileType: 'grass', occupant: 'Tree_3_A_Color1' },
+    { q: -3, r:  2, tileType: 'water', occupant: null },
+    { q: -2, r:  2, tileType: 'water', occupant: null },
+    { q: -1, r:  2, tileType: 'water', occupant: null },
+    { q:  0, r:  2, tileType: 'water', occupant: null },
+    { q:  1, r:  2, tileType: 'water', occupant: null },
+    { q:  2, r:  2, tileType: 'river', occupant: 'building_bridge_B' },
+    { q:  3, r:  2, tileType: 'river', occupant: null },
+    { q:  4, r:  2, tileType: 'river', occupant: 'hex_river_crossing_A' },
+
+    // R: 3
+    { q: -5, r:  3, tileType: 'grass', occupant: 'Bush_3_A_Color1' },
+    { q: -4, r:  3, tileType: 'grass', occupant: 'building_scaffolding' },
+    { q: -3, r:  3, tileType: 'grass', occupant: 'Tree_4_B_Color1' },
+    { q: -2, r:  3, tileType: 'water', occupant: null },
+    { q: -1, r:  3, tileType: 'water', occupant: null },
+    { q:  0, r:  3, tileType: 'water', occupant: null },
+    { q:  1, r:  3, tileType: 'river', occupant: null },
+    { q:  2, r:  3, tileType: 'grass', occupant: 'Tree_Bare_1_A_Color1' },
+    { q:  3, r:  3, tileType: 'grass', occupant: 'rock_single_E' },
+    { q:  4, r:  3, tileType: 'grass', occupant: 'lava' },
+
+    // R: 4
+    { q: -5, r:  4, tileType: 'grass', occupant: 'mountain_A_grass' },
+    { q: -4, r:  4, tileType: 'grass', occupant: 'Tree_Bare_2_A_Color1' },
+    { q: -3, r:  4, tileType: 'grass', occupant: 'building_stage_B' },
+    { q: -2, r:  4, tileType: 'grass', occupant: 'tree_single_A_cut' },
+    { q: -1, r:  4, tileType: 'grass', occupant: 'fence_wood_straight' },
+    { q:  0, r:  4, tileType: 'grass', occupant: 'tent' },
+    { q:  1, r:  4, tileType: 'grass', occupant: 'Tree_Bare_1_B_Color1' },
+    { q:  2, r:  4, tileType: 'grass', occupant: 'Rock_2_A_Color1' },
+    { q:  3, r:  4, tileType: 'grass', occupant: 'Skeleton_Staff' },
+    { q:  4, r:  4, tileType: 'grass', occupant: 'Skeleton_Axe' }
 ];
 
 // ═══════════════════════════════════════════════════════
-// BASE DE DATOS ONTOLÓGICA (Contenido Literario e Inspección)
+// BASE DE DATOS ONTOLÓGICA SOBERANA
 // ═══════════════════════════════════════════════════════
 const assetDatabase = {
-    'hex_grass.gltf': {
-        title: 'Praderas de Ítaca',
-        desc: 'Las tierras natales de Odiseo, marcadas por la fertilidad de sus pastos y colinas, las cuales sufren el continuo abuso de los pretendientes durante su prolongada ausencia.',
-        stats: { 'Canto Relacionado': 'Cantos I - IV (Telemaquía)', 'Ubicación': 'Reino de Ítaca', 'Suelo': 'Pradera' }
-    },
-    'hex_water.gltf': {
-        title: 'El Ponto (Mar Abierto)',
-        desc: 'Las indomables aguas del Mediterráneo antiguo, escenario de las tragedias y desvíos de Odiseo, controladas bajo el implacable tridente y furia del dios Poseidón.',
-        stats: { 'Canto Relacionado': 'Canto V', 'Estado Náutico': 'Tormentas constantes', 'Deidad': 'Poseidón 🔱' }
-    },
-    'hex_river_A.gltf': {
-        title: 'Estuario de Esqueria',
-        desc: 'Canal de agua dulce perteneciente a la isla de los Feacios, lugar providencial donde el exhausto héroe llega arrastrado por la marea y es rescatado por la princesa Nausícaa.',
-        stats: { 'Canto Relacionado': 'Canto VI', 'Frontera': 'Reino Feacio', 'Recurso': 'Agua pura' }
-    },
-    'hex_road_A.gltf': {
-        title: 'Sendero de la Telemaquía',
-        desc: 'Los caminos empedrados que recorre el joven e inexperto Telémaco al salir de su hogar fortificado hacia los reinos aliados de Pilos y Esparta en busca de noticias firmes de su padre.',
-        stats: { 'Canto Relacionado': 'Cantos III - IV', 'Ruta Comercial': 'Estable', 'Seguridad': 'Baja' }
-    },
-    'building_castle_blue.gltf': {
-        title: 'Palacio Real de Odiseo',
-        desc: 'El gran bastión de Ítaca. Su salón principal es el epicentro del caos, donde los soberbios pretendientes devoran la hacienda real y exigen la mano de la reina Penélope.',
-        stats: { 'Canto Relacionado': 'Cantos I - II', 'Estado del Reino': 'Sitiado internamente', 'Gobernante': 'Penélope (En espera)' }
-    },
-    'building_destroyed.gltf': {
-        title: 'La Atalaya Ruinosa',
-        desc: 'Estructura derruida que representa la desolación de los dominios perimetrales del reino tras veinte años sin un soberano legítimo que defienda las fronteras.',
-        stats: { 'Canto Relacionado': 'Canto II', 'Seguridad': 'Crítica 💀', 'Vestigios': 'Guerras pasadas' }
-    },
-    'building_tavern_blue.gltf': {
-        title: 'Posada de los Pretendientes',
-        desc: 'Taberna pervertida y utilizada por Antínoo y los suyos para embriagarse, tramar emboscadas contra el joven Telémaco y malgastar los víveres reales.',
-        stats: { 'Canto Relacionado': 'Canto IV', 'Felicidad': 'Baja', 'Consumo de Vino': 'Desmedido 🍷' }
-    },
-    'building_bridge_A.gltf': {
-        title: 'Paso Fluvial de Esqueria',
-        desc: 'Arco monumental que conecta la costa con los jardines sagrados y el palacio del magnánimo rey Alcínoo, quien proveerá el transporte seguro de regreso a Ítaca.',
-        stats: { 'Canto Relacionado': 'Canto VII', 'Integridad': '100%', 'Alianza': 'Alta' }
-    },
-    'hex_coast_A.gltf': {
-        title: 'Litoral de la Isla de Ogigia',
-        desc: 'La costa arenosa de la isla paradisíaca donde la hermosa ninfa Calipso retiene cautivo a Odiseo durante siete largos años, ofreciéndole la inmortalidad a cambio de su olvido.',
-        stats: { 'Canto Relacionado': 'Canto V', 'Residente': 'Calipso', 'Condición': 'Prisión Dorada 🏖️' }
-    },
-    'building_grain.gltf': {
-        title: 'Granero de Ismaro',
-        desc: 'Almacén de granos de los Cícones. Primer puerto saqueado por Odiseo y su flota al iniciar el retorno desde Troya, desatando una violenta represalia.',
-        stats: { 'Canto Relacionado': 'Canto IX', 'Sustento': 'Saqueado', 'Peligro Recurrente': 'Alto' }
-    },
-    'mountain_C_grass_trees.gltf': {
-        title: 'Monte Nérito',
-        desc: 'La imponente elevación boscosa que corona el paisaje de Ítaca. Sirve de faro geográfico natural para que Odiseo reconozca su patria al despertar de su profundo sueño.',
-        stats: { 'Canto Relacionado': 'Canto XIII', 'Vegetación': 'Densa 🌲', 'Visibilidad': 'Continental' }
-    },
-    'trees_A_large.gltf': {
-        title: 'Bosques de la Hechicera Circe',
-        desc: 'La espesura de la isla de Eea, donde los hombres de Odiseo son transformados en bestias por los filtros mágicos de Circe. Odiseo los rescata gracias a la planta Moly.',
-        stats: { 'Canto Relacionado': 'Canto X', 'Magia': 'Transformación 🐗', 'Inmunidad': 'Moly Activa' }
-    },
-    'lava.gltf': {
-        title: 'Las Fauces del Hades (Inframundo)',
-        desc: 'El umbral incandescente y desolado del reino de los muertos. Odiseo desciende aquí para invocar la sombra del adivino ciego Tirésias y conocer su destino definitivo.',
-        stats: { 'Canto Relacionado': 'Canto XI (Nekyia)', 'Destino': 'Hades', 'Peligro Mental': 'Absoluto' }
-    },
-    'mountain_A.gltf': {
-        title: 'Guarida de Escila',
-        desc: 'Promontorio rocoso y escarpado donde habita el monstruo de seis cabezas, Escila, el cual devora implacablemente a un hombre por cada boca al pasar la nave.',
-        stats: { 'Canto Relacionado': 'Canto XII', 'Amenaza': 'Extrema 👹', 'Bajas de Tripulación': '-6 Hombres' }
-    },
-    'hex_river_crossing_A.gltf': {
-        title: 'Cruce del Aqueronte',
-        desc: 'Límite geográfico intermedio donde las corrientes fluviales convergen con las nieblas eternas del Inframundo antes de alcanzar los llanos de Asfódelos.',
-        stats: { 'Canto Relacionado': 'Canto XI', 'Caudal': 'Espectral', 'Navegación': 'Peligrosa' }
-    },
-    'building_well_blue.gltf': {
-        title: 'Cisterna de los Cíclopes',
-        desc: 'Fuente de agua de la escarpada Isla de los Cíclopes. Territorio salvaje ajeno a las leyes humanas, dominado por el gigante Polifemo.',
-        stats: { 'Canto Relacionado': 'Canto IX', 'Peligro Ocupante': 'Gigantes', 'Condición': 'Sin ley' }
-    },
-    'building_church_blue.gltf': {
-        title: 'Templo del Sol (Trinacria)',
-        desc: 'Santuario en la isla de Trinacria consagrado a las vacas sagradas de Hiperión. La tripulación sella su propia muerte al sacrificar las reses prohibidas.',
-        stats: { 'Canto Relacionado': 'Canto XII', 'Sacrilegio': 'Cometido 🐂', 'Juicio': 'Rayo de Zeus inminente' }
-    },
-    'building_home_A_blue.gltf': {
-        title: 'Cabaña del Porquerizo Emeo',
-        desc: 'El refugio humilde del leal siervo Emeo. Primer punto de llegada de Odiseo disfrazado de mendigo, donde se gesta la alianza para retomar el control familiar.',
-        stats: { 'Canto Relacionado': 'Canto XIV', 'Lealtad': 'Máxima ✨', 'Refugio': 'Seguro' }
-    },
-    'building_dirt.gltf': {
-        title: 'Choza del Boyero Filetio',
-        desc: 'Vivienda modesta de los pastores de bueyes que permanecieron fieles al legítimo rey de Ítaca durante las dos décadas de desorden.',
-        stats: { 'Canto Relacionado': 'Canto XX', 'Población': 'Siervos fieles', 'Sustento': 'Ganado' }
-    },
-    'building_market_blue.gltf': {
-        title: 'Ágora de la Asamblea',
-        desc: 'La plaza central de Ítaca, convocada de forma extraordinaria por Telémaco para denunciar formalmente el ultraje de los pretendientes ante los ancianos del pueblo.',
-        stats: { 'Canto Relacionado': 'Canto II', 'Estatus Social': 'Conflicto Abierto', 'Atención': 'Media' }
-    },
-    'building_lumbermill_blue.gltf': {
-        title: 'Aserradero Naviero de los Feacios',
-        desc: 'Instalación de ingeniería portuaria donde se extraen maderas nobles para construir los barcos mágicos que navegan sin timón, guiados por el pensamiento.',
-        stats: { 'Canto Relacionado': 'Canto VIII', 'Eficiencia': 'Excelente', 'Especialidad': 'Naves Feacias' }
-    },
-    'building_windmill_blue.gltf': {
-        title: 'Torre del Rey Eolo',
-        desc: 'La fortaleza flotante del soberano de los vientos, quien entrega a Odiseo un odre de cuero que encierra las corrientes tempestuosas para garantizar un rumbo directo a casa.',
-        stats: { 'Canto Relacionado': 'Canto X', 'Elemento': 'Viento Guardado 💨', 'Confianza': 'Traicionada por la tripulación' }
-    },
-    'tree_single_B.gltf': {
-        title: 'El Olivo de Atenea',
-        desc: 'Árbol sagrado que preside la costa de Ítaca. Bajo sus ramas, la diosa Atenea disipa la niebla de Odiseo y planea junto a él el castigo definitivo a los invasores.',
-        stats: { 'Canto Relacionado': 'Canto XIII', 'Bendición': 'Diosa Atenea 🦉', 'Estado': 'Inmortal' }
-    },
-    'rock_single_E.gltf': {
-        title: 'Escollos de las Sirenas',
-        desc: 'Formaciones rocosas rodeadas de restos óseos, desde donde las Sirenas atraen a los navegantes con sus cantos divinos. Odiseo se ata al mástil para escucharlas sin perecer.',
-        stats: { 'Canto Relacionado': 'Canto XII', 'Hechizo': 'Música Fatal 🎶', 'Estrategia': 'Cera en oídos' }
-    }
+    'hex_grass.gltf': { title: 'Praderas Continentales', desc: 'Tierras estables sometidas a las leyes soberanas terrestres, o bien ocupadas ilegalmente en los años de interregno.', stats: { 'Ontología': 'Leyes Mundanas', 'Suelo': 'Fértil' } },
+    'hex_water.gltf': { title: 'El Ponto Tempestuoso', desc: 'Dominio absoluto de Poseidón. Espacio de deriva física que constituye el castigo por la desmesura y ceguera de los mortales.', stats: { 'Ontología': 'Abismo Divino', 'Estado': 'Furia Líquida' } },
+    'hex_river_A.gltf': { title: 'Corrientes del Estuario', desc: 'Cursos de agua dulce que marcan la transición entre las pruebas salvajes y la salvación providencial.', stats: { 'Ontología': 'Frontera de Transición', 'Fluidez': 'Pura' } },
+    'hex_road_A.gltf': { title: 'Vía de la Telemaquía', desc: 'Líneas de conexión terrestre que transita Telémaco para consolidar alianzas con Néstor y Menelao en la defensa del hogar.', stats: { 'Ontología': 'Iniciación del Héroe', 'Destino': 'Pilos / Esparta' } },
+    'building_castle_blue.gltf': { title: 'Palacio de Odiseo', desc: 'Centro ontológico de Ítaca. Su profanación por los pretendientes simboliza la ruptura del orden político y familiar.', stats: { 'Canto': 'Cantos I-IV', 'Estatus': 'Crisis Institucional' } },
+    'building_destroyed.gltf': { title: 'Ruinas de Ismaro', desc: 'Los vestigios del violento asalto a la ciudad de los Cícones, primer desvío trágico donde la tripulación pagó su codicia.', stats: { 'Canto': 'Canto IX', 'Condición': 'Devastado' } },
+    'building_well_blue.gltf': { title: 'Cisterna de Polifemo', desc: 'Oasis primitivo en la tierra de la barbarie, donde los cíclopes viven sin asambleas ni leyes compartidas.', stats: { 'Canto': 'Canto IX', 'Sociedad': 'Pre-civilizada' } },
+    'building_church_blue.gltf': { title: 'Santuario de Trinacria', desc: 'Templo solar donde pastan las vacas inmortales de Hiperión. Un límite sagrado violado trágicamente por el hambre de la tripulación.', stats: { 'Canto': 'Canto XII', 'Crimen': 'Sacrilegio Astral' } },
+    'building_tavern_blue.gltf': { title: 'Banquete de la Corrupción', desc: 'La distorsión del concepto sagrado de la hospitalidad (Xenia) cometida por los pretendientes en las salas reales.', stats: { 'Canto': 'Canto II', 'Crimen': 'Abuso de la Xenia' } },
+    'hex_coast_A.gltf': { title: 'Orilla de Ogigia', desc: 'Litoral de confinamiento y parálisis ontológica. Siete años de retención erótica bajo los cantos de la ninfa Calipso.', stats: { 'Canto': 'Canto V', 'Efecto': 'Olvido de la Patria' } },
+    'hex_coast_B.gltf': { title: 'Costa de Eea', desc: 'Playas donde encalló la nave antes de que Circe alterara la naturaleza zoológica de los compañeros.', stats: { 'Canto': 'Canto X', 'Ecosistema': 'Fascinación' } },
+    'hex_coast_C.gltf': { title: 'Playa de los Feacios', desc: 'Espacio de salvación donde Odiseo es devuelto al orden humano tras ser escuchado en su extensa Apología.', stats: { 'Canto': 'Canto VI', 'Estatus': 'Restauración' } },
+    'hex_coast_D.gltf': { title: 'Arribo Oculto de Ítaca', desc: 'La cala de Forcis donde los Feacios depositan a Odiseo dormido junto a sus tesoros, marcando el fin de la deriva errante.', stats: { 'Canto': 'Canto XIII', 'Fase': 'Retorno en Secreto' } },
+    'hex_coast_E.gltf': { title: 'Embarcadero del Hades', desc: 'Confines del océano occidental cubierto de nieblas eternas, donde las almas descarnadas se congregan.', stats: { 'Canto': 'Canto XI', 'Clima': 'Sombrío' } },
+    'building_grain.gltf': { title: 'Granero de la Discordia', desc: 'Depósito que encierra la provisión alimentaria maldita que incita los motines a bordo por falta de fe en el retorno.', stats: { 'Canto': 'Canto X', 'Recurso': 'Trigo Racionado' } },
+    'mountain_C_grass_trees.gltf': { title: 'Bosques del Monte Nérito', desc: 'Eje vertical de Ítaca. Su visión rompe el hechizo de Atenea y confirma al héroe que ha pisado tierra patria.', stats: { 'Canto': 'Canto XIII', 'Símbolo': 'Identidad Geográfica' } },
+    'trees_A_large.gltf': { title: 'Selva de Circe', desc: 'Ecosistema vegetal cerrado gobernado por las metamorfosis y la regresión animal de los apetitos corporales.', stats: { 'Canto': 'Canto X', 'Amenaza': 'Pérdida del Logos' } },
+    'lava.gltf': { title: 'Flegor del Tártaro', desc: 'Corrientes ígneas del Inframundo que exponen la fragilidad del alma mortal frente a los castigos eternos.', stats: { 'Canto': 'Canto XI', 'Gravedad': 'Pena Eterna' } },
+    'mountain_A.gltf': { title: 'Risco de Escila', desc: 'Promontorio donde el monstruo de múltiples cabezas devora hombres de forma matemática, una fatalidad inevitable.', stats: { 'Canto': 'Canto XII', 'Tipo': 'Peligro Absoluto' } },
+    'hex_river_crossing_A.gltf': { title: 'El Paso de Caronte', desc: 'Estrecho de aguas densas donde convergen los lamentos y el rito de sangre necesario para escuchar a los muertos.', stats: { 'Canto': 'Canto XI', 'Rito': 'Nekyia Activa' } },
+    'building_home_A_blue.gltf': { title: 'Majada de Emeo', desc: 'El espacio de la lealtad pura. La cabaña del porquerizo que mantiene el honor intacto en la base de la pirámide social.', stats: { 'Canto': 'Canto XIV', 'Arquetipo': 'Fidelidad Rústica' } },
+    'building_home_B_blue.gltf': { title: 'Hogar del Boyero', desc: 'Refugio de Filetio, aliado táctico que cerrará las puertas exteriores del palacio en la masacre final.', stats: { 'Canto': 'Canto XX', 'Alianza': 'Sólida' } },
+    'building_dirt.gltf': { title: 'Choza del Mendigo', desc: 'La encarnación del disfraz de Odiseo. Espacio de humillación donde el rey prueba la templanza antes de golpear.', stats: { 'Canto': 'Canto XVII', 'Función': 'Prueba de Carácter' } },
+    'building_market_blue.gltf': { title: 'Ágora de la Denuncia', desc: 'El foro público donde Telémaco rompe el cetro real en llanto, visibilizando el ultraje ante los ciudadanos impasibles.', stats: { 'Canto': 'Canto II', 'Espacio': 'Político' } },
+    'building_lumbermill_blue.gltf': { title: 'Astillero Feacio', desc: 'Lugar donde se ensamblan las naves místicas que viajan al ritmo del pensamiento, sin necesidad de timón.', stats: { 'Canto': 'Canto VIII', 'Tecnología': 'Divina' } },
+    'building_windmill_blue.gltf': { title: 'Fortaleza Flotante de Eolo', desc: 'Estructura murada de bronce donde el rey del viento encierra los soplos adversos para limpiar el rumbo náutico.', stats: { 'Canto': 'Canto X', 'Regalo': 'Odre de Vientos' } },
+    'building_tower_A_blue': { title: 'Atalaya de Néstor', desc: 'Torre de vigilancia en Pilos, ejemplo de piedad y orden ritual que inspira el viaje maduro de Telémaco.', stats: { 'Canto': 'Canto III', 'Región': 'Pilos' } },
+    'building_tower_B_blue': { title: 'Torreón de Esparta', desc: 'Bastión del rey Menelao y Helena, donde Telémaco confirma la inmortalidad del confinamiento de su padre en Ogigia.', stats: { 'Canto': 'Canto IV', 'Región': 'Lacedemonia' } },
+    'building_barracks_blue': { title: 'Arsenal de la Venganza', desc: 'Estructura oculta donde Odiseo, Telémaco, Emeo y Filetio encierran las armas hurtadas del salón del banquete.', stats: { 'Canto': 'Canto XXI', 'Preparativo': 'Purga Mítica' } },
+    'building_blacksmith_blue': { title: 'Fragua de la Ceguera', desc: 'Metáfora de la estaca incandescente forjada para anular el único ojo del Cíclope, salvando al héroe bajo el nombre de "Nadie".', stats: { 'Canto': 'Canto IX', 'Arma': 'Estaca de Olivo' } },
+    'building_mine_blue': { title: 'Cantera de los Lestrigones', desc: 'Lugar desde donde los gigantes antropófagos lanzan rocas masivas para triturar la flota de Odiseo.', stats: { 'Canto': 'Canto X', 'Resultado': 'Destrucción de 11 Naves' } },
+    'building_scaffolding': { title: 'Andamiaje del Lecho Nupcial', desc: 'La construcción del secreto de Penélope: una cama enraizada en un olivo vivo que nadie puede desplazar.', stats: { 'Canto': 'Canto XXIII', 'Clave': 'Prueba Conyugal' } },
+    'building_stage_A': { title: 'Arpa del Poeta Demódoco', desc: 'El proscenio donde el aedo canta las glorias de Troya, provocando las lágrimas ocultas de Odiseo.', stats: { 'Canto': 'Canto VIII', 'Función': 'Efecto Catártico' } },
+    'building_stage_B': { title: 'El Umbral del Tiro con Arco', desc: 'Espacio ceremonial donde se alinean las doce hachas que solo el verdadero rey puede atravesar con su flecha.', stats: { 'Canto': 'Canto XXI', 'Prueba': 'Juicio del Arco' } },
+    'projectile_catapult': { title: 'Roca Lanzada por Polifemo', desc: 'Proyectil masivo arrojado por el Cíclope ciego tras la burla de Odiseo, variando el rumbo de la nave.', stats: { 'Canto': 'Canto IX', 'Fuerza': 'Maldición de Poseidón' } },
+    'Skeleton_Staff': { title: 'Sombra de Tirésias', desc: 'Espectro del adivino de Tebas que retiene el juicio en el Hades. Revela la profecía de los bueyes del Sol y el remo.', stats: { 'Canto': 'Canto XI', 'Rol': 'Guía del Destino' } },
+    'Skeleton_Axe': { title: 'Espectro de Agamenón', desc: 'Alma en pena que relata su traicionero asesinato y advierte a Odiseo que no desembarque abiertamente en Ítaca.', stats: { 'Canto': 'Canto XI', 'Mensaje': 'Desconfianza Cauta' } },
+    'mountain_B': { title: 'Montaña de los Cicones', desc: 'Elevación desde donde descendieron las tropas enemigas para expulsar a los griegos tras el saqueo inicial.', stats: { 'Canto': 'Canto IX', 'Resultado': 'Retirada Inmediata' } },
+    'rock_single_E': { title: 'Rocas Errantes', desc: 'Estructuras geológicas móviles que trituran cualquier embarcación; peligro evitado gracias a la guía de Hera.', stats: { 'Canto': 'Canto XII', 'Peligro': 'Colisión Mecánica' } },
+    'Tree_1_A_Color1': { title: 'Olivo del Despertar', desc: 'Árbol bajo el cual despierta Odiseo en Ítaca sin reconocer su propia tierra debido a la niebla de Atenea.', stats: { 'Canto': 'Canto XIII', 'Efecto': 'Anamnesis' } },
+    'Tree_2_B_Color1': { title: 'Higuera de Caribdis', desc: 'Árbol al que se aferra Odiseo colgado en el abismo mientras el monstruo succiona y expulsa el mar debajo.', stats: { 'Canto': 'Canto XII', 'Arquetipo': 'Resistencia Extrema' } },
+    'Tree_3_C_Color1': { title: 'Planta de los Lotófagos', desc: 'Vegetación exótica cuyo consumo extirpa el deseo del retorno, atrapando las mentes en una pasividad eterna.', stats: { 'Canto': 'Canto IX', 'Efecto': 'Pérdida de la Patria' } },
+    'Tree_4_A_Color1': { title: 'Arboleda Sacra de Perséfone', desc: 'Álamos negros y sauces estériles que marcan la entrada vegetal a las mansiones del Hades.', stats: { 'Canto': 'Canto X', 'Botánica': 'Fúnebre' } },
+    'Tree_4_B_Color1': { title: 'Bosque de la Cacería', desc: 'Lugar del monte Parnaso donde Odiseo recibió la herida del jabalí que dejó la cicatriz por la cual será reconocido.', stats: { 'Canto': 'Canto XIX', 'Identificador': 'La Cicatriz Externa' } },
+    'Tree_Bare_1_A_Color1': { title: 'Ramas Desnudas del Cocyto', desc: 'Vegetación muerta que bordea el río de las lamentaciones en la geografía del dolor del Inframundo.', stats: { 'Canto': 'Canto XI', 'Río': 'Cocyto' } },
+    'Tree_Bare_1_B_Color1': { title: 'Tronco de la Pérdida', desc: 'Símbolo de la destrucción total de la tripulación tras cruzar el estrecho de las deidades de ultramar.', stats: { 'Canto': 'Canto XII', 'Estado': 'Falta de Hubris' } },
+    'Tree_Bare_2_A_Color1': { title: 'Madera para la Pira', desc: 'Árboles talados en la isla de Eea para celebrar los funerales del joven Elpénor, quien cayó del techo de Circe.', stats: { 'Canto': 'Canto XII', 'Rito': 'Honores Fúnebres' } },
+    'tree_single_A_cut': { title: 'Tocón de la Navegación', desc: 'Maderos cortados por Odiseo en la isla de Calipso para ensamblar la balsa con la que desafiaría el Ponto.', stats: { 'Canto': 'Canto V', 'Actividad': 'Carpintería Épica' } },
+    'tree_single_B': { title: 'Olivo Protector', desc: 'Árbol antiguo donde Odiseo y Atenea se sientan a planificar el asesinato sistemático de los pretendientes.', stats: { 'Canto': 'Canto XIII', 'Bendición': 'Estrategia Divina' } },
+    'Bush_1_A_Color1': { title: 'Matorral del Camuflaje', desc: 'Arbusto espeso donde Odiseo se oculta desnudo y cubierto de hojas al despertar en la isla de los Feacios.', stats: { 'Canto': 'Canto VI', 'Función': 'Preservación del Pudor' } },
+    'Bush_1_B_Color1': { title: 'Zarza de la Vejez', desc: 'Vegetación espinosa que rodea los huertos de Laertes, donde el anciano padre llora la ausencia de su hijo.', stats: { 'Canto': 'Canto XXIV', 'Escena': 'Reencuentro Final' } },
+    'Bush_2_A_Color1': { title: 'Filtro de la Hierba Moly', desc: 'Especie botánica de raíz negra y flor lechosa entregada por Hermes para neutralizar la magia animal de Circe.', stats: { 'Canto': 'Canto X', 'Propiedad': 'Antídoto Divino' } },
+    'Bush_3_A_Color1': { title: 'Pastizal de las Vacas Sagradas', desc: 'Matorrales costeros de Trinacria donde la tripulación hambrienta consumó el sacrilegio contra el Sol.', stats: { 'Canto': 'Canto XII', 'Crimen': 'Impiedad Alimentaria' } },
+    'Rock_1_A_Color1': { title: 'Roca del Retorno Feacio', desc: 'La nave de los Feacios petrificada por Poseidón frente al puerto al regresar de dejar a Odiseo.', stats: { 'Canto': 'Canto XIII', 'Castigo': 'Petrificación Estática' } },
+    'Rock_1_B_Color1': { title: 'Guijarro de los Cíclopes', desc: 'Piedras colosales que bloqueaban la entrada de la caverna, imposibles de mover para la fuerza humana.', stats: { 'Canto': 'Canto IX', 'Mecánica': 'Obstáculo Absoluto' } },
+    'Rock_2_A_Color1': { title: 'Piedra de Sísifo', desc: 'Estructura geológica del Inframundo que el alma condenada empuja eternamente cuesta arriba para verla caer.', stats: { 'Canto': 'Canto XI', 'Condena': 'Esfuerzo Absurdo' } },
+    'rock_single_E': { title: 'Escollo de Caribdis', desc: 'Roca inferior donde el monstruo marino succiona tres veces al día el océano completo, tragándose las naves.', stats: { 'Canto': 'Canto XII', 'Riesgo': 'Vórtice Destructor' } },
+    'fence_wood_straight': { title: 'Cerca del Redil', desc: 'Empalizada construida por Emeo para proteger los puercos del rey contra las alimañas y el robo externo.', stats: { 'Canto': 'Canto XIV', 'Estructura': 'Seguridad Rural' } },
+    'tent': { title: 'Campamento de la Espera', desc: 'Tiendas provisionales alzadas en las playas de Ítaca por los siervos que aguardan la resolución de la crisis.', stats: { 'Canto': 'Canto XVI', 'Uso': 'Estrategia de Asedio' } },
+    'building_bridge_B': { title: 'Paso del Estigia', desc: 'Estructura mítica sobre los ramales fluviales que divide el espacio de las sombras del mundo habitable.', stats: { 'Canto': 'Canto XI', 'Espacio': 'Inframundo' } }
 };
 
-// ═══════════════════════════════════════════════════════
-// INSTANCIACIÓN DE VARIABLES DE THREE.JS
-// ═══════════════════════════════════════════════════════
-const startBtn    = document.getElementById('start-btn');
-const landingDiv  = document.getElementById('landing');
-const infoOverlay = document.getElementById('info-overlay');
-const modalOverlay = document.getElementById('modal-overlay');
-
+// Variables globales de control
 let scene, camera, renderer, controls, raycaster, mouse;
 
 startBtn.addEventListener('click', () => {
-    startBtn.textContent = 'Desplegando Velas...';
-    startBtn.style.pointerEvents = 'none';
-    initWorld();
+    initMassiveWorld();
 });
 
-async function initWorld() {
-    // ── Creación de Escena y Niebla Náutica ────────────────
+async function initMassiveWorld() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0d131a, 0.035);
+    scene.fog = new THREE.FogExp2(0x080f14, 0.025); // Niebla oceánica extendida
 
-    camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
-    camera.position.set(0, 13, 17);
+    camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 150);
+    camera.position.set(0, 22, 28); // Cámara más alta para encuadrar la extensión 4x
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(innerWidth, innerHeight);
@@ -382,238 +312,206 @@ async function initWorld() {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2.1; // Evita ver por debajo del océano
+    controls.maxPolarAngle = Math.PI / 2.1;
+    controls.minDistance = 5;
+    controls.maxDistance = 60;
 
     raycaster = new THREE.Raycaster();
     mouse     = new THREE.Vector2();
 
-    // ── Configuración Lumínica Mítica ─────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-    const sunLight = new THREE.DirectionalLight(0xfff1d0, 2.8); // Luz cálida de amanecer homérico
-    sunLight.position.set(10, 18, 12);
-    scene.add(sunLight);
+    // Iluminación ambiental y solar
+    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+    const sun = new THREE.DirectionalLight(0xffe8bc, 3.0);
+    sun.position.set(15, 25, 10);
+    scene.add(sun);
 
-    // ── Carga Asíncrona de Archivos del Registry ────────────
-    const filesToLoad = new Set(['cloud_big.gltf']);
+    // Filtrado de archivos únicos requeridos desde el mapa extendido de 100 celdas
+    const uniqueFiles = new Set(['cloud_big.gltf']);
     WORLD_CELLS.forEach(cell => {
-        filesToLoad.add(TILE_FILES[cell.tileType]);
-        if (cell.occupant) filesToLoad.add(cell.occupant + '.gltf');
+        uniqueFiles.add(TILE_FILES[cell.tileType]);
+        if (cell.occupant) uniqueFiles.add(cell.occupant + '.gltf');
     });
 
     const loader = new GLTFLoader();
     const cache  = new Map();
 
-    // Promesas concurrentes para evitar bloqueos en el hilo principal
-    await Promise.all([...filesToLoad].map(file =>
+    // Carga paralela masiva
+    await Promise.all([...uniqueFiles].map(file =>
         new Promise(res =>
             loader.load(
                 file,
                 gltf => { cache.set(file, gltf); res(); },
                 undefined,
-                err  => { 
-                    // Fallback procedural: Si el archivo real no existe localmente, generamos un proxy visual 3D
-                    cache.set(file, createProceduralProxy(file)); 
-                    res(); 
-                }
+                err  => { cache.set(file, generateProceduralBackup(file)); res(); }
             )
         )
     ));
 
-    // ── Construcción de Capas Geográficas (PoC Estructura) ──
-    buildBaseTerrain(cache);  // Capa 0 -> InstancedMesh eficiente (1 Draw Call por tipo)
-    buildEpicOccupants(cache);// Capa 2 -> Clones únicos conUserData inyectado para Raycasting
+    // Despliegue de los sistemas de mallas en base al JSON de assets
+    executeBaseInstancing(cache);
+    populateEpicOccupants(cache);
 
-    // Elementos decorativos de atmósfera (Cielo)
-    placeAtmosphereCloud(cache, -5, 5, -3);
-    placeAtmosphereCloud(cache,  6, 4.5, -4);
-    placeAtmosphereCloud(cache,  0, 6, 5);
+    // Decoración aérea masiva
+    spawnCloud(cache, -12, 7, -10);
+    spawnCloud(cache,  14, 8, -12);
+    spawnCloud(cache,   0, 9,  15);
+    spawnCloud(cache,  -8, 6,   8);
 
-    // ── Desvanecimiento y Activación de la Interfaz ────────
+    // Transición de Interfaz
     landingDiv.classList.add('fade-out');
     infoOverlay.style.opacity = '1';
-    setTimeout(() => landingDiv.remove(), 800);
+    setTimeout(() => landingDiv.remove(), 600);
 
-    setupWorldInteractions();
+    bindUserInputs();
 
-    // ── Render Loop Principal ─────────────────────────────
     renderer.setAnimationLoop(() => {
         controls.update();
         renderer.render(scene, camera);
     });
 }
 
-// ═══════════════════════════════════════════════════════
-// SISTEMA DE CAPAS 0: TERRENOS INSTANCIADOS
-// ═══════════════════════════════════════════════════════
-function buildBaseTerrain(cache) {
-    const cellsByType = {};
+// Generación de capas base indexadas por tipo de hexágono
+function executeBaseInstancing(cache) {
+    const cellsByTerrain = {};
     WORLD_CELLS.forEach(cell => {
-        if (!cellsByType[cell.tileType]) cellsByType[cell.tileType] = [];
-        cellsByType[cell.tileType].push(cell);
+        if (!cellsByTerrain[cell.tileType]) cellsByTerrain[cell.tileType] = [];
+        cellsByTerrain[cell.tileType].push(cell);
     });
 
-    for (const [tileType, cells] of Object.entries(cellsByType)) {
-        const fileName = TILE_FILES[tileType];
-        const cachedAsset = cache.get(fileName);
+    for (const [tileType, cells] of Object.entries(cellsByTerrain)) {
+        const file = TILE_FILES[tileType];
+        const asset = cache.get(file);
 
-        let geometry = null, material = null;
-
-        if (cachedAsset.scene) {
-            // Extracción automatizada del sub-mesh raíz de KayKit
-            cachedAsset.scene.traverse(child => {
-                if (child.isMesh && !geometry) { 
-                    geometry = child.geometry; 
-                    material = child.material; 
-                }
+        let geo = null, mat = null;
+        if (asset.scene) {
+            asset.scene.traverse(child => {
+                if (child.isMesh && !geo) { geo = child.geometry; mat = child.material; }
             });
         } else {
-            geometry = cachedAsset.geometry;
-            material = cachedAsset.material;
+            geo = asset.geometry; mat = asset.material;
         }
 
-        const instMesh = new THREE.InstancedMesh(geometry, material, cells.length);
-        instMesh.userData = { assetKey: fileName };
+        const meshInstances = new THREE.InstancedMesh(geo, mat, cells.length);
+        meshInstances.userData = { assetKey: file };
 
-        const dummyObj = new THREE.Object3D();
-        cells.forEach((cell, index) => {
-            dummyObj.position.copy(axialToWorld(cell.q, cell.r));
-            dummyObj.updateMatrix();
-            instMesh.setMatrixAt(index, dummyObj.matrix);
+        const dummy = new THREE.Object3D();
+        cells.forEach((cell, idx) => {
+            dummy.position.copy(axialToWorld(cell.q, cell.r));
+            dummy.updateMatrix();
+            meshInstances.setMatrixAt(idx, dummy.matrix);
         });
 
-        instMesh.instanceMatrix.needsUpdate = true;
-        scene.add(instMesh);
+        meshInstances.instanceMatrix.needsUpdate = true;
+        scene.add(meshInstances);
     }
 }
 
-// ═══════════════════════════════════════════════════════
-// SISTEMA DE CAPAS 2: OCUPANTES ÉPICOS DE LA ONTOLOGÍA
-// ═══════════════════════════════════════════════════════
-function buildEpicOccupants(cache) {
+// Inyección y clonación de ocupantes de la ontología lírica
+function populateEpicOccupants(cache) {
     WORLD_CELLS.forEach(cell => {
         if (!cell.occupant) return;
-        const fileName = cell.occupant + '.gltf';
-        const cachedAsset = cache.get(fileName);
+        const file = cell.occupant + '.gltf';
+        const asset = cache.get(file);
 
-        let entityInstance;
-        if (cachedAsset.scene) {
-            entityInstance = cachedAsset.scene.clone(true);
-        } else {
-            entityInstance = cachedAsset.clone();
-        }
+        let meshClone = asset.scene ? asset.scene.clone(true) : asset.clone();
+        const worldCoords = axialToWorld(cell.q, cell.r);
+        meshClone.position.set(worldCoords.x, 0, worldCoords.z);
 
-        const targetPos = axialToWorld(cell.q, cell.r);
-        entityInstance.position.set(targetPos.x, 0, targetPos.z);
-
-        // Propagación recursiva de metadatos en profundidad para detección limpia del Raycaster
-        entityInstance.traverse(node => { 
-            node.userData.assetKey = fileName; 
+        meshClone.traverse(node => { 
+            node.userData.assetKey = file; 
         });
 
-        scene.add(entityInstance);
+        scene.add(meshClone);
     });
 }
 
-// ═══════════════════════════════════════════════════════
-// FALLBACK GENERATIVO: PROXIES PROCEDURALES (Mantenimiento FPS)
-// Genera mallas 3D estilizadas si no se detectan los .gltf físicos locales
-// ═══════════════════════════════════════════════════════
-function createProceduralProxy(fileName) {
+// Sistema de contingencia volumétrico si se corre sin el servidor local de archivos de KayKit
+function generateProceduralBackup(fileName) {
     let geo, mat;
     if (fileName.includes('hex_')) {
-        // Malla hexagonal para terreno base
         geo = new THREE.CylinderGeometry(1, 1, 0.4, 6);
         geo.rotateX(Math.PI / 2);
-        if (fileName.includes('grass')) mat = new THREE.MeshStandardMaterial({ color: 0x2d4a27, roughness: 0.8 });
-        else if (fileName.includes('water')) mat = new THREE.MeshStandardMaterial({ color: 0x1a4666, roughness: 0.3, metalness: 0.2 });
-        else if (fileName.includes('river')) mat = new THREE.MeshStandardMaterial({ color: 0x235d85, roughness: 0.4 });
-        else mat = new THREE.MeshStandardMaterial({ color: 0x6e563b, roughness: 0.9 });
-    } else if (fileName.includes('building_castle')) {
-        geo = new THREE.BoxGeometry(0.9, 1.6, 0.9);
-        mat = new THREE.MeshStandardMaterial({ color: 0x5a6978, roughness: 0.7 });
+        if (fileName.includes('grass')) mat = new THREE.MeshStandardMaterial({ color: 0x1f381c, roughness: 0.85 });
+        else if (fileName.includes('water')) mat = new THREE.MeshStandardMaterial({ color: 0x0f2b3d, roughness: 0.2, metalness: 0.3 });
+        else if (fileName.includes('river')) mat = new THREE.MeshStandardMaterial({ color: 0x174663, roughness: 0.3 });
+        else mat = new THREE.MeshStandardMaterial({ color: 0x54402a, roughness: 0.9 });
+    } else if (fileName.includes('building_castle') || fileName.includes('building_tower')) {
+        geo = new THREE.CylinderGeometry(0.4, 0.5, 1.8, 6);
+        mat = new THREE.MeshStandardMaterial({ color: 0x47515c, roughness: 0.7 });
     } else if (fileName.includes('building_')) {
-        geo = new THREE.ConeGeometry(0.5, 1, 4);
-        mat = new THREE.MeshStandardMaterial({ color: 0x9c7643, roughness: 0.8 });
-    } else if (fileName.includes('mountain')) {
-        geo = new THREE.ConeGeometry(0.7, 1.8, 5);
-        mat = new THREE.MeshStandardMaterial({ color: 0x47525e, roughness: 0.9 });
+        geo = new THREE.BoxGeometry(0.7, 0.8, 0.7);
+        mat = new THREE.MeshStandardMaterial({ color: 0x82623a, roughness: 0.8 });
+    } else if (fileName.includes('mountain') || fileName.includes('rock')) {
+        geo = new THREE.ConeGeometry(0.6, 1.6, 4);
+        mat = new THREE.MeshStandardMaterial({ color: 0x3a424a, roughness: 0.95 });
+    } else if (fileName.includes('Skeleton_')) {
+        geo = new THREE.BoxGeometry(0.2, 1.2, 0.2);
+        mat = new THREE.MeshStandardMaterial({ color: 0xdedede, roughness: 0.6 });
     } else if (fileName.includes('lava')) {
         geo = new THREE.BoxGeometry(0.8, 0.1, 0.8);
-        mat = new THREE.MeshStandardMaterial({ color: 0xd94b18, emissive: 0x6e1b05, roughness: 0.5 });
+        mat = new THREE.MeshStandardMaterial({ color: 0xb83407, emissive: 0x420d00, roughness: 0.4 });
     } else {
-        geo = new THREE.SphereGeometry(0.4, 8, 8);
-        mat = new THREE.MeshStandardMaterial({ color: 0x3d5c36, roughness: 0.8 });
+        geo = new THREE.SphereGeometry(0.35, 8, 8);
+        mat = new THREE.MeshStandardMaterial({ color: 0x254220, roughness: 0.9 });
     }
     const mesh = new THREE.Mesh(geo, mat);
-    const container = new THREE.Group();
-    container.add(mesh);
-    return container;
+    const pivot = new THREE.Group();
+    pivot.add(mesh);
+    return pivot;
 }
 
-function placeAtmosphereCloud(cache, x, y, z) {
-    const cachedAsset = cache.get('cloud_big.gltf');
-    let cloudNode;
-    if (cachedAsset.scene) {
-        cloudNode = cachedAsset.scene.clone(true);
-    } else {
-        cloudNode = cachedAsset.clone();
-    }
-    cloudNode.position.set(x, y, z);
-    scene.add(cloudNode); // Sin assetKey adjunto: el raycaster no lo procesa
+function spawnCloud(cache, x, y, z) {
+    const cloudAsset = cache.get('cloud_big.gltf');
+    const cloud = cloudAsset.scene ? cloudAsset.scene.clone(true) : cloudAsset.clone();
+    cloud.position.set(x, y, z);
+    scene.add(cloud);
 }
 
-// ═══════════════════════════════════════════════════════
-// INTERACCIONES RAYCASTING Y APERTURA DE PERGAMINO
-// ═══════════════════════════════════════════════════════
-function setupWorldInteractions() {
+// Raycasting e interactividad con el árbol del DOM
+function bindUserInputs() {
     window.addEventListener('click', event => {
         if (modalOverlay.classList.contains('active')) return;
 
-        // Coordenadas normalizadas del puntero
         mouse.x =  (event.clientX / innerWidth)  * 2 - 1;
         mouse.y = -(event.clientY / innerHeight) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
 
-        const intersects = raycaster.intersectObjects(scene.children, true);
-        if (!intersects.length) return;
+        const hits = raycaster.intersectObjects(scene.children, true);
+        if (!hits.length) return;
 
-        // Ascensión jerárquica en el árbol de transformación para recuperar el identificador heráldico
-        let targetMesh = intersects[0].object;
-        while (targetMesh && targetMesh.parent && !targetMesh.userData.assetKey) {
-            targetMesh = targetMesh.parent;
+        let detectedNode = hits[0].object;
+        while (detectedNode && detectedNode.parent && !detectedNode.userData.assetKey) {
+            detectedNode = detectedNode.parent;
         }
 
-        if (targetMesh?.userData?.assetKey) {
-            const assetIdentifier = targetMesh.userData.assetKey;
-            if (assetDatabase[assetIdentifier]) {
-                openEpicParchment(assetDatabase[assetIdentifier]);
-            }
+        if (detectedNode?.userData?.assetKey) {
+            const registryKey = detectedNode.userData.assetKey;
+            // Si el asset individual no tiene descripción propia, se asume su descripción de clase base
+            const targetData = assetDatabase[registryKey] || assetDatabase[registryKey.split('_')[0] + '_' + registryKey.split('_')[1]] || assetDatabase['hex_grass.gltf'];
+            unrollParchment(targetData);
         }
     });
 
-    const closeParchment = () => modalOverlay.classList.remove('active');
-    document.getElementById('close-btn').addEventListener('click', closeParchment);
-    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeParchment(); });
+    const hideParchment = () => modalOverlay.classList.remove('active');
+    document.getElementById('close-btn').addEventListener('click', hideParchment);
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) hideParchment(); });
 }
 
-function openEpicParchment(data) {
+function unrollParchment(data) {
     document.getElementById('parchment-title').textContent = data.title;
     document.getElementById('parchment-desc').textContent  = data.desc;
 
-    const statsTableBody = document.getElementById('parchment-stats');
-    statsTableBody.innerHTML = '';
+    const tbody = document.getElementById('parchment-stats');
+    tbody.innerHTML = '';
     
-    for (const [statName, statValue] of Object.entries(data.stats)) {
-        const tableRow = document.createElement('tr');
-        tableRow.innerHTML = `<td>${statName}</td><td class="stat-val">${statValue}</td>`;
-        statsTableBody.appendChild(tableRow);
+    for (const [key, value] of Object.entries(data.stats)) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${key}</td><td class="stat-val">${value}</td>`;
+        tbody.appendChild(row);
     }
     modalOverlay.classList.add('active');
 }
 
-// ═══════════════════════════════════════════════════════
-// RE-AJUSTE DINÁMICO DE VENTANA (Mantenimiento de Aspect Ratio)
-// ═══════════════════════════════════════════════════════
 window.addEventListener('resize', () => {
     if (!camera || !renderer) return;
     camera.aspect = innerWidth / innerHeight;
