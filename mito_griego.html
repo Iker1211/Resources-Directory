@@ -3,279 +3,535 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Odisea 3D - Adaptive Hexagonal World</title>
+    <title>La Odisea - Mitología Hexagonal 3D</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #05050a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        body { margin: 0; overflow: hidden; background-color: #0b0e14; font-family: 'Segoe UI', Tahoma, sans-serif; color: #ecf0f1; user-select: none; }
+
+        /* === PANTALLA DE INICIO === */
+        #landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #131921 0%, #05070a 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.8s ease; }
+        #landing.fade-out { opacity: 0; pointer-events: none; }
+        .landing-content { max-width: 650px; text-align: center; padding: 0 20px; }
+        .landing-content h1 { font-size: 3.2rem; font-weight: 300; color: #f1c40f; text-shadow: 0 4px 15px rgba(0,0,0,0.6); margin-bottom: 10px; font-family: 'Georgia', serif; }
+        .landing-content p { color: #a4b0be; line-height: 1.6; margin-bottom: 30px; }
+        #start-btn { padding: 16px 50px; font-size: 1.1rem; font-weight: bold; color: #fff; background-color: #d35400; border: none; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(211, 84, 0, 0.4); }
+        #start-btn:hover { background-color: #e67e22; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6); }
+
+        /* === INTERFAZ GENERAL === */
+        #info-overlay { position: absolute; top: 20px; width: 100%; text-align: center; pointer-events: none; opacity: 0; transition: opacity 1s ease 1s; text-shadow: 0 2px 8px rgba(0,0,0,0.9); z-index: 10; }
+        #info-overlay h2 { margin: 0; font-weight: 400; color: #f1c40f; font-family: 'Georgia', serif; font-size: 1.8rem; }
+        #info-overlay p { margin: 5px 0 0 0; color: #bdc3c7; font-size: 0.95rem; letter-spacing: 0.5px; }
+
+        /* === PERGAMINO HELÉNICO (MODAL) === */
+        #modal-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 50; opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
         }
-        #canvas-container {
-            width: 100vw;
-            height: 100vh;
+        #modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        #parchment-sheet {
+            background-color: #f2e6cb; color: #1c2833;
+            padding: 35px; width: 90%; max-width: 440px;
+            border: 6px double #c0392b; border-radius: 2px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            position: relative;
+            transform: scale(0.7);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
+            background-size: 4px 4px;
         }
-        #ui-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            background: rgba(10, 10, 20, 0.85);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #3a3a5a;
-            max-width: 320px;
-            pointer-events: none;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        h1 { margin: 0 0 10px 0; font-size: 1.5rem; color: #e0a96d; text-transform: uppercase; letter-spacing: 1px; }
-        h2 { margin: 0 0 5px 0; font-size: 1rem; color: #cccccc; }
-        p { margin: 0; font-size: 0.85rem; color: #a0a0b0; line-height: 1.4; }
-        .legend { margin-top: 15px; font-size: 0.75rem; border-top: 1px solid #3a3a5a; padding-top: 10px; }
-        .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
-        .color-box { width: 12px; height: 12px; margin-right: 8px; border-radius: 2px; }
+        #modal-overlay.active #parchment-sheet { transform: scale(1); }
+
+        #close-btn { position: absolute; top: 10px; right: 20px; font-size: 1.8rem; font-weight: bold; cursor: pointer; color: #95a5a6; transition: color 0.2s; }
+        #close-btn:hover { color: #c0392b; }
+
+        #parchment-title { font-family: 'Georgia', serif; font-size: 2rem; margin-top: 0; border-bottom: 2px dashed #d35400; padding-bottom: 12px; color: #2c3e50; text-align: center; }
+        #parchment-desc { font-style: italic; line-height: 1.6; margin: 20px 0; color: #2c3e50; font-size: 1.05rem; text-align: justify; }
+
+        .stats-table { width: 100%; border-collapse: collapse; margin-top: 25px; font-size: 0.95rem; }
+        .stats-table tr { border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .stats-table td { padding: 10px 6px; }
+        .stats-table td.stat-val { font-weight: bold; text-align: right; color: #c0392b; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
-
-    <div id="ui-overlay">
-        <h1>La Odisea</h1>
-        <h2>Ontología del viaje de Odiseo</h2>
-        <p>Generación procedural basada en la gramática Kaykit y renderizado optimizado por instancias (Adaptive Rendering Mesh Layers).</p>
-        
-        <div class="legend">
-            <div class="legend-item"><div class="color-box" style="background: #2e6f40;"></div> Verde: Ítaca (Hogar y Palacio)</div>
-            <div class="legend-item"><div class="color-box" style="background: #1034a6;"></div> Azul: Mar Mediterráneo (Peligro de Poseidón)</div>
-            <div class="legend-item"><div class="color-box" style="background: #7c6245;"></div> Marrón: Isla de Cíclopes (Cueva y Rocas)</div>
-            <div class="legend-item"><div class="color-box" style="background: #222225;"></div> Negro: El Hades (Inframundo Escatológico)</div>
-        </div>
+<div id="landing">
+    <div class="landing-content">
+        <h1>La Odisea: El Espacio Geográfico</h1>
+        <p>Explora el viaje épico de Odiseo recreado proceduralmente a través de una rejilla computacional de 3D Low-Poly. Inspecciona los reinos de Ítaca, el Mar de Poseidón, la Cueva de Polifemo y los confines oscuros del Hades.</p>
+        <button id="start-btn">Navegar el Mar Helénico</button>
     </div>
+</div>
 
-    <script>
-        // --- CONSTANTES DE CONFIGURACIÓN ---
-        const GRID_RADIUS = 7; // Suficiente para generar más de 120 cels/tiles hexagonales
-        const TILE_SIZE = 1.0; 
-        const HEX_WIDTH = TILE_SIZE * Math.sqrt(3);
-        const HEX_HEIGHT = TILE_SIZE * 2;
+<div id="info-overlay">
+    <h2>Crónicas de la Antigua Grecia</h2>
+    <p>Órbita con el ratón. Haz clic en las islas, palacios u ocupantes para abrir los registros del mito.</p>
+</div>
 
-        // --- DEFINICIÓN DE TIPOS DE REGINAL SEGÚN LA ODICEA ---
-        const BIOMES = {
-            ITHACA: 0,
-            MEDITERRANEAN: 1,
-            CYCLOPS: 2,
-            HADES: 3
-        };
+<div id="modal-overlay">
+    <div id="parchment-sheet">
+        <span id="close-btn">&times;</span>
+        <h3 id="parchment-title">Cargando Canto...</h3>
+        <p id="parchment-desc">Extracto de las crónicas de Homero...</p>
+        <table class="stats-table">
+            <tbody id="parchment-stats"></tbody>
+        </table>
+    </div>
+</div>
 
-        // --- CONFIGURACIÓN DEL ESCENARIO ---
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a12);
-        scene.fog = new THREE.FogExp2(0x0a0a12, 0.03);
+<script type="importmap">
+{
+    "imports": {
+        "three":         "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+    }
+}
+</script>
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 15, 15);
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Adaptive resolution limit
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        container.appendChild(renderer.domElement);
+// ═══════════════════════════════════════════════════════
+// GEOMETRÍA HEXAGONAL EXACTA (Métrica Unificada)
+// Spacing preciso para evitar gaps ("pointy-top" setup)
+// ═══════════════════════════════════════════════════════
+const HEX_W = 1.82; 
+const HEX_H = 1.575;
 
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2.1; // No traspasar el suelo
+function axialToWorld(q, r) {
+    return new THREE.Vector3(HEX_W * (q + r * 0.5), 0, HEX_H * r);
+}
 
-        // --- ILUMINACIÓN ---
-        const ambientLight = new THREE.AmbientLight(0x22223b, 1.5);
-        scene.add(ambientLight);
+// ═══════════════════════════════════════════════════════
+// RELACIÓN EXACTA ONTOLOGÍA -> REGISTRO DE ASSETS (JSON)
+// Paths absolutos del set de datos de KayKit proporcionado
+// ═══════════════════════════════════════════════════════
+const ASSET_PATHS = {
+    // Capa 0: Tiles de Terreno
+    'hex_grass': 'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/base/hex_grass.gltf',
+    'hex_water': 'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/base/hex_water.gltf',
+    'hex_coast': 'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/coast/hex_coast_A.gltf',
+    
+    // Capa 1 y 2: Elementos de la Odisea (Ocupantes y Arquitectura)
+    'palacio_itaca': 'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/colour blue/building_castle_blue.gltf',
+    'hogar_itaca':   'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/colour blue/building_home_A_blue.gltf',
+    'pozo_itaca':    'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/colour blue/building_well_blue.gltf',
+    'roca_ciclope':  'assets/KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Rock_1_A_Color1.gltf',
+    'roca_masiva':   'assets/KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Rock_1_J_Color1.gltf',
+    'fogata_ciclope':'assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Log_Stack.gltf',
+    'circe_templo':  'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/colour green/building_church_green.gltf',
+    'arbol_circe':   'assets/KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Tree_1_A_Color1.gltf',
+    'tiresias_prop': 'assets/KayKit_Skeletons_1.1_FREE/KayKit_Skeletons_1.1_FREE/assets/gltf/Skeleton_Staff.gltf',
+    'espectro_guerrer':'assets/KayKit_Skeletons_1.1_FREE/KayKit_Skeletons_1.1_FREE/assets/gltf/Skeleton_Blade.gltf',
+    'antorcha_hades':'assets/KayKit_RPGToolsBits_1.0_FREE/KayKit_RPGToolsBits_1.0_FREE/Assets/gltf/torch_burnt.gltf',
+    'arrecife_poseidon':'assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/rubble_large.gltf',
+    'barco_naufragio':'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/building_destroyed.gltf',
+    'nube_decorativa':'assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/nature/cloud_big.gltf'
+};
 
-        const sunLight = new THREE.DirectionalLight(0xfff3e0, 2.0);
-        sunLight.position.set(10, 20, 10);
-        sunLight.castShadow = true;
-        sunLight.shadow.mapSize.width = 2048;
-        sunLight.shadow.mapSize.height = 2048;
-        scene.add(sunLight);
+// ═══════════════════════════════════════════════════════
+// BASE DE DATOS DE LA ONTOLOGÍA (Contenido del Pergamino)
+// Mapeado uno a uno con el identificador del asset lógico
+// ═══════════════════════════════════════════════════════
+const assetDatabase = {
+    'hex_grass': {
+        title: 'Tierras de Pradera',
+        desc: 'Suelo firme y cultivable que bordea los reinos continentales e islas estables.',
+        stats: { 'Tipo': 'Terreno Fértil', 'Sustrato': 'Capa de Humus', ' allowsOccupant': 'True' }
+    },
+    'hex_water': {
+        title: 'Mar Abierto (Poseidón)',
+        desc: 'Aguas profundas controladas por el dios de los terremotos. Peligro constante para la flota de naves negras.',
+        stats: { 'Peligro de Tormenta': 'Extremo 🌊', 'Navegabilidad': 'Compleja', 'allowsOccupant': 'False' }
+    },
+    'hex_coast': {
+        title: 'Litoral Costero',
+        desc: 'La interfaz entre las aguas de Poseidón y los dominios de los mortales e inmortales.',
+        stats: { 'Tipo': 'Costa de Arena', 'Riesgo de Encallar': 'Medio', ' allowsEnv': 'True' }
+    },
+    'palacio_itaca': {
+        title: 'Palacio Real de Ítaca',
+        desc: 'Hogar ancestral de Odiseo. Actualmente asediado por más de un centenar de pretendientes que consumen su hacienda esperando la mano de Penélope.',
+        stats: { 'Canto Relacionado': 'Canto I al IV', 'Pretendientes': '108 Nobles', 'Estado': 'Falta el Rey 👑' }
+    },
+    'hogar_itaca': {
+        title: 'Cabaña de Emeo',
+        desc: 'El fiel porquerizo de Odiseo mantiene su lealtad intacta, cuidando el ganado en las afueras de la urbe.',
+        stats: { 'Lealtad': '100% 🐖', 'Ocupante': 'Emeo el Porquerizo', 'Hospitalidad': 'Excelente' }
+    },
+    'roca_masiva': {
+        title: 'Cueva de Polifemo',
+        desc: 'Antro gigantesco tallado en roca viva donde el cíclope, hijo de Poseidón, devora a los extranjeros violando las leyes de hospitalidad de Zeus.',
+        stats: { 'Canto Relacionado': 'Canto IX', 'Ocupante': 'Cíclope Polifemo 👁️', 'Peligro': 'Mortal' }
+    },
+    'fogata_ciclope': {
+        title: 'Hoguera del Gigante',
+        desc: 'Madera apilada por Polifemo. Odiseo y sus hombres rematan una estaca de olivo en sus brasas para cegar al monstruo.',
+        stats: { 'Arma Improvisada': 'Estaca de Olivo 🪵', 'Temperatura': 'Incandescente', 'Estrategia': 'Astucia (Metis)' }
+    },
+    'circe_templo': {
+        title: 'Mansión de Circe',
+        desc: 'Palacio de piedra pulida en los valles de la Isla de Eea. Aquí, la deidad de lindas trenzas transforma a los hombres en bestias con sus pócimas.',
+        stats: { 'Canto Relacionado': 'Canto X', 'Hechicera': 'Circe la Maga 🔮', 'Efecto': 'Metamorfosis Porcina' }
+    },
+    'tiresias_prop': {
+        title: 'Sombra de Tiresias',
+        desc: 'El adivino tebano ciego. Conserva su mente lúcida en el Hades y profetiza el regreso de Odiseo a Ítaca y el peligro de las vacas de Helios.',
+        stats: { 'Canto Relacionado': 'Canto XI (Nekuia)', 'Profecía': 'Rumbo a Ítaca 🧭', 'Condición': 'Sombra Espectral' }
+    },
+    'espectro_guerrer': {
+        title: 'Sombra de Aquiles',
+        desc: 'El héroe del talón prefiere ser el último siervo en la tierra de los vivos que reinar sobre las almas del Inframundo.',
+        stats: { 'Espíritu': 'Fiel a Troya ⚔️', 'Pesar': 'Melancolía Heroica', 'Familiar': 'Pregunta por Neoptólemo' }
+    },
+    'barco_naufragio': {
+        title: 'Restos de la Flota',
+        desc: 'Madera astillada por los rayos de Zeus tras la profanación de las vacas sagradas del Sol Hyperión.',
+        stats: { 'Supervivientes': 'Solo Odiseo 🛶', 'Causa': 'Rayo de Zeus', 'Pérdidas': 'Última nave destruida' }
+    }
+};
 
-        // --- PROCESO DE INSTANCIACIÓN (ADAPTIVE RENDERING) ---
-        // Estructuras de datos para contener las mallas instanciadas por capas
-        const geometries = {
-            tile: new THREE.CylinderGeometry(TILE_SIZE, TILE_SIZE, 0.4, 6),
-            tree: new THREE.ConeGeometry(0.25, 0.8, 5),
-            rock: new THREE.DodecahedronGeometry(0.3),
-            building: new THREE.BoxGeometry(0.6, 0.8, 0.6),
-            skeleton: new THREE.CylinderGeometry(0.05, 0.05, 0.7, 4)
-        };
+// ═══════════════════════════════════════════════════════
+// GENERACIÓN PROCEDURAL DEL MUNDO (127 Celdas Axiales)
+// Construcción matemática de un mapa de radio de anillo 6
+// ═══════════════════════════════════════════════════════
+const WORLD_CELLS = [];
+const MAP_RADIUS = 6;
 
-        // Rotar base geométrica del hexágono para alinear correctamente con la orientación KayKit
-        geometries.tile.rotateX(Math.PI / 2); 
-        geometries.tile.rotateZ(Math.PI / 6);
+for (let q = -MAP_RADIUS; q <= MAP_RADIUS; q++) {
+    let r1 = Math.max(-MAP_RADIUS, -q - MAP_RADIUS);
+    let r2 = Math.min(MAP_RADIUS, -q + MAP_RADIUS);
+    
+    for (let r = r1; r <= r2; r++) {
+        // Cálculo del bioma por coordenadas lógicas
+        let tileType = 'hex_water';
+        let occupant = null;
 
-        const materials = {
-            ithacaBase: new THREE.MeshStandardMaterial({ color: 0x3a7d44, roughness: 0.6 }),
-            medBase: new THREE.MeshStandardMaterial({ color: 0x1d4e89, roughness: 0.2, metalness: 0.1 }),
-            cyclopsBase: new THREE.MeshStandardMaterial({ color: 0x8a7968, roughness: 0.8 }),
-            hadesBase: new THREE.MeshStandardMaterial({ color: 0x1c1c1e, roughness: 0.9 }),
-            tree: new THREE.MeshStandardMaterial({ color: 0x1b4332, roughness: 0.5 }),
-            rock: new THREE.MeshStandardMaterial({ color: 0x5c5757, roughness: 0.8 }),
-            palace: new THREE.MeshStandardMaterial({ color: 0xd6ccc2, roughness: 0.4 }),
-            undead: new THREE.MeshStandardMaterial({ color: 0xeeeeee, roughness: 0.9 })
-        };
-
-        // Array para agrupar todas las llamadas de instancias y controlar sus matrices eficientemente
-        const instanceRegistry = [];
-
-        function registerInstance(type, materialKey, matrix) {
-            const registryKey = `${type}_${materialKey}`;
-            if (!instanceRegistry[registryKey]) {
-                instanceRegistry[registryKey] = {
-                    geometry: geometries[type],
-                    material: materials[materialKey],
-                    matrices: []
-                };
+        // BIOMA 1: Ítaca (Esquina Superior Derecha)
+        if (q > 2 && r < 0) {
+            tileType = (q === MAP_RADIUS || r === -MAP_RADIUS) ? 'hex_coast' : 'hex_grass';
+            if (q === 4 && r === -2) occupant = 'palacio_itaca';
+            else if (q === 5 && r === -3) occupant = 'hogar_itaca';
+            else if (q === 3 && r === -1) occupant = 'pozo_itaca';
+        }
+        // BIOMA 2: Isla de los Cíclopes (Esquina Inferior Izquierda)
+        else if (q < -1 && r > 1) {
+            tileType = (q === -MAP_RADIUS || r === MAP_RADIUS) ? 'hex_coast' : 'hex_grass';
+            if (q === -4 && r === 4) occupant = 'roca_masiva';
+            else if (q === -3 && r === 3) occupant = 'fogata_ciclope';
+            else if (q === -5 && r === 4) occupant = 'roca_ciclope';
+        }
+        // BIOMA 3: El Hades / Inframundo (Esquina Superior Izquierda, sombrío)
+        else if (q < 0 && r < -1) {
+            tileType = 'hex_grass'; // Representará los campos de Asfódelos
+            if (q === -3 && r === -2) occupant = 'tiresias_prop';
+            else if (q === -2 && r === -2) occupant = 'espectro_guerrer';
+            else if (Math.random() > 0.6) occupant = 'antorcha_hades';
+        }
+        // BIOMA 4: Isla de Circe (Eea) y Mar Abierto (Centro y Resto)
+        else {
+            const distFromCenter = Math.sqrt(q*q + r*r);
+            if (distFromCenter < 1.8) {
+                // Isla Central de Circe
+                tileType = 'hex_coast';
+                if (q === 0 && r === 0) occupant = 'circe_templo';
+                else occupant = 'arbol_circe';
+            } else {
+                // Mar con amenazas geográficas
+                tileType = 'hex_water';
+                if (q === 2 && r === 2) occupant = 'barco_naufragio'; // Naufragio provocado por Escila
+                else if (q === -1 && r === 2 && Math.random() > 0.7) occupant = 'arrecife_poseidon';
             }
-            instanceRegistry[registryKey].matrices.push(matrix);
         }
 
-        // --- MAP GENERATION LOGIC (LA ODISEA) ---
-        const tileCount = 0;
+        WORLD_CELLS.push({ q, r, tileType, occupant });
+    }
+}
+
+// ═══════════════════════════════════════════════════════
+// PROGRAMACIÓN PRINCIPAL (MOTOR THREE.JS / REQUISITOS DE POC)
+// ═══════════════════════════════════════════════════════
+const startBtn = document.getElementById('start-btn');
+const landingDiv = document.getElementById('landing');
+const infoOverlay = document.getElementById('info-overlay');
+const modalOverlay = document.getElementById('modal-overlay');
+
+let scene, camera, renderer, controls, raycaster, mouse;
+
+startBtn.addEventListener('click', () => {
+    startBtn.textContent = 'Invocando el Mar Helénico...';
+    startBtn.style.pointerEvents = 'none';
+    initWorld();
+});
+
+async function initWorld() {
+    // ── Configuración de Escena y Niebla Atmosférica ──
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x1a252c, 0.025);
+
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.set(0, 16, 22);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Adaptive rendering limiter
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    document.body.appendChild(renderer.domElement);
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2.15; // Evitar clipping inferior
+    controls.minDistance = 5;
+    controls.maxDistance = 60;
+
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
+
+    // ── Iluminación Cinemática ──
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9)); // Luz de ambiente helénica
+    const sun = new THREE.DirectionalLight(0xfff5e6, 2.5);
+    sun.position.set(15, 25, 12);
+    scene.add(sun);
+
+    // ── Carga Asíncrona Paralela y Almacenamiento en Caché ──
+    const uniqueFiles = new Set();
+    Object.values(ASSET_PATHS).forEach(path => uniqueFiles.add(path));
+
+    const loader = new GLTFLoader();
+    const cache = new Map();
+
+    await Promise.all([...uniqueFiles].map(path => 
+        new Promise(resolve => {
+            loader.load(
+                path,
+                gltf => { cache.set(path, gltf); resolve(); },
+                undefined,
+                err => {
+                    console.warn(`No se encontró el asset real en path: ${path}. Creando Fallback Geométrico.`);
+                    cache.set(path, createFallbackMesh(path));
+                    resolve();
+                }
+            );
+        })
+    ));
+
+    // ── Construcción de Capas bajo la Regla del Registro Estructural ──
+    buildTileLayer(cache);      // Layer 0: InstancedMesh unificado por tipo de terreno
+    buildOccupantLayer(cache);  // Layer 1 y 2: Clones recursivos con metadatos indexados
+
+    // Decoración aérea estática
+    placeAtmosphere(cache);
+
+    // ── Transición e Inyección de Interfaz de Usuario ──
+    landingDiv.classList.add('fade-out');
+    infoOverlay.style.opacity = '1';
+    setTimeout(() => landingDiv.remove(), 800);
+
+    setupControllerInteractions();
+
+    // ── Bucle de Animación Adaptativo (Render Loop) ──
+    renderer.setAnimationLoop(() => {
+        controls.update();
+        renderer.render(scene, camera);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+// CAPA 0: MESH RENDERING POR INSTANCIAS (InstancedMesh)
+// Agrupa draw calls de forma adaptativa por identificador lógico
+// ═══════════════════════════════════════════════════════
+function buildTileLayer(cache) {
+    const tileGroups = { hex_grass: [], hex_water: [], hex_coast: [] };
+    WORLD_CELLS.forEach(cell => {
+        if (tileGroups[cell.tileType]) tileGroups[cell.tileType].push(cell);
+    });
+
+    for (const [tileType, cells] of Object.entries(tileGroups)) {
+        const path = ASSET_PATHS[tileType];
+        const gltf = cache.get(path);
+        if (!gltf) continue;
+
+        let geo = null, mat = null;
         
-        // Mapeo matemático de coordenadas cúbicas axiales a mundo 3D cartesiano
-        for (let q = -GRID_RADIUS; q <= GRID_RADIUS; q++) {
-            let r1 = Math.max(-GRID_RADIUS, -q - GRID_RADIUS);
-            let r2 = Math.min(GRID_RADIUS, -q + GRID_RADIUS);
-            for (let r = r1; r <= r2; r++) {
-                
-                // Calcular posición espacial
-                const x = HEX_WIDTH * (q + r/2);
-                const z = HEX_HEIGHT * 3/4 * r;
-                const y = 0;
-
-                // Determinar el bioma en función de la zona para mapear la ontología
-                let biome = BIOMES.MEDITERRANEAN; // Por defecto es mar profundo
-                const distToCenter = Math.sqrt(x*x + z*z);
-
-                if (q < -3 && r > 2) {
-                    biome = BIOMES.HADES; // El rincón del inframundo
-                } else if (q > 3 && r < -2) {
-                    biome = BIOMES.ITHACA; // La patria estable
-                } else if (distToCenter > 2 && distToCenter < 4 && x < 0) {
-                    biome = BIOMES.CYCLOPS; // Isla de Polifemo apartada
-                }
-
-                // Generar transformaciones de matriz para la Capa 0 (Base)
-                const objectDummy = new THREE.Object3D();
-                objectDummy.position.set(x, y, z);
-                
-                // Factor de alteración de altura para dinamismo visual
-                if (biome === BIOMES.HADES) objectDummy.position.y -= 0.15;
-                if (biome === BIOMES.CYCLOPS) objectDummy.position.y += 0.1;
-                
-                objectDummy.updateMatrix();
-
-                let baseMatKey = 'medBase';
-                if (biome === BIOMES.ITHACA) baseMatKey = 'ithacaBase';
-                if (biome === BIOMES.CYCLOPS) baseMatKey = 'cyclopsBase';
-                if (biome === BIOMES.HADES) baseMatKey = 'hadesBase';
-
-                registerInstance('tile', baseMatKey, objectDummy.matrix.clone());
-
-                // --- CAPAS 1 Y 2 INDEPENDIENTES (Gramática Procedural Adaptativa) ---
-                const randomVal = Math.random();
-
-                if (biome === BIOMES.ITHACA) {
-                    // Mapear Palacio y pretendientes
-                    if (randomVal > 0.85) {
-                        objectDummy.position.y += 0.5; // Sobre el tile hexagonal
-                        objectDummy.updateMatrix();
-                        registerInstance('building', 'palace', objectDummy.matrix.clone());
-                    } else if (randomVal > 0.6) {
-                        objectDummy.position.y += 0.4;
-                        objectDummy.scale.set(0.8, 1.2, 0.8);
-                        objectDummy.updateMatrix();
-                        registerInstance('tree', 'tree', objectDummy.matrix.clone());
-                    }
-                } 
-                else if (biome === BIOMES.CYCLOPS) {
-                    // Cueva de polifemo, rocas masivas (Stone_Chunks)
-                    if (randomVal > 0.4) {
-                        objectDummy.position.y += 0.3;
-                        const rockScale = 0.5 + Math.random() * 0.8;
-                        objectDummy.scale.set(rockScale, rockScale, rockScale);
-                        objectDummy.rotation.set(Math.random(), Math.random(), Math.random());
-                        objectDummy.updateMatrix();
-                        registerInstance('rock', 'rock', objectDummy.matrix.clone());
-                    }
-                } 
-                else if (biome === BIOMES.HADES) {
-                    // El ejército de sombras (Pack Skeletons)
-                    if (randomVal > 0.75) {
-                        objectDummy.position.y += 0.35;
-                        objectDummy.updateMatrix();
-                        registerInstance('skeleton', 'undead', objectDummy.matrix.clone());
-                    } else if (randomVal > 0.6) {
-                        objectDummy.position.y += 0.2;
-                        objectDummy.updateMatrix();
-                        registerInstance('rock', 'hadesBase', objectDummy.matrix.clone());
-                    }
-                }
-                else if (biome === BIOMES.MEDITERRANEAN) {
-                    // Pequeños arrecifes e islas fantasmas en el mar de Poseidón
-                    if (randomVal > 0.96) {
-                        objectDummy.position.y += 0.4;
-                        objectDummy.scale.set(1.5, 2.5, 1.5);
-                        objectDummy.updateMatrix();
-                        registerInstance('rock', 'rock', objectDummy.matrix.clone());
-                    }
-                }
-            }
+        // Extracción recursiva del sub-mesh raíz del asset empaquetado de KayKit
+        if (gltf.scene) {
+            gltf.scene.traverse(child => {
+                if (child.isMesh && !geo) { geo = child.geometry; mat = child.material; }
+            });
+        } else {
+            geo = gltf.geometry; mat = gltf.material;
         }
 
-        // --- CONSTRUCCIÓN FINAL DE LOS MESHES DE INSTANCIAS ---
-        // Aquí ocurre la magia del Adaptive Rendering de alto rendimiento
-        for (const key in instanceRegistry) {
-            const data = instanceRegistry[key];
-            const count = data.matrices.length;
-            const instancedMesh = new THREE.InstancedMesh(data.geometry, data.material, count);
-            
-            for (let i = 0; i < count; i++) {
-                instancedMesh.setMatrixAt(i, data.matrices[i]);
-            }
-            
-            instancedMesh.castShadow = true;
-            instancedMesh.receiveShadow = true;
-            scene.add(instancedMesh);
-        }
+        if (!geo) continue;
 
-        // --- BUCLE DE ANIMACIÓN ---
-        const clock = new THREE.Clock();
+        const instMesh = new THREE.InstancedMesh(geo, mat, cells.length);
+        instMesh.userData = { assetKey: tileType }; // Llave de búsqueda ontológica
 
-        function animate() {
-            requestAnimationFrame(animate);
-            
-            // Animación sutil de la cámara o luces para simular el oleaje/viento del mito griego
-            const elapsedTime = clock.getElapsedTime();
-            sunLight.position.x = 10 + Math.sin(elapsedTime * 0.05) * 2;
-            
-            controls.update();
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        // --- MANEJO DE REDIMENSIONAMIENTO ---
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        const dummy = new THREE.Object3D();
+        cells.forEach((cell, idx) => {
+            dummy.position.copy(axialToWorld(cell.q, cell.r));
+            dummy.rotation.y = 0;
+            dummy.updateMatrix();
+            instMesh.setMatrixAt(idx, dummy.matrix);
         });
 
-    </script>
+        instMesh.instanceMatrix.needsUpdate = true;
+        scene.add(instMesh);
+    }
+}
+
+// ═══════════════════════════════════════════════════════
+// CAPA 1 Y 2: IMPLEMENTACIÓN DE OCUPANTES EN REJILLA
+// Clona la jerarquía GLTF e inyecta la clave ontológica en profundidad
+// ═══════════════════════════════════════════════════════
+function buildOccupantLayer(cache) {
+    WORLD_CELLS.forEach(cell => {
+        if (!cell.occupant) return;
+        const path = ASSET_PATHS[cell.occupant];
+        const gltf = cache.get(path);
+        if (!gltf) return;
+
+        let obj;
+        if (gltf.scene) {
+            obj = gltf.scene.clone(true);
+        } else {
+            obj = new THREE.Mesh(gltf.geometry, gltf.material);
+        }
+
+        const worldPos = axialToWorld(cell.q, cell.r);
+        obj.position.set(worldPos.x, 0, worldPos.y);
+
+        // Propagación inyectiva de userData para el algoritmo de Raycasting
+        obj.traverse(node => {
+            node.userData.assetKey = cell.occupant;
+        });
+
+        scene.add(obj);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+// DECORACIÓN ADAPTATIVA ATMOSFÉRICA
+// ═══════════════════════════════════════════════════════
+function placeAtmosphere(cache) {
+    const path = ASSET_PATHS['nube_decorativa'];
+    const gltf = cache.get(path);
+    if (!gltf || !gltf.scene) return;
+
+    const cloudCoords = [
+        { x: -8, y: 6, z: -5 }, { x: 8, y: 5, z: -8 }, { x: 0, y: 7, z: 10 }
+    ];
+
+    cloudCoords.forEach(coord => {
+        const cloud = gltf.scene.clone(true);
+        cloud.position.set(coord.x, coord.y, coord.z);
+        scene.add(cloud); // Al no poseer assetKey, se convierte en transparente para los clics
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+// CONTROLADORES DE INTERACCIÓN Y RAYCASTING AVANZADO
+// ═══════════════════════════════════════════════════════
+function setupControllerInteractions() {
+    window.addEventListener('click', event => {
+        // Bloquear disparos secundarios si el pergamino está desplegado
+        if (modalOverlay.classList.contains('active')) return;
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        
+        if (!intersects.length) return;
+
+        let targetNode = intersects[0].object;
+        let foundKey = null;
+
+        // Comprobación especial para InstancedMesh (Capa 0)
+        if (targetNode.isInstancedMesh && targetNode.userData.assetKey) {
+            foundKey = targetNode.userData.assetKey;
+        } else {
+            // Burbujeo jerárquico ascendente para Capas 1 y 2
+            while (targetNode && targetNode.parent) {
+                if (targetNode.userData && targetNode.userData.assetKey) {
+                    foundKey = targetNode.userData.assetKey;
+                    break;
+                }
+                targetNode = targetNode.parent;
+            }
+        }
+
+        if (foundKey && assetDatabase[foundKey]) {
+            renderParchmentModal(assetDatabase[foundKey]);
+        }
+    });
+
+    const hideParchment = () => modalOverlay.classList.remove('active');
+    document.getElementById('close-btn').addEventListener('click', hideParchment);
+    modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) hideParchment(); });
+}
+
+function renderParchmentModal(data) {
+    document.getElementById('parchment-title').textContent = data.title;
+    document.getElementById('parchment-desc').textContent = data.desc;
+
+    const statsContainer = document.getElementById('parchment-stats');
+    statsContainer.innerHTML = '';
+    
+    for (const [statName, statValue] of Object.entries(data.stats)) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${statName}</td><td class="stat-val">${statValue}</td>`;
+        statsContainer.appendChild(row);
+    }
+    
+    modalOverlay.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+// FALLBACKS GEOMÉTRICOS DE SEGURIDAD
+// Garantiza la ejecución matemática del sistema si las rutas
+// locales de red fallan de manera temporal
+// ═══════════════════════════════════════════════════════
+function createFallbackMesh(path) {
+    let geo, mat;
+    if (path.includes('tiles/base/hex_water')) {
+        geo = new THREE.CylinderGeometry(1, 1, 0.3, 6);
+        geo.rotateX(Math.PI / 2); geo.rotateY(Math.PI / 6);
+        mat = new THREE.MeshStandardMaterial({ color: 0x2980b9, roughness: 0.2 });
+    } else if (path.includes('tiles/')) {
+        geo = new THREE.CylinderGeometry(1, 1, 0.4, 6);
+        geo.rotateX(Math.PI / 2); geo.rotateY(Math.PI / 6);
+        mat = new THREE.MeshStandardMaterial({ color: path.includes('coast') ? '#f1c40f' : '#27ae60', roughness: 0.7 });
+    } else if (path.includes('buildings/')) {
+        geo = new THREE.BoxGeometry(0.7, 1.2, 0.7);
+        mat = new THREE.MeshStandardMaterial({ color: 0x7f8c8d, roughness: 0.5 });
+    } else if (path.includes('Skeletons')) {
+        geo = new THREE.CylinderGeometry(0.1, 0.1, 1.2, 5);
+        mat = new THREE.MeshStandardMaterial({ color: 0xdfe6e9 });
+    } else {
+        geo = new THREE.DodecahedronGeometry(0.4);
+        mat = new THREE.MeshStandardMaterial({ color: 0x6e7881 });
+    }
+    return new THREE.Mesh(geo, mat);
+}
+
+// ── Redimensionamiento Dinámico de Ventana ──
+window.addEventListener('resize', () => {
+    if (!camera || !renderer) return;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
 </body>
 </html>
