@@ -1,0 +1,367 @@
+{
+  "meta": {
+    "title": "Odyssey Canto I — 3D Grammar Systematization",
+    "description": "Closed ontology → 3D world grammar. Maps every entity from Homero's Odyssey Canto I to Three.js assets in the KayKit registry, through the ontological-layer-composer system.",
+    "ontology_source": "odisea_canto_1_notas/",
+    "registry_source": "registry.json",
+    "skills_used": [
+      "ontological-layer-composer",
+      "gltf-instanced-world",
+      "hex-grid-axial",
+      "low-poly-medieval-threejs",
+      "adaptive-quality"
+    ],
+    "total_entities": 44,
+    "total_registry_assets": 380,
+    "available_layers": ["L0_tile", "L1_environment", "L2_occupant", "ui", "dungeon"],
+    "flavours": 4
+  },
+
+  "ontology_classes": {
+    "Lugar": {
+      "description": "Places — geographical or mythological locations",
+      "count": 12,
+      "canonical_layer": "L0_tile",
+      "tile_type_mapping": {
+        "Itaca":     { "tileType": "grass",     "reason": "peñascosa, patria — grass con rocks environment" },
+        "Troya":     { "tileType": "stone_dark", "reason": "sagrada, vasta — stone_dark con gold decorativo" },
+        "Olimpo":    { "tileType": "stone",      "reason": "cumbre divina — stone (montaña elevada)" },
+        "Ogigia":    { "tileType": "water",      "reason": "isla rodeada por el mar — water tile" },
+        "Pilos":     { "tileType": "sand_A",     "reason": "arenosa — sand tile" },
+        "Esparta":   { "tileType": "dirt",       "reason": "tierra firme donde reside Menelao" },
+        "Tafos":     { "tileType": "sand_B",     "reason": "isla de navegantes — sand alternativo" },
+        "Duliquio":  { "tileType": "grass",      "reason": "isla insular — grass con water vecino" },
+        "Samé":      { "tileType": "grass",      "reason": "isla insular — grass con water vecino" },
+        "Zacinto":   { "tileType": "grass",      "reason": "umbrosa — grass con tree environment" },
+        "Olimpo (cumbre)": { "tileType": "mountain", "reason": "altura divina — mountain tile" }
+      },
+      "world_coordinates": {
+        "Olimpo":  { "q": 0,  "r": 0  },
+        "Itaca":   { "q": 8,  "r": 0  },
+        "Ogigia":  { "q": -5, "r": 5  },
+        "Troya":   { "q": 12, "r": -4 },
+        "Pilos":   { "q": 5,  "r": 3  },
+        "Esparta": { "q": 7,  "r": 5  },
+        "Tafos":   { "q": 3,  "r": -2 },
+        "Duliquio":{ "q": 9,  "r": 2  },
+        "Samé":    { "q": 10, "r": 1  },
+        "Zacinto": { "q": 9,  "r": -1 }
+      }
+    },
+    "Personaje": {
+      "description": "Characters — mortal heroes, bards, servants",
+      "count": 19,
+      "canonical_layer": "L2_occupant",
+      "weight_classes": {
+        "protagonist": {
+          "criteria": "5+ attributes AND 5+ relations",
+          "entities": ["Ulises"],
+          "asset_strategy": "L2 custom humanoid with equipment (sword_1handed, shield_round, arrow_bow)"
+        },
+        "major": {
+          "criteria": "3-5 attributes AND 4+ relations",
+          "entities": ["Telémaco", "Penélope", "Antinoo", "Eurímaco", "Mentes"],
+          "asset_strategy": "L2 humanoid proxy + distinctive weapon"
+        },
+        "minor": {
+          "criteria": "1-3 attributes AND 2-3 relations",
+          "entities": ["Femio", "Euriclea", "Orestes", "Agamenón", "Néstor", "Menelao", "Egisto", "Laertes", "Polifemo"],
+          "asset_strategy": "L2 simple or L1 animated prop"
+        },
+        "genealogical": {
+          "criteria": "0 attributes AND 1 relation (parent only)",
+          "entities": ["Eupites", "Pisenor", "Polibo", "Icario", "Anquíalo", "Ops"],
+          "asset_strategy": "NO 3D asset — text monument or UI inscription only"
+        }
+      },
+      "attribute_asset_map": {
+        "ingenioso":    { "effect": "multiple_weapons_visible", "assets": ["sword_1handed", "bow_withString"] },
+        "prudente":     { "effect": "blue_banner", "assets": ["banner_blue", "shield_round"] },
+        "afligido":     { "effect": "torch_unlit", "assets": ["torch"] },
+        "valiente":     { "effect": "sword_drawn", "assets": ["sword_1handed", "shield_badge"] },
+        "soberbio":     { "effect": "red_banner_+_spikes", "assets": ["banner_red", "shield_spikes", "sword_2handed"] },
+        "insolente":    { "effect": "red_banner_+_scale_1.2", "assets": ["banner_patternA_red"] },
+        "divino":       { "effect": "emissive_glow", "assets": ["torch_lit", "coin_stack_small"] },
+        "anciano":      { "effect": "staff_+_gray_tint", "assets": ["staff", "candle_melted"] },
+        "elocuente":    { "effect": "no_weapon_+_open_hands", "assets": ["table_medium"] },
+        "belicoso":     { "effect": "axe_+_shield", "assets": ["axe_1handed", "shield_round_barbarian"] },
+        "veda":         { "effect": "musical_instrument", "assets": ["candle_lit", "chair", "mug_full"] },
+        "cíclope":      { "effect": "large_scale_3x", "assets": ["axe_2handed"] }
+      }
+    },
+    "Deidad": {
+      "description": "Deities — gods, nymphs, divine beings",
+      "count": 9,
+      "canonical_layer": "L2_occupant_with_FX",
+      "fx_asset_map": {
+        "Minerva":   { "fx": "descending_light_beam", "assets": ["torch_lit", "banner_blue"], "color": 4886745 },
+        "Júpiter":   { "fx": "throne_+_lightning",    "assets": ["pillar_decorated", "coin_stack_large"], "color": 16766720 },
+        "Neptuno":   { "fx": "wave_particles",         "assets": ["water"], "color": 1724022 },
+        "Mercurio":  { "fx": "speed_lines",            "assets": ["wand", "banner_yellow"], "color": 15967250 },
+        "Calipso":   { "fx": "heart_particles",        "assets": ["candle_lit", "bed_decorated"], "color": 15243455 },
+        "Saturno":   { "fx": "time_ripple",            "assets": ["pillar"], "color": 7092355 },
+        "Atlas":     { "fx": "globe_effect",           "assets": ["stone_dark"], "color": 6123902 },
+        "Forcis":    { "fx": "deep_blue_aura",         "assets": ["water"], "color": 938852 },
+        "Toosa":     { "fx": "foam_particles",         "assets": ["water"], "color": 8764905 }
+      },
+      "residence": {
+        "Minerva":  "Olimpo",
+        "Júpiter":  "Olimpo",
+        "Neptuno":  "sea (no fixed tile — appears near Troya)",
+        "Mercurio": "Olimpo (messenger — moves between)",
+        "Calipso":  "Ogigia",
+        "Saturno":  "Olimpo (ancestral)",
+        "Atlas":    "ends_of_earth (edge of grid)",
+        "Forcis":   "sea_depth",
+        "Toosa":    "sea_near_polifemo"
+      }
+    },
+    "Facción": {
+      "description": "Factions — groups with shared identity",
+      "count": 3,
+      "canonical_layer": "metadata (transversal)",
+      "banner_color_map": {
+        "Griegos":       { "color": "blue",  "pattern": "patternA", "assets": ["banner_blue", "banner_patternA_blue", "banner_triple_blue"] },
+        "Pretendientes": { "color": "red",   "pattern": "patternB", "assets": ["banner_red", "banner_patternB_red", "banner_triple_red"] },
+        "Tafios":        { "color": "green", "pattern": "patternC", "assets": ["banner_green", "banner_patternC_green", "banner_triple_green"] }
+      },
+      "members": {
+        "Griegos":       ["Ulises", "Telémaco", "Agamenón", "Néstor", "Menelao", "Orestes"],
+        "Pretendientes": ["Antinoo", "Eurímaco"],
+        "Tafios":        ["Mentes", "Anquíalo"]
+      }
+    }
+  },
+
+  "relation_rules": {
+    "aliado_de": {
+      "3d_effect": "same_banner_color + adjacent_cells (distance ≤ 1)",
+      "validation": "if A aliado_de B, then A.banner.color === B.banner.color"
+    },
+    "enemigo_de": {
+      "3d_effect": "barrier_or_wall_between + minimum_distance_2",
+      "validation": "if A enemigo_de B, then hexDistance(A.cell, B.cell) >= 2, and a barrier asset is placed on the edge between territories",
+      "assets": ["barrier", "barrier_half", "barrier_column", "wall_half"]
+    },
+    "padre_de": {
+      "3d_effect": "adjacent_cell (distance = 1) + road_connecting",
+      "validation": "if A padre_de B, then B is placed distance 1 from A, connected by hex_road_A"
+    },
+    "hijo_de": {
+      "3d_effect": "inverse of padre_de — same rule applies",
+      "validation": "mirror of padre_de"
+    },
+    "pertenece_a": {
+      "3d_effect": "sets banner_color from faction + groups cells in same region",
+      "validation": "all members of X faction share X.banner.color"
+    },
+    "ubicado_en": {
+      "3d_effect": "RESOLVES COORDINATES — entity is placed at the Lugar's (q,r)",
+      "validation": "CRITICAL: if no ubicado_en, entity is 'in transit' and not rendered in initial grid"
+    }
+  },
+
+  "flavours": {
+    "A_canonical": {
+      "name": "Mapeo Directo Clase→Capa",
+      "description": "Each ontological class maps 1:1 to a 3D layer. Lugar→L0, Personaje→L2, Deidad→L2+FX, Facción→metadata.",
+      "world_json_complexity": "high",
+      "artistic_control": "maximum",
+      "automation_level": "low",
+      "fidelity_to_text": "high (everything represented)",
+      "performance": "medium",
+      "cell_count_estimate": 45,
+      "draw_calls_estimate": 80,
+      "total_kb_estimate": 4200
+    },
+    "B_narrative_weight": {
+      "name": "Gramática por Peso Narrativo",
+      "description": "Entities filtered by narrative weight. Protagonists get full L2, minor characters get L1 props, genealogical-only entities get no 3D representation. Drastically reduces instance count.",
+      "world_json_complexity": "medium",
+      "artistic_control": "high",
+      "automation_level": "medium",
+      "fidelity_to_text": "high (important things stand out)",
+      "performance": "high",
+      "cell_count_estimate": 20,
+      "draw_calls_estimate": 35,
+      "total_kb_estimate": 1800,
+      "filter_rules": {
+        "excluded_from_3d": ["Eupites", "Pisenor", "Polibo", "Icario", "Anquíalo", "Ops"],
+        "reason": "These entities have 0 attributes and exist only as genealogical references (padre_de of someone). They contribute nothing to visual storytelling."
+      }
+    },
+    "C_relational": {
+      "name": "Gramática Relacional (Edge-Driven)",
+      "description": "Relationships between entities drive geometry. Ally→same banner color+proximity, Enemy→barrier+minimum distance, Parent→adjacent+road. The graph structure determines the grid layout.",
+      "world_json_complexity": "high (includes constraints)",
+      "artistic_control": "medium",
+      "automation_level": "medium",
+      "fidelity_to_text": "high (relationships visible)",
+      "performance": "medium",
+      "cell_count_estimate": 35,
+      "draw_calls_estimate": 65,
+      "total_kb_estimate": 3500,
+      "signature_mechanic": "enemy_factions_get_barriers_between_territories"
+    },
+    "D_attribute_driven": {
+      "name": "Gramática Procedural Atributo→Asset",
+      "description": "YAML attributes directly select registry assets via a scoring system. The most generative approach — world.json can be auto-generated from ontology alone. Least predictable but most scalable.",
+      "world_json_complexity": "low (auto-generated)",
+      "artistic_control": "minimal",
+      "automation_level": "high (generative)",
+      "fidelity_to_text": "medium (can be imprecise)",
+      "performance": "variable",
+      "cell_count_estimate": "auto",
+      "draw_calls_estimate": "auto",
+      "total_kb_estimate": "auto",
+      "scoring_engine": {
+        "attribute_weights": {
+          "divino":     { "emissive": 10, "gold_coin": 5 },
+          "soberbio":   { "red_banner": 10, "spikes": 8, "scale_1.2": 5 },
+          "prudente":   { "blue_banner": 10, "round_shield": 5 },
+          "belicoso":   { "axe": 8, "sword": 6, "spiked_shield": 4 },
+          "anciano":    { "staff": 8, "candle_melted": 5, "gray_tint": 3 },
+          "aeda":       { "candle_lit": 6, "chair": 5, "table": 3 }
+        }
+      }
+    }
+  },
+
+  "registry_mappings": {
+    "L0_tile_mapping": {
+      "grass":     { "asset": "hex_grass",     "layer": 0, "allowsEnv": true,  "allowsOccupant": true },
+      "dirt":      { "asset": "hex_dirt",      "layer": 0, "allowsEnv": true,  "allowsOccupant": true },
+      "stone":     { "asset": "hex_stone",     "layer": 0, "allowsEnv": true,  "allowsOccupant": false },
+      "stone_dark":{ "asset": "stone_dark",    "layer": 1, "allowsEnv": false, "allowsOccupant": false },
+      "water":     { "asset": "hex_river_A",   "layer": 0, "allowsEnv": false, "allowsOccupant": false },
+      "sand":      { "asset": "sand_A",        "layer": 1, "allowsEnv": true,  "allowsOccupant": true },
+      "mountain":  { "asset": "mountain_B_grass_trees", "layer": 2, "allowsEnv": true, "allowsOccupant": false },
+      "road":      { "asset": "hex_road_A",    "layer": 0, "allowsEnv": false, "allowsOccupant": true }
+    },
+    "L1_environment_pool": {
+      "trees":          ["tree", "tree_with_snow"],
+      "bushes":         ["Bush_1_A_Color1", "Bush_1_B_Color1", "Bush_2_A_Color1", "Bush_3_A_Color1", "Bush_4_A_Color1"],
+      "grass_patches":  ["Grass_1_A_Color1", "Grass_1_B_Color1", "Grass_2_A_Color1", "Grass_2_B_Color1"],
+      "flowers":        ["Grass_1_C_Color1", "Grass_1_D_Color1"],
+      "rocks":          ["stone", "stone_dark", "stone_with_copper", "stone_with_gold", "stone_with_silver"],
+      "banners_blue":   ["banner_blue","banner_patternA_blue","banner_patternB_blue","banner_patternC_blue","banner_thin_blue","banner_triple_blue"],
+      "banners_red":    ["banner_red","banner_patternA_red","banner_patternB_red","banner_patternC_red","banner_thin_red","banner_triple_red"],
+      "banners_green":  ["banner_green","banner_patternA_green","banner_patternB_green","banner_patternC_green","banner_thin_green","banner_triple_green"],
+      "banners_yellow": ["banner_yellow","banner_patternA_yellow","banner_patternB_yellow","banner_patternC_yellow","banner_thin_yellow","banner_triple_yellow"],
+      "banners_brown":  ["banner_brown","banner_patternA_brown","banner_patternB_brown","banner_patternC_brown","banner_thin_brown","banner_triple_brown"],
+      "barrels":        ["barrel_large", "barrel_large_decorated", "barrel_small", "barrel_small_stack"],
+      "boxes":          ["box_large", "box_small", "box_small_decorated", "box_stacked"],
+      "crates":         ["crates_stacked"],
+      "furniture_outdoor": ["table_medium", "chair", "stool", "bench"],
+      "camp_items":     ["torch", "torch_lit", "torch_mounted", "keg", "keg_decorated"],
+      "barriers":       ["barrier", "barrier_half", "barrier_column", "barrier_corner", "barrier_colum_half"]
+    },
+    "L2_occupant_pool": {
+      "buildings": {
+        "palacio_ulises":   { "asset": "building_castle_green", "subtype": "building", "validOn": ["grass","dirt"] },
+        "palacio_menelao":  { "asset": "building_bridge_A",     "subtype": "building", "validOn": ["grass","dirt"] },
+        "palacio_nestor":   { "asset": "building_grain",        "subtype": "building", "validOn": ["grass","dirt"] },
+        "templo_olimpo":    { "asset": "building_bridge_B",     "subtype": "building", "validOn": ["stone","mountain"] },
+        "casa_laertes":     { "asset": "building_dirt",         "subtype": "building", "validOn": ["grass","dirt"] },
+        "ruinas_troya":     { "asset": "building_destroyed",    "subtype": "building", "validOn": ["stone_dark","dirt"] }
+      },
+      "humanoid_proxies": {
+        "ulises":     { "weapons": ["sword_1handed", "bow_withString"], "shield": "shield_round", "banner": "banner_blue" },
+        "telemaco":   { "weapons": ["sword_1handed"], "shield": "shield_badge", "banner": "banner_blue" },
+        "penelope":   { "weapons": [], "items": ["candle_lit", "spellbook_closed"], "banner": "banner_white" },
+        "antinoo":    { "weapons": ["sword_2handed_color"], "shield": "shield_spikes_color", "banner": "banner_red" },
+        "eurimaco":   { "weapons": ["dagger"], "items": ["mug_full"], "banner": "banner_patternC_red" },
+        "mentes":     { "weapons": ["spear_A"], "shield": "shield_A", "banner": "banner_green" },
+        "femio":      { "weapons": [], "items": ["chair", "candle_lit", "mug_full"], "faction": "none" },
+        "euriclea":   { "weapons": [], "items": ["candle", "plate"], "banner": "banner_white" },
+        "laertes":    { "weapons": ["staff"], "items": ["candle_melted"], "banner": "banner_white" },
+        "nestor":     { "weapons": ["staff_A"], "shield": "shield_square", "banner": "banner_blue" },
+        "menelao":    { "weapons": ["sword_B"], "shield": "shield_badge_color", "banner": "banner_yellow" },
+        "agamenon":   { "weapons": ["axe_C"], "shield": "shield_C", "banner": "banner_patternA_blue" },
+        "orestes":    { "weapons": ["sword_A"], "shield": "shield_B", "banner": "banner_blue" },
+        "egisto":     { "weapons": ["dagger_B"], "items": ["mug_full"], "banner": "banner_brown" },
+        "polifemo":   { "weapons": ["axe_2handed"], "scale": 3.0, "banner": "none" }
+      }
+    },
+    "ui_item_pool": {
+      "weapons":    ["arrow_bow", "arrow_crossbow", "axe_1handed", "axe_2handed", "bow", "crossbow_1handed", "crossbow_2handed", "dagger", "sword_1handed", "sword_2handed", "sword_2handed_color", "staff", "wand"],
+      "shields":    ["shield_badge", "shield_badge_color", "shield_round", "shield_round_barbarian", "shield_round_color", "shield_spikes", "shield_spikes_color", "shield_square", "shield_square_color"],
+      "consumables":["mug_empty", "mug_full", "smokebomb", "bottle_A_brown", "bottle_A_green", "bottle_B_brown", "bottle_B_green", "bottle_C_brown", "bottle_C_green"],
+      "books":      ["spellbook_closed", "spellbook_open"],
+      "furniture":  ["table_long", "table_medium", "table_small", "chair", "stool", "candle", "candle_lit", "candle_thin", "candle_triple", "bed_decorated", "bed_floor", "bed_frame"],
+      "treasure":   ["chest", "chest_gold", "coin", "coin_stack_large", "coin_stack_medium", "coin_stack_small", "key", "keyring"],
+      "decorative": ["banner_shield_blue", "banner_shield_red", "banner_shield_green", "banner_shield_white", "banner_shield_yellow", "sword_shield", "sword_shield_broken", "sword_shield_gold"],
+      "lighting":   ["torch", "torch_lit", "torch_mounted", "candle", "candle_lit", "candle_melted", "candle_thin", "candle_thin_lit", "candle_triple"]
+    },
+    "dungeon_item_pool": {
+      "floors":     ["floor_tile_small", "floor_tile_large", "floor_dirt_small_A", "floor_dirt_large", "floor_wood_small", "floor_wood_large"],
+      "walls":      ["wall", "wall_half", "wall_corner", "wall_cracked", "wall_broken", "wall_arched"],
+      "pillars":    ["pillar", "pillar_decorated", "column"],
+      "stairs":     ["stairs", "stairs_long", "stairs_wood", "stairs_narrow", "stairs_wide"],
+      "traps":      ["floor_tile_grate", "floor_tile_big_grate", "floor_tile_big_spikes"],
+      "containers": ["barrel_large", "barrel_small", "box_large", "crates_stacked", "shelf_large", "shelf_small", "shelves"],
+      "rubble":     ["rubble_half", "rubble_large"]
+    }
+  },
+
+  "world_cells_canonical": [
+    { "q": 0,  "r": 0,  "tileType": "stone",    "environment": ["pillar_decorated","banner_blue","torch_lit"], "occupant": "jupiter" },
+    { "q": 0,  "r": 1,  "tileType": "stone",    "environment": ["banner_blue","torch"], "occupant": "minerva" },
+    { "q": 1,  "r": 0,  "tileType": "stone",    "environment": ["pillar","banner_blue"], "occupant": "mercurio" },
+    { "q": -1, "r": 1,  "tileType": "mountain", "environment": ["Bush_1_A_Color1","stone_with_gold"], "occupant": null },
+    { "q": 8,  "r": 0,  "tileType": "grass",    "environment": [], "occupant": "palacio_ulises" },
+    { "q": 8,  "r": 1,  "tileType": "grass",    "environment": ["banner_red","banner_red"], "occupant": null },
+    { "q": 8,  "r": 2,  "tileType": "grass",    "environment": ["barrier","barrier"], "occupant": null },
+    { "q": 9,  "r": 0,  "tileType": "grass",    "environment": [], "occupant": "telemaco" },
+    { "q": 9,  "r": -1, "tileType": "grass",    "environment": ["banner_white","candle"], "occupant": "penelope" },
+    { "q": 10, "r": 0,  "tileType": "grass",    "environment": ["banner_white"], "occupant": "euriclea" },
+    { "q": 7,  "r": 0,  "tileType": "grass",    "environment": ["tree","tree","banner_red"], "occupant": "antinoo" },
+    { "q": 7,  "r": 1,  "tileType": "grass",    "environment": ["banner_red","barrel_small"], "occupant": "eurimaco" },
+    { "q": 8,  "r": -1, "tileType": "grass",    "environment": ["candle_lit","chair"], "occupant": "femio" },
+    { "q": 6,  "r": 1,  "tileType": "grass",    "environment": ["tree","barrel_large"], "occupant": null },
+    { "q": 9,  "r": 1,  "tileType": "grass",    "environment": ["barrier_half","barrier_half"], "occupant": null },
+    { "q": 5,  "r": 3,  "tileType": "sand_A",   "environment": ["banner_blue"], "occupant": "nestor" },
+    { "q": 5,  "r": 4,  "tileType": "sand_A",   "environment": ["box_small","box_large"], "occupant": null },
+    { "q": 7,  "r": 5,  "tileType": "dirt",     "environment": ["banner_yellow","torch"], "occupant": "menelao" },
+    { "q": -5, "r": 5,  "tileType": "water",    "environment": [], "occupant": "ogigia" },
+    { "q": -5, "r": 6,  "tileType": "water",    "environment": ["candle_lit"], "occupant": "calipso" },
+    { "q": -4, "r": 5,  "tileType": "water",    "environment": [], "occupant": "ulises" },
+    { "q": 12, "r": -4, "tileType": "stone_dark","environment": ["stone_with_gold","rubble_large","rubble_half"], "occupant": "ruinas_troya" },
+    { "q": 11, "r": -2, "tileType": "water",    "environment": [], "occupant": null },
+    { "q": 3,  "r": -2, "tileType": "sand_B",   "environment": ["banner_green"], "occupant": null },
+    { "q": 9,  "r": 2,  "tileType": "grass",    "environment": ["banner_patternC_red"], "occupant": null },
+    { "q": 10, "r": 1,  "tileType": "grass",    "environment": ["banner_patternC_red"], "occupant": null },
+    { "q": 9,  "r": -1, "tileType": "grass",    "environment": ["banner_white"], "occupant": null },
+    { "q": 11, "r": -3, "tileType": "road",     "environment": [], "occupant": null },
+    { "q": 10, "r": -2, "tileType": "road",     "environment": [], "occupant": null },
+    { "q": 7,  "r": -2, "tileType": "road",     "environment": [], "occupant": null },
+    { "q": 5,  "r": 2,  "tileType": "road",     "environment": [], "occupant": null },
+    { "q": 6,  "r": 3,  "tileType": "road",     "environment": [], "occupant": null }
+  ],
+
+  "implementation_plan": {
+    "phase_1_world_composition": {
+      "description": "Build the HexGridContext with the Canonical world cells. L0 tiles as InstancedMesh, L1 environment as InstancedMesh, L2 occupants as Mesh.clone.",
+      "files_needed": ["hex_grass.gltf","hex_river_A.gltf","hex_road_A.gltf","stone_dark.gltf","mountain_B_grass_trees.gltf","sand_A.gltf"],
+      "estimated_time": "session 1"
+    },
+    "phase_2_character_placement": {
+      "description": "Place L2 occupants. For buildings: use building_*.gltf. For characters: compose from weapon/shield assets as visual proxies. Add assignment arrows with THREE.ArrowHelper.",
+      "files_needed": ["building_castle_green.gltf","building_bridge_A.gltf","building_grain.gltf","building_bridge_B.gltf","building_destroyed.gltf","building_dirt.gltf"],
+      "estimated_time": "session 2"
+    },
+    "phase_3_faction_coloring": {
+      "description": "Apply banner colors based on faction membership. Blue=Griegos, Red=Pretendientes, Green=Tafios. Place barriers between enemy territories.",
+      "files_needed": ["banner_blue.gltf","banner_red.gltf","banner_green.gltf","barrier.gltf","barrier_half.gltf"],
+      "estimated_time": "session 3"
+    },
+    "phase_4_deity_fx": {
+      "description": "Add divine FX: emissive materials for gods, particle systems for domain-specific effects (water for Neptuno, light for Minerva, lightning for Júpiter).",
+      "estimated_time": "session 4"
+    },
+    "phase_5_camera_narrative": {
+      "description": "Set up camera flythrough: Olimpo (consejo divino) → Itaca (conflicto con pretendientes) → Ogigia (Ulises retenido) → road connections showing journey.",
+      "estimated_time": "session 5"
+    }
+  }
+}
