@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang=en><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1.0"><title>Odyssey · Okeanos Disc</title><style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#1a1f2e;overflow:hidden;font-family:Georgia,serif}canvas{display:block}
+#hud{position:fixed;top:16px;left:16px;z-index:10;background:rgba(10,8,18,0.85);border:1px solid rgba(180,200,220,0.15);border-radius:12px;padding:18px 22px;font-size:13px;line-height:1.7;min-width:280px;color:#b0c8d8;backdrop-filter:blur(10px);pointer-events:none}
+#hud h2{font-size:17px;font-weight:700;color:#c0d8e8;letter-spacing:2px;margin-bottom:4px}#hud .sub{font-size:10px;color:#5a6a7a;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+#log{font-family:'Courier New',monospace;font-size:10px;line-height:1.5;color:#5a6a7a;max-height:140px;overflow-y:auto}
+#log .ok{color:#7aaf6a}#log .warn{color:#c9a84c}#log .err{color:#c95a4c}#log .dim{color:#3a4a5a}#log .sep{color:#2a3a4a}#log .cyan{color:#6ab0c0}
+#fps{position:fixed;top:16px;right:16px;z-index:10;background:rgba(10,8,18,0.85);border:1px solid rgba(180,200,220,0.12);border-radius:8px;padding:6px 14px;font-family:'Courier New',monospace;font-size:12px;color:#7aaf6a}
+#legend{position:fixed;bottom:16px;left:16px;z-index:10;background:rgba(10,8,18,0.82);border:1px solid rgba(180,200,220,0.10);border-radius:10px;padding:10px 16px;font-family:'Courier New',monospace;font-size:10px;color:#5a6a7a}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+#hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(180,200,220,0.12);font-family:'Courier New',monospace;white-space:nowrap;pointer-events:none}
+</style></head>
+<body>
+<div id=hud><h2>⏤ Okeanos Disc ⏤</h2><div class=sub>The World-River · Low-Poly Archipelago</div><div id=log>λ Initializing…</div></div>
+<div id=fps>-- fps</div>
+<div id=legend><span><span class=dot style=background:#4a7db5></span>Olympus</span><span style=margin-left:14px><span class=dot style=background:#b84a3a></span>Ithaca</span><span style=margin-left:14px><span class=dot style=background:#3a8a5a></span>Ogygia</span><span style=margin-left:14px><span class=dot style=background:#d4b87a></span>Troy</span></div>
+<div id=hint>Orbit: click · Zoom: scroll · Pan: right-click</div>
+<script type=importmap>{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/" } }</script>
+<script type=module>
+import*as THREE from'three';import{OrbitControls}from'three/addons/controls/OrbitControls.js';import{GLTFLoader}from'three/addons/loaders/GLTFLoader.js';
+function M(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=M(4242),rY=()=>R()*Math.PI*2,rT=()=>(R()-.5)*.17,rS=()=>.82+R()*.36,rF=(n,x)=>n+R()*(x-n),HW=1.82,HH=1.575;
+const BM={olimpo:{c:{q:0,r:0},r:3,tt:'stone',cM:'divine'},itaca:{c:{q:8,r:0},r:4,tt:'grass',cM:'plains'},ogigia:{c:{q:-5,r:5},r:3,tt:'water',cM:'mystical'},troya:{c:{q:12,r:-4},r:3,tt:'stone_dark',cM:'ruins'},pilos:{c:{q:5,r:3},r:2,tt:'sand',cM:'plains'},esparta:{c:{q:7,r:5},r:2,tt:'dirt',cM:'plains'},tafos:{c:{q:3,r:-2},r:2,tt:'sand',cM:'plains'}};
+function gB(q,r){for(const b of Object.values(BM)){if(Math.abs(q-b.c.q)<=b.r&&Math.abs(r-b.c.r)<=b.r)return b}return null}
+function gTT(q,r){const b=gB(q,r);return b?b.tt:'grass'}
+function gCM(q,r){const b=gB(q,r);return b?b.cM:'plains'}
+const T2H={grass:'hex_grass',stone:'hex_grass',stone_dark:'hex_grass',sand:'hex_grass',dirt:'hex_grass',water:'hex_river_A',road:'hex_road_A'};
+const VO={cloud_big:['grass','dirt','mountain'],cloud_small:['grass','dirt','mountain'],coin_stack_large:['stone','grass','dirt','sand','mountain'],building_dirt:['grass','dirt'],building_grain:['grass','dirt'],hex_road_A:['grass','stone','stone_dark','dirt','sand','mountain']};
+const VOO={building_castle_green:['grass','dirt'],building_bridge_A:['grass','dirt'],building_bridge_B:['grass','dirt'],building_dirt:['grass','dirt'],building_destroyed:['grass','dirt'],building_grain:['grass','dirt'],mountain_B_grass_trees:['grass','dirt','mountain']};
+const AS={hex_grass:{f:'hex_grass.gltf',b:'hex_grass.bin'},hex_river_A:{f:'hex_river_A.gltf',b:'hex_river_A.bin'},hex_road_A:{f:'hex_road_A.gltf',b:'hex_road_A.bin'},cloud_big:{f:'cloud_big.gltf',b:'cloud_big.bin'},coin_stack_large:{f:'coin_stack_large.gltf',b:'coin_stack_large.bin'},building_castle_green:{f:'building_castle_green.gltf',b:'building_castle_green.bin'},building_bridge_A:{f:'building_bridge_A.gltf',b:'building_bridge_A.bin'},building_bridge_B:{f:'building_bridge_B.gltf',b:'building_bridge_B.bin'},building_dirt:{f:'building_dirt.gltf',b:'building_dirt.bin'},building_destroyed:{f:'building_destroyed.gltf',b:'building_destroyed.bin'},building_grain:{f:'building_grain.gltf',b:'building_grain.bin'},mountain_B_grass_trees:{f:'mountain_B_grass_trees.gltf',b:'mountain_B_grass_trees.bin'}};
+const CL=[{q:0,r:0,env:['coin_stack_large','coin_stack_large','cloud_big'],occ:'building_bridge_B'},{q:0,r:1,env:['coin_stack_large','cloud_big'],occ:null},{q:1,r:0,env:['cloud_big'],occ:null},{q:-1,r:1,env:['hex_road_A','hex_road_A','cloud_big'],occ:'mountain_B_grass_trees'},{q:8,r:0,env:[],occ:'building_castle_green'},{q:8,r:1,env:['building_dirt','building_dirt'],occ:null},{q:8,r:2,env:['hex_road_A','hex_road_A','hex_road_A'],occ:null},{q:9,r:0,env:['building_grain'],occ:null},{q:9,r:-1,env:['coin_stack_large'],occ:null},{q:10,r:0,env:['building_dirt'],occ:null},{q:7,r:0,env:['building_dirt','building_grain'],occ:null},{q:7,r:1,env:['building_dirt'],occ:null},{q:8,r:-1,env:['hex_road_A','coin_stack_large'],occ:null},{q:6,r:1,env:['hex_road_A'],occ:null},{q:9,r:1,env:['hex_road_A','hex_road_A'],occ:null},{q:10,r:-1,env:['coin_stack_large'],occ:null},{q:-5,r:5,env:['cloud_big','cloud_big'],occ:'building_dirt'},{q:-5,r:6,env:['cloud_big'],occ:null},{q:-4,r:5,env:['hex_road_A','coin_stack_large'],occ:'building_dirt'},{q:12,r:-4,env:['building_grain','coin_stack_large','hex_road_A'],occ:'building_destroyed'},{q:11,r:-3,env:['hex_road_A'],occ:null},{q:11,r:-4,env:['building_grain'],occ:null},{q:5,r:3,env:['building_dirt'],occ:'building_bridge_A'},{q:5,r:4,env:['hex_road_A','coin_stack_large'],occ:null},{q:7,r:5,env:['building_grain','hex_road_A'],occ:'building_bridge_B'},{q:3,r:-2,env:['building_dirt'],occ:'building_bridge_A'},{q:9,r:2,env:['hex_road_A'],occ:null},{q:10,r:1,env:['hex_road_A'],occ:null},{q:9,r:-2,env:[],occ:null},{q:10,r:-2,env:[],occ:null},{q:7,r:-2,env:[],occ:null},{q:6,r:-1,env:[],occ:null},{q:5,r:2,env:['hex_road_A'],occ:null},{q:6,r:3,env:[],occ:null},{q:6,r:4,env:[],occ:null},{q:4,r:3,env:[],occ:null},{q:3,r:3,env:[],occ:null}];
+const REN=new THREE.WebGLRenderer({antialias:true});REN.setPixelRatio(Math.min(devicePixelRatio,2));REN.setSize(innerWidth,innerHeight);REN.outputColorSpace=THREE.SRGBColorSpace;REN.toneMapping=THREE.ACESFilmicToneMapping;REN.toneMappingExposure=1;REN.shadowMap.enabled=true;REN.shadowMap.type=THREE.PCFSoftShadowMap;document.body.appendChild(REN.domElement);
+const SN=new THREE.Scene(),SKY=0x2a3a4a;SN.background=new THREE.Color(SKY);SN.fog=new THREE.FogExp2(SKY,0.010);
+const CAM=new THREE.PerspectiveCamera(40,innerWidth/innerHeight,0.5,80);CAM.position.set(-2,22,28);CAM.lookAt(4,0,0);
+const CT=new OrbitControls(CAM,REN.domElement);CT.enableDamping=true;CT.dampingFactor=0.06;
+function OKE(){
+  const g=new THREE.Group(),S=48,X=7,Z=0;
+  [[0,6,0x0a1a2e],[6,11,0x0f2a4a],[11,16,0x1a4a5a],[16,20,0x28606a]].forEach(b=>{const m=new THREE.Mesh(new THREE.RingGeometry(b[0],b[1],S),new THREE.MeshStandardMaterial({color:b[2],flatShading:true,roughness:0.95,metalness:0,side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.set(X,-0.04,Z);m.receiveShadow=true;g.add(m);});
+  const r=new THREE.Mesh(new THREE.RingGeometry(20,22.5,S),new THREE.MeshStandardMaterial({color:0x2a1e15,flatShading:true,roughness:0.75,metalness:0.15,side:THREE.DoubleSide}));r.rotation.x=-Math.PI/2;r.position.set(X,0.06,Z);r.receiveShadow=true;g.add(r);
+  const wM=new THREE.MeshStandardMaterial({color:0x1a100a,flatShading:true,roughness:0.75,metalness:0.15,side:THREE.DoubleSide});
+  const ow=new THREE.Mesh(new THREE.CylinderGeometry(22.5,22.5,0.08,S,1,true),wM);ow.position.set(X,0.04,Z);g.add(ow);
+  const iw=new THREE.Mesh(new THREE.CylinderGeometry(20,20,0.08,S,1,true),wM);iw.position.set(X,0.04,Z);g.add(iw);
+  const h=new THREE.Mesh(new THREE.RingGeometry(22.5,27,S),new THREE.MeshStandardMaterial({color:0x3a4a5a,flatShading:true,roughness:1,metalness:0,transparent:true,opacity:0.35,side:THREE.DoubleSide}));h.rotation.x=-Math.PI/2;h.position.set(X,-0.06,Z);g.add(h);
+  const gr=new THREE.Mesh(new THREE.RingGeometry(5.8,6.2,S),new THREE.MeshStandardMaterial({color:0x0a2238,flatShading:true,roughness:0.95,metalness:0,side:THREE.DoubleSide}));gr.rotation.x=-Math.PI/2;gr.position.set(X,-0.02,Z);g.add(gr);
+  SN.add(g);return{getHeight:()=>0};
+}
+function a2W(q,r){return new THREE.Vector3(HW*(q+r*0.5),0,HH*r);}
+const LEL=document.getElementById('log'),LB=[];
+function L(t,c=''){LB.push(c?'<span class="'+c+'">'+t+'</span>':t);LEL.innerHTML=LB.join('<br>');LEL.scrollTop=LEL.scrollHeight;}
+function SEP(){L('━'.repeat(30),'sep');}
+const LDR=new GLTFLoader(),GM=new Map();
+function loadGLTF(p){if(GM.has(p))return GM.get(p);const pr=new Promise((rs,rj)=>LDR.load(p,rs,void 0,e=>rj(new Error(e.message||'load error'))));GM.set(p,pr);return pr;}
+async function MP(g,b){try{const[a1,a2]=await Promise.all([fetch(g),fetch(b)]);const[b1,b2]=await Promise.all([a1.arrayBuffer(),a2.arrayBuffer()]);return b1.byteLength+b2.byteLength;}catch(_){return 0;}}
+function BIL(gltf,pos,key){
+  const ms=[];gltf.scene.traverse(c=>{if(c.isMesh)ms.push(c);});if(!ms.length)return null;
+  const gr=new THREE.Group(),d=new THREE.Object3D();
+  ms.forEach(s=>{const inst=new THREE.InstancedMesh(s.geometry,s.material,pos.length);inst.userData.assetKey=key;inst.castShadow=true;inst.receiveShadow=true;pos.forEach((p,i)=>{d.position.copy(p);d.rotation.set(rT(),rY(),rT());const sc=rS();d.scale.set(sc,sc*(1+R()*0.15),sc);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});inst.instanceMatrix.needsUpdate=true;gr.add(inst);});return gr;
+}
+function PGLTF(gltf,pos,key,op={}){
+  const o=gltf.scene.clone(true),isC=key==='cloud_big'||key==='cloud_small';
+  if(isC){const fh=op.floatY!==undefined?op.floatY:rF(1.5,3);o.position.set(pos.x,pos.y+fh,pos.z);o.traverse(n=>{n.userData.assetKey=key;if(n.isMesh){n.castShadow=false;n.receiveShadow=false;if(n.material){n.material.transparent=true;n.material.opacity=0.88;}}});}
+  else{const sk=op.sink!==undefined?op.sink:0.01;o.position.set(pos.x,pos.y+sk,pos.z);o.traverse(n=>{n.userData.assetKey=key;if(n.isMesh){n.castShadow=true;n.receiveShadow=true;}});}
+  const sc=op.scale||(isC?0.3+R()*0.3:rS());o.scale.set(op.sx||sc,op.sy||(isC?sc:sc*(1+R()*0.15)),op.sz||sc);o.rotation.set(op.tiltX||rT(),op.rotY||rY(),op.tiltZ||rT());return o;
+}
+function RC(cx,x,y,w,h,r){cx.beginPath();cx.moveTo(x+r,y);cx.lineTo(x+w-r,y);cx.quadraticCurveTo(x+w,y,x+w,y+r);cx.lineTo(x+w,y+h-r);cx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);cx.lineTo(x+r,y+h);cx.quadraticCurveTo(x,y+h,x,y+h-r);cx.lineTo(x,y+r);cx.quadraticCurveTo(x,y,x+r,y);cx.closePath();}
+function mL(t,d){const c=document.createElement('canvas');c.width=512;c.height=64;const cx=c.getContext('2d');RC(cx,8,4,496,56,6);cx.fillStyle='rgba(8,6,14,0.65)';cx.fill();cx.font=d?'bold 22px Georgia':'18px Georgia';cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle=d?'#c0d8e8':'#8aa0b0';cx.fillText(t,256,32);const tx=new THREE.CanvasTexture(c);tx.minFilter=THREE.LinearFilter;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false}));sp.scale.set(2.2,0.28,1);return sp;}
+function mS(t,c){const c2=document.createElement('canvas');c2.width=256;c2.height=48;const cx=c2.getContext('2d');cx.clearRect(0,0,256,48);RC(cx,4,4,248,40,5);cx.fillStyle='rgba(8,6,14,0.55)';cx.fill();cx.font='15px Georgia';cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle=c||'#8aa0b0';cx.fillText(t,128,24);const tx=new THREE.CanvasTexture(c2);tx.minFilter=THREE.LinearFilter;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false}));sp.scale.set(1.1,0.2,1);return sp;}
+function VL(cell,aid,layer){
+  const tt=cell.tt||gTT(cell.q,cell.r);
+  if(layer==='L0')return true;
+  if(layer==='L1'){const lu=VO[aid]||['grass','dirt','mountain'];if(!lu.includes(tt)){L('⚠ Skip '+aid+' @ ('+cell.q+','+cell.r+') tt='+tt,'warn');return false;}if(cell.occ){L('⚠ Skip '+aid+' @ ('+cell.q+','+cell.r+') L2 occ','warn');return false;}return true;}
+  if(layer==='L2'){const lu=VOO[aid]||['grass','dirt'];if(!lu.includes(tt)){L('⚠ Skip '+aid,'warn');return false;}return true;}
+  return true;
+}
+CT.maxPolarAngle=Math.PI/2.05;CT.target.set(4,0,0);CT.update();
+const SU=new THREE.DirectionalLight(0xffe5b0,1.6);SU.position.set(12,22,10);SU.castShadow=true;
+SU.shadow.mapSize.width=2048;SU.shadow.mapSize.height=2048;SU.shadow.camera.left=-25;SU.shadow.camera.right=25;SU.shadow.camera.top=25;SU.shadow.camera.bottom=-25;SU.shadow.camera.near=1;SU.shadow.camera.far=60;SU.shadow.camera.updateProjectionMatrix();SN.add(SU);
+async function BW(){
+  const t0=performance.now();let TB=0,DC=0,CC=0,GC=0;
+  L('κ Weaving Okeanos Archipelago…','dim');SEP();
+  L('⌗ Building Okeanos Disc…','dim');OKE();L('✔ Okeanos Disc ready','ok');
+  const AK=Object.keys(AS);L('⌂ Loading '+AK.length+' GLTFs…','dim');
+  const LD=await Promise.allSettled(AK.map(async k=>{const a=AS[k];const[b,g]=await Promise.all([MP(a.f,a.b),loadGLTF(a.f)]);return{k,b,g};}));
+  SEP();const CM=new Map();let LE=0;
+  LD.forEach(r=>{if(r.status==='rejected'){L('✗ '+r.reason.message,'err');LE++;return;}CM.set(r.value.k,r.value.g);TB+=r.value.b;L('✔ '+r.value.k,'ok');});
+  L('✔ '+CM.size+' GLTFs · '+LE+' errors',LE>0?'warn':'ok');
+  SEP();L('ϟ L0 hex tiles…','dim');
+  const TG={};
+  CL.forEach(c=>{const tt=c.tt||gTT(c.q,c.r);const ha=T2H[tt]||'hex_grass';if(!TG[ha])TG[ha]=[];const p=a2W(c.q,c.r);p.y=0;TG[ha].push(p);});
+  Object.entries(TG).forEach(([st,ps])=>{const g=CM.get(st);if(!g){L('✗ No GLTF for '+st,'warn');return;}const gr=BIL(g,ps,st);if(gr){SN.add(gr);DC+=gr.children.length;L('✔ L0 '+st+': '+ps.length+' inst','dim');}});
+  SEP();L('ϟ L2 Alpha Anchors…','dim');
+  CL.forEach(c=>{if(!c.occ)return;if(!VL(c,c.occ,'L2'))return;const bp=a2W(c.q,c.r);bp.y=0;const g=CM.get(c.occ);if(!g)return;const iA=['building_castle_green','building_bridge_B','building_destroyed','mountain_B_grass_trees'].includes(c.occ);const sc=iA?0.85+R()*0.25:0.5+R()*0.3;const o=PGLTF(g,bp,c.occ,{sink:0.01,scale:sc});SN.add(o);DC++;L('✔ '+(iA?'★ Anchor':'- Beta')+' '+c.occ,'ok');});
+  SEP();L('ϟ L1 Environment…','dim');
+  CL.forEach(c=>{
+    if(!c.env||!c.env.length)return;
+    const bp=a2W(c.q,c.r);bp.y=0;
+    const iD=c.occ!==null||c.env.length>2;
+    const eC=iD?c.env.length:Math.max(0,Math.min(c.env.length,Math.ceil(c.env.length*0.3)));
+    for(let i=0;i<eC;i++){
+      const a=c.env[i%c.env.length];if(!VL(c,a,'L1'))continue;
+      const g=CM.get(a);if(!g)continue;const iC=a==='cloud_big'||a==='cloud_small';
+      const j=iC?0.3:(iD?0.1:0.25);
+      const p=bp.clone().add(new THREE.Vector3((R()-.5)*j,0,(R()-.5)*j));
+      if(iC){const cm=gCM(c.q,c.r);let fm=1.5,fx=2.5,sm=0.3,sx=0.5;
+        switch(cm){case'divine':fm=3;fx=4;sm=0.4;sx=0.6;break;case'mystical':fm=2;fx=3;sm=0.3;sx=0.5;break;case'ruins':fm=1.5;fx=2;sm=0.2;sx=0.4;break;}
+        p.y=0;const fy=rF(fm,fx);const o=PGLTF(g,p,a,{floatY:fy,scale:sm+R()*(sx-sm),tiltX:(R()-.5)*0.08,tiltZ:(R()-.5)*0.08});SN.add(o);DC++;CC++;
+        if(cm==='divine'&&i===0)L('☁ Cloud @ ('+c.q+','+c.r+') float='+fy.toFixed(1),'cyan');
+      }else{p.y=0;const iCo=a==='coin_stack_large';const sc=iCo?0.2+R()*0.2:0.4+R()*0.3;const o=PGLTF(g,p,a,{sink:0.01,scale:sc});SN.add(o);DC++;GC++;}
+    }
+  });
+  const dC=CL.filter(c=>c.env&&c.env.length>2).length;
+  L('✔ L1: '+GC+' ground + '+CC+' clouds · '+dC+' dense','ok');
+  const CB=CL.find(c=>c.q===-1&&c.r===1);
+  if(CB){const p=a2W(CB.q,CB.r);p.y=0;const m=CM.get('mountain_B_grass_trees');if(m){const o=PGLTF(m,p,'mountain_B_grass_trees',{scale:0.9,rotY:rY(),sink:0.01});SN.add(o);DC++;L('✔ Sacred Peak of Olympus','ok');}}
+  [{q:0,r:0,t:'Olympus',d:true},{q:8,r:0,t:'Ithaca'},{q:-5,r:5,t:'Ogygia'},{q:12,r:-4,t:'Troy'},{q:5,r:3,t:'Pylos'},{q:7,r:5,t:'Sparta'},{q:3,r:-2,t:'Taphos'}].forEach(l=>{const p=a2W(l.q,l.r);p.y=0.6;const sp=mL(l.t,l.d);sp.position.copy(p);SN.add(sp);});
+  [{q:0,r:0,t:'Jupiter',c:'#c0d8e8'},{q:0,r:1,t:'Minerva',c:'#7ab0e0'},{q:1,r:0,t:'Mercury',c:'#f0c060'},{q:9,r:0,t:'Telemachus'},{q:9,r:-1,t:'Penelope'},{q:7,r:0,t:'Antinous',c:'#e07050'},{q:8,r:-1,t:'Phemius'},{q:-5,r:6,t:'Calypso',c:'#e8a0bf'},{q:-4,r:5,t:'Odysseus',c:'#c0d8e8'},{q:7,r:5,t:'Menelaus'},{q:5,r:3,t:'Nestor'}].forEach(l=>{const p=a2W(l.q,l.r);p.y=0.45;const sp=mS(l.t,l.c);sp.position.copy(p);SN.add(sp);});
+  SEP();const dt=((performance.now()-t0)/1000).toFixed(1);L('Χ '+dt+'s · '+(TB/1024).toFixed(0)+' KB · ~'+DC+' draws','ok');
+  L('Χ '+CC+' clouds · '+GC+' ground · '+AK.length+' unique GLTFs','dim');L('Χ Okeanos Disc · flat stage · 48-segment rings','dim');SEP();L('✔ Okeanos Archipelago — World Complete','ok');
+  setTimeout(()=>{console.log('Okeanos Disc:',CL.length,'cells,',DC,'draws');},1500);
+}
+const FE=document.getElementById('fps');let LT=performance.now(),FR=0;
+REN.setAnimationLoop(()=>{CT.update();REN.render(SN,CAM);FR++;const n=performance.now();if(n-LT>=1000){FE.textContent=FR+' fps';FE.style.color=FR>=50?'#7aaf6a':FR>=25?'#c9a84c':'#c95a4c';FR=0;LT=n;}});
+BW().catch(e=>{SEP();L('☠ '+e.message,'err');console.error(e);});
+</script>
+</body>
+</html>
