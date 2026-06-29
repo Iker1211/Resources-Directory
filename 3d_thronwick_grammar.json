@@ -1,0 +1,837 @@
+{
+  "meta": {
+    "description": "Mapping of Thornwick kingdom entities to 3D assets available in the project registry. Each entity is mapped to one or more specific asset keys that best represent its visual/physical characteristics.",
+    "source_entities": "thornwick.json",
+    "source_assets": "registry.json",
+    "total_entities": 53,
+    "total_asset_references": 108
+  },
+  "geography": [
+    {
+      "entity_name": "The Thorn River",
+      "entity_type": "river",
+      "primary_asset": "hex_river_A",
+      "asset_category": "tiles/rivers",
+      "variant_assets": [
+        "hex_river_A", "hex_river_A_curvy", "hex_river_B", "hex_river_C",
+        "hex_river_D", "hex_river_E", "hex_river_F", "hex_river_G",
+        "hex_river_H", "hex_river_I", "hex_river_J", "hex_river_K", "hex_river_L",
+        "hex_river_crossing_A", "hex_river_crossing_B"
+      ],
+      "decoration_assets": ["waterplant_A", "waterplant_B", "waterplant_C", "waterlily_A", "waterlily_B"],
+      "placement_rules": "Linear corridor through valley floor using river tiles. Crossings at mill and bridge points. Water plants along banks."
+    },
+    {
+      "entity_name": "The Valley Floor",
+      "entity_type": "valley",
+      "primary_asset": "hex_grass",
+      "asset_category": "tiles/base",
+      "variant_assets": [
+        "hex_grass", "hex_grass_sloped_low", "hex_grass_sloped_high", "hex_grass_bottom"
+      ],
+      "decoration_assets": ["Grass_1_A_Color1", "Grass_1_B_Color1", "Grass_1_C_Color1", "Grass_1_D_Color1", "Grass_2_A_Color1", "Grass_2_B_Color1", "Grass_2_C_Color1", "Grass_2_D_Color1"],
+      "placement_rules": "Large open area flanking both sides of the Thorn River. Contains grain field decoration and demesne barn."
+    },
+    {
+      "entity_name": "The Westwood",
+      "entity_type": "forest",
+      "primary_asset": "Tree_1_A_Color1",
+      "asset_category": "nature/trees",
+      "variant_assets": [
+        "Tree_1_A_Color1", "Tree_1_B_Color1", "Tree_1_C_Color1",
+        "Tree_2_A_Color1", "Tree_2_B_Color1", "Tree_2_C_Color1", "Tree_2_D_Color1", "Tree_2_E_Color1",
+        "Tree_3_A_Color1", "Tree_3_B_Color1", "Tree_3_C_Color1",
+        "Tree_4_A_Color1", "Tree_4_B_Color1", "Tree_4_C_Color1",
+        "Tree_Bare_1_A_Color1", "Tree_Bare_1_B_Color1", "Tree_Bare_1_C_Color1",
+        "Tree_Bare_2_A_Color1", "Tree_Bare_2_B_Color1", "Tree_Bare_2_C_Color1",
+        "trees_A_large", "trees_A_medium", "trees_A_small",
+        "trees_B_large", "trees_B_medium", "trees_B_small"
+      ],
+      "decoration_assets": [
+        "Bush_1_A_Color1", "Bush_1_B_Color1", "Bush_1_C_Color1", "Bush_1_D_Color1", "Bush_1_E_Color1", "Bush_1_F_Color1", "Bush_1_G_Color1",
+        "Bush_2_A_Color1", "Bush_2_B_Color1", "Bush_2_C_Color1", "Bush_2_D_Color1", "Bush_2_E_Color1", "Bush_2_F_Color1",
+        "Bush_3_A_Color1", "Bush_3_B_Color1", "Bush_3_C_Color1",
+        "Bush_4_A_Color1", "Bush_4_B_Color1", "Bush_4_C_Color1", "Bush_4_D_Color1", "Bush_4_E_Color1", "Bush_4_F_Color1"
+      ],
+      "ground_assets": ["dirt", "dirt_with_grass", "grass"],
+      "placement_rules": "Dense forest cover on western rise. Mix of oaks, beeches, ashes, hazels. Coppice rotation areas with clearings."
+    },
+    {
+      "entity_name": "The Grey Hills",
+      "entity_type": "hill",
+      "primary_asset": "hills_A",
+      "asset_category": "nature/hills",
+      "variant_assets": [
+        "hill_single_A", "hill_single_B", "hill_single_C",
+        "hills_A", "hills_A_trees", "hills_B", "hills_B_trees", "hills_C", "hills_C_trees"
+      ],
+      "decoration_assets": [
+        "Rock_1_A_Color1", "Rock_1_B_Color1", "Rock_1_C_Color1", "Rock_1_D_Color1", "Rock_1_E_Color1",
+        "Rock_1_F_Color1", "Rock_1_G_Color1", "Rock_1_H_Color1", "Rock_1_I_Color1", "Rock_1_J_Color1",
+        "Rock_1_K_Color1", "Rock_1_L_Color1", "Rock_1_M_Color1", "Rock_1_N_Color1", "Rock_1_O_Color1",
+        "Rock_1_P_Color1", "Rock_1_Q_Color1",
+        "Rock_2_A_Color1", "Rock_2_B_Color1", "Rock_2_C_Color1", "Rock_2_D_Color1", "Rock_2_E_Color1",
+        "Rock_2_F_Color1", "Rock_2_G_Color1", "Rock_2_H_Color1",
+        "Rock_3_A_Color1", "Rock_3_B_Color1", "Rock_3_C_Color1", "Rock_3_D_Color1", "Rock_3_E_Color1",
+        "Rock_3_F_Color1", "Rock_3_G_Color1", "Rock_3_H_Color1", "Rock_3_I_Color1", "Rock_3_J_Color1",
+        "Rock_3_K_Color1", "Rock_3_L_Color1", "Rock_3_M_Color1", "Rock_3_N_Color1", "Rock_3_O_Color1",
+        "Rock_3_P_Color1", "Rock_3_Q_Color1", "Rock_3_R_Color1",
+        "rock_single_A", "rock_single_B", "rock_single_C", "rock_single_D", "rock_single_E"
+      ],
+      "ground_assets": ["stone", "stone_dark", "stone_with_copper", "stone_with_gold", "stone_with_silver", "gravel", "gravel_with_grass"],
+      "placement_rules": "Low limestone-and-ironstone ridge east of valley. Rocky outcrops with iron ore visible. Thin soil with scattered grass patches."
+    },
+    {
+      "entity_name": "The Southmarsh",
+      "entity_type": "marsh",
+      "primary_asset": "hex_water",
+      "asset_category": "tiles/base",
+      "variant_assets": [
+        "hex_water", "hex_coast_A_waterless", "hex_coast_B_waterless",
+        "hex_coast_C_waterless", "hex_coast_D_waterless", "hex_coast_E_waterless"
+      ],
+      "decoration_assets": ["waterplant_A", "waterplant_B", "waterplant_C", "waterlily_A", "waterlily_B"],
+      "ground_assets": ["dirt", "gravel", "sand_A", "sand_B", "water"],
+      "placement_rules": "Wetlands where Thorn River widens. Reed beds, peat bogs, open water patches. Defensive barrier terrain."
+    },
+    {
+      "entity_name": "Saltwick Cove",
+      "entity_type": "coast",
+      "primary_asset": "hex_coast_A",
+      "asset_category": "tiles/coast",
+      "variant_assets": [
+        "hex_coast_A", "hex_coast_B", "hex_coast_C", "hex_coast_D", "hex_coast_E",
+        "hex_coast_A_waterless", "hex_coast_B_waterless", "hex_coast_C_waterless", "hex_coast_D_waterless", "hex_coast_E_waterless"
+      ],
+      "decoration_assets": ["sand_A", "sand_B", "sand_with_grass"],
+      "placement_rules": "Sheltered shingle beach at marsh's southern edge. Transition from marsh to coast tiles. Sea access point with dock."
+    }
+  ],
+  "resources": [
+    {
+      "entity_name": "Wheat",
+      "entity_type": "resource",
+      "source_zone": "The Valley Floor",
+      "primary_asset": "building_grain",
+      "visual_representation": "Grain field decoration",
+      "asset_category": "buildings/extras",
+      "icon_asset": "building_grain",
+      "placement_rules": "Scattered across Valley Floor hex tiles near demesne barn."
+    },
+    {
+      "entity_name": "Barley",
+      "entity_type": "resource",
+      "source_zone": "The Valley Floor",
+      "primary_asset": "building_grain",
+      "visual_representation": "Grain field decoration",
+      "asset_category": "buildings/extras",
+      "icon_asset": "building_grain",
+      "placement_rules": "Two-field rotation with wheat. Alternate placement across Valley Floor."
+    },
+    {
+      "entity_name": "Hay",
+      "entity_type": "resource",
+      "source_zone": "The Valley Floor",
+      "primary_asset": "Wood_Log_A",
+      "visual_representation": "Stacked bales (reuse wood log stacking aesthetic)",
+      "asset_category": "resources/wood",
+      "icon_asset": "Pallet_Wood",
+      "placement_rules": "Near demesne barn as animal fodder stockpiles."
+    },
+    {
+      "entity_name": "Timber",
+      "entity_type": "resource",
+      "source_zone": "The Westwood",
+      "primary_asset": "Wood_Log_Stack",
+      "asset_category": "resources/wood",
+      "variant_assets": ["Wood_Log_A", "Wood_Log_B", "Wood_Log_Stack", "Pallet_Wood", "resource_lumber"],
+      "icon_asset": "resource_lumber",
+      "placement_rules": "Logging piles at Westwood edges, transport stacks near sawmill."
+    },
+    {
+      "entity_name": "Firewood",
+      "entity_type": "resource",
+      "source_zone": "The Westwood",
+      "primary_asset": "Wood_Planks_Stack_Small",
+      "asset_category": "resources/wood",
+      "variant_assets": ["Wood_Plank_A", "Wood_Plank_B", "Wood_Plank_C", "Wood_Planks_Stack_Small"],
+      "icon_asset": "Wood_Plank_A",
+      "placement_rules": "Small stacks near every building and household."
+    },
+    {
+      "entity_name": "Charcoal",
+      "entity_type": "resource",
+      "source_zone": "The Westwood",
+      "primary_asset": "Fuel_A_Barrel",
+      "asset_category": "resources/fuel",
+      "variant_assets": ["Fuel_A_Barrel", "Fuel_A_Barrel_Dirty", "Fuel_A_Barrels", "Fuel_A_Jerrycan"],
+      "icon_asset": "Fuel_A_Barrel_Dirty",
+      "placement_rules": "Barrel stacks near smelter and smithy. Dark, sooty barrels."
+    },
+    {
+      "entity_name": "Pannage (Swine Mast)",
+      "entity_type": "resource",
+      "source_zone": "The Westwood",
+      "primary_asset": "Bush_1_A_Color1",
+      "visual_representation": "Acorn/beechmast scatter on forest floor",
+      "asset_category": "nature/bushes",
+      "icon_asset": "Bush_1_D_Color1",
+      "placement_rules": "Scattered acorn and mast cover under Westwood trees. Seasonal."
+    },
+    {
+      "entity_name": "Iron Ore",
+      "entity_type": "resource",
+      "source_zone": "The Grey Hills",
+      "primary_asset": "Iron_Nugget_Large",
+      "asset_category": "resources/metal",
+      "variant_assets": [
+        "Iron_Nugget_Large", "Iron_Nugget_Medium", "Iron_Nugget_Small", "Iron_Nuggets",
+        "Iron_Bar", "Iron_Bars", "Iron_Bars_Stack_Small", "Iron_Bars_Stack_Medium", "Iron_Bars_Stack_Large"
+      ],
+      "icon_asset": "Iron_Nuggets",
+      "placement_rules": "Outcrop nodes at northern Grey Hills near Hillend. Nuggets scattered on surface."
+    },
+    {
+      "entity_name": "Limestone",
+      "entity_type": "resource",
+      "source_zone": "The Grey Hills",
+      "primary_asset": "Stone_Brick",
+      "asset_category": "resources/stone",
+      "variant_assets": [
+        "Stone_Brick", "Stone_Bricks_Stack_Small", "Stone_Bricks_Stack_Medium", "Stone_Bricks_Stack_Large",
+        "Stone_Chunks_Large", "Stone_Chunks_Small", "resource_stone"
+      ],
+      "icon_asset": "resource_stone",
+      "placement_rules": "Quarry face at Grey Hills escarpment. Block stacks near quarry and transport route."
+    },
+    {
+      "entity_name": "Wool",
+      "entity_type": "resource",
+      "source_zone": "The Grey Hills",
+      "primary_asset": "Textiles_A",
+      "asset_category": "resources/textiles",
+      "variant_assets": [
+        "Textiles_A", "Textiles_B", "Textiles_C",
+        "Textiles_Stack_Small", "Textiles_Stack_Large", "Textiles_Stack_Large_Colored"
+      ],
+      "icon_asset": "Textiles_A",
+      "placement_rules": "Bales and stacks near sheep pastures on Grey Hills. Trade goods at dock."
+    },
+    {
+      "entity_name": "Peat",
+      "entity_type": "resource",
+      "source_zone": "The Southmarsh",
+      "primary_asset": "Fuel_B_Barrel",
+      "asset_category": "resources/fuel",
+      "variant_assets": ["Fuel_B_Barrel", "Fuel_B_Barrel_Dirty", "Fuel_B_Barrels", "Fuel_B_Jerrycan"],
+      "icon_asset": "Fuel_B_Barrel_Dirty",
+      "placement_rules": "Cut peat stacks in Southmarsh. Transport piles near salt pans for boiling fuel."
+    },
+    {
+      "entity_name": "Reeds",
+      "entity_type": "resource",
+      "source_zone": "The Southmarsh",
+      "primary_asset": "waterplant_A",
+      "asset_category": "nature/waterplants",
+      "variant_assets": ["waterplant_A", "waterplant_B", "waterplant_C"],
+      "icon_asset": "waterplant_C",
+      "placement_rules": "Dense reed growth along river edges in Southmarsh. Harvest bundles near buildings needing thatch."
+    },
+    {
+      "entity_name": "Salt",
+      "entity_type": "resource",
+      "source_zone": "Saltwick Cove",
+      "primary_asset": "Stone_Bricks_Stack_Small",
+      "visual_representation": "White crystalline piles (use light stone aesthetic)",
+      "asset_category": "resources/stone",
+      "icon_asset": "Stone_Chunks_Small",
+      "placement_rules": "Salt mounds and packed barrels near salt pans at Coastwatch."
+    },
+    {
+      "entity_name": "Fish",
+      "entity_type": "resource",
+      "source_zone": "Saltwick Cove",
+      "primary_asset": "plate_food_A",
+      "asset_category": "dungeon/props",
+      "variant_assets": ["plate_food_A", "plate_food_B"],
+      "icon_asset": "plate_food_A",
+      "placement_rules": "Fish drying racks near dock (represented by dock props and plate food items)."
+    },
+    {
+      "entity_name": "Clay",
+      "entity_type": "resource",
+      "source_zone": "The Thorn River (riverbanks)",
+      "primary_asset": "dirt",
+      "asset_category": "terrain",
+      "variant_assets": ["dirt", "dirt_with_grass"],
+      "icon_asset": "dirt",
+      "placement_rules": "Clay deposits along Thorn River banks near Thornwick. Mound piles near kiln."
+    }
+  ],
+  "buildings": [
+    {
+      "entity_name": "Lord's Great Hall",
+      "entity_name_slug": "lords_great_hall",
+      "settlement": "Thornwick",
+      "primary_asset": "building_castle_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_castle_blue", "building_castle_green", "building_castle_red", "building_castle_yellow"],
+      "decoration_assets": ["banner_shield_blue", "banner_shield_red", "banner_triple_blue", "flag_blue", "flag_red"],
+      "interior_assets": [
+        "table_long_decorated_A", "table_long_tablecloth_decorated_A", "chair", "chair_A",
+        "bed_decorated", "armchair", "couch", "couch_pillows",
+        "candle_triple", "candle_lit", "torch_lit", "torch_mounted",
+        "chest", "chest_gold", "coin_stack_large",
+        "shelf_B_large_decorated", "cabinet_medium_decorated",
+        "rug_rectangle_stripes_A", "rug_oval_A",
+        "plate_stack", "plate_food_A", "plate_food_B", "mug_full",
+        "wall_shelves", "pillar_decorated"
+      ],
+      "placement_rules": "Central Thornwick. Timber-framed with stone foundation. Castle-scale building with banners and interior furnishings."
+    },
+    {
+      "entity_name": "Watermill",
+      "entity_name_slug": "watermill",
+      "settlement": "Thornwick",
+      "primary_asset": "building_watermill_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_watermill_blue", "building_watermill_green", "building_watermill_red", "building_watermill_yellow"],
+      "decoration_assets": ["hex_river_crossing_A", "hex_river_crossing_B", "water"],
+      "interior_assets": ["sack", "barrel_large", "barrel_small", "crate_A_big", "crate_A_small"],
+      "placement_rules": "On Thorn River within Thornwick. Undershot water wheel. Sluice gate control."
+    },
+    {
+      "entity_name": "Sawmill",
+      "entity_name_slug": "sawmill",
+      "settlement": "Millthorpe",
+      "primary_asset": "building_lumbermill_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_lumbermill_blue", "building_lumbermill_green", "building_lumbermill_red", "building_lumbermill_yellow"],
+      "decoration_assets": ["Wood_Log_Stack", "Wood_Log_A", "Wood_Log_B", "resource_lumber", "Wood_Planks_Stack_Large"],
+      "placement_rules": "Upstream at Millthorpe where river gradient is steeper. Log stockpiles nearby."
+    },
+    {
+      "entity_name": "Smelter",
+      "entity_name_slug": "smelter",
+      "settlement": "Hillend",
+      "primary_asset": "building_mine_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_mine_blue", "building_mine_green", "building_mine_red", "building_mine_yellow"],
+      "decoration_assets": [
+        "anvil", "grindstone", "hammer", "tongs", "Fuel_A_Barrel", "Fuel_A_Barrels",
+        "Iron_Nuggets", "Iron_Bars", "Iron_Bars_Stack_Medium",
+        "Stone_Brick", "Clay resource pits (dirt)"
+      ],
+      "placement_rules": "At Hillend near iron ore outcrops. Bloomery hearth with charcoal and limestone piles."
+    },
+    {
+      "entity_name": "Smithy",
+      "entity_name_slug": "smithy",
+      "settlement": "Thornwick",
+      "primary_asset": "building_blacksmith_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_blacksmith_blue", "building_blacksmith_green", "building_blacksmith_red", "building_blacksmith_yellow"],
+      "decoration_assets": [
+        "anvil", "grindstone", "hammer", "tongs", "pickaxe", "shovel",
+        "saw", "chisel", "file", "mallet", "handdrill", "handplane",
+        "nail", "screw_A", "screw_B", "wrench_A", "wrench_B",
+        "Iron_Bars", "Iron_Bars_Stack_Small", "Iron_Bars_Stack_Medium",
+        "axe", "axe_A", "axe_B", "axe_C",
+        "sword_A", "sword_B", "sword_C", "sword_D", "sword_E",
+        "dagger_A", "dagger_B",
+        "spear_A", "halberd",
+        "hammer_A", "hammer_B", "hammer_C",
+        "shield_A", "shield_B", "shield_C"
+      ],
+      "placement_rules": "Central Thornwick. Forge and anvil. Finished tools/weapons display. Water quenching trough."
+    },
+    {
+      "entity_name": "Tannery",
+      "entity_name_slug": "tannery",
+      "settlement": "Thornwick (downstream edge)",
+      "primary_asset": "building_home_B_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_home_B_blue", "building_home_B_green", "building_home_B_red", "building_home_B_yellow"],
+      "decoration_assets": ["bucket_water", "bucket_empty", "barrel_large", "barrel_small", "crate_long_empty"],
+      "placement_rules": "Downstream edge of Thornwick. Pits for liming and oak-bark tanning. Water access."
+    },
+    {
+      "entity_name": "Brewery",
+      "entity_name_slug": "brewery",
+      "settlement": "Thornwick",
+      "primary_asset": "building_tavern_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_tavern_blue", "building_tavern_green", "building_tavern_red", "building_tavern_yellow"],
+      "decoration_assets": [
+        "barrel_large", "barrel_large_decorated", "barrel_small", "barrel_small_stack",
+        "keg", "keg_decorated", "bottle_A_brown", "bottle_A_green",
+        "bottle_B_brown", "bottle_B_green", "bottle_C_brown", "bottle_C_green",
+        "mug_empty", "mug_full",
+        "crate_A_big", "crate_A_small"
+      ],
+      "placement_rules": "Thornwick. Small beer production. Barley storage and fermentation vats."
+    },
+    {
+      "entity_name": "Granary",
+      "entity_name_slug": "granary",
+      "settlement": "Thornwick",
+      "primary_asset": "building_market_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_market_blue", "building_market_green", "building_market_red", "building_market_yellow"],
+      "decoration_assets": [
+        "sack", "barrel_large", "barrel_small",
+        "crate_A_big", "crate_A_small", "crate_B_big", "crate_B_small",
+        "crate_long_A", "crate_long_B", "crate_long_C",
+        "pallet", "Pallet_Wood", "box_large", "box_small", "box_stacked",
+        "building_grain"
+      ],
+      "placement_rules": "Raised timber storehouse in Thornwick. Grain stores at 1.5x annual consumption. Rat-proofed with stone footings."
+    },
+    {
+      "entity_name": "Chapel of St. Cuthbert",
+      "entity_name_slug": "chapel_of_st_cuthbert",
+      "settlement": "Thornwick",
+      "primary_asset": "building_church_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_church_blue", "building_church_green", "building_church_red", "building_church_yellow"],
+      "decoration_assets": [
+        "candle", "candle_lit", "candle_thin", "candle_thin_lit", "candle_triple",
+        "candle_melted",
+        "book_set", "book_single",
+        "journal_closed", "journal_open",
+        "spellbook_closed", "spellbook_open",
+        "bench (chair)", "chair", "chair_A_wood", "chair_B_wood",
+        "pillar_decorated", "banner_white", "banner_patternA_white",
+        "shelf_small_candles",
+        "table_long_tablecloth", "table_medium_tablecloth"
+      ],
+      "placement_rules": "Fieldstone chapel serving all five settlements. Central Thornwick location. Candle-lit interior with written records."
+    },
+    {
+      "entity_name": "Kiln",
+      "entity_name_slug": "kiln",
+      "settlement": "Thornwick",
+      "primary_asset": "building_tower_base_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_tower_base_blue", "building_tower_base_green", "building_tower_base_red", "building_tower_base_yellow"],
+      "decoration_assets": [
+        "dirt", "gravel",
+        "bricks_A", "bricks_B",
+        "plate", "plate_small", "plate_stack",
+        "bowl (plate)", "crate_A_big", "crate_A_small"
+      ],
+      "placement_rules": "Dual-chamber updraft kiln in Thornwick. Clay stockpiles nearby. Fired pottery and roof tile output."
+    },
+    {
+      "entity_name": "Salt Pans",
+      "entity_name_slug": "salt_pans",
+      "settlement": "Coastwatch",
+      "primary_asset": "sand_A",
+      "asset_category": "terrain",
+      "variant_assets": [
+        "sand_A", "sand_B", "sand_with_grass", "sand_with_snow",
+        "hex_coast_A", "hex_coast_B", "hex_coast_C"
+      ],
+      "decoration_assets": [
+        "bucket_water", "bucket_empty", "Fuel_A_Barrel", "Fuel_B_Barrel",
+        "Firewood (Wood_Log_Stack)", "Pallet_Wood",
+        "barrel_large", "barrel_small"
+      ],
+      "placement_rules": "Shallow lead-lined evaporation pans on Saltwick Cove beach. Seawater boiling with peat/firewood fuel."
+    },
+    {
+      "entity_name": "Dock",
+      "entity_name_slug": "dock",
+      "settlement": "Coastwatch",
+      "primary_asset": "building_stage_A",
+      "asset_category": "buildings/extras",
+      "variant_assets": ["building_stage_A", "building_stage_B", "building_stage_C", "building_bridge_A", "building_bridge_B"],
+      "decoration_assets": [
+        "barrel_large", "barrel_small", "crate_A_big", "crate_A_small",
+        "crate_long_A", "crate_long_B", "crate_long_C",
+        "bucket_water", "bucket_empty",
+        "flag_blue", "flag_red", "flag_green", "flag_yellow",
+        "Fish (plate_food_A)", "resource_lumber", "resource_stone",
+        "sack", "pallet", "wheelbarrow",
+        "rope_bundle_A", "rope_bundle_B",
+        "lantern", "torch", "torch_lit", "torch_mounted"
+      ],
+      "placement_rules": "Timber jetty and stone quay at Saltwick Cove. Mooring for fishing boats and coasting cog. Trade goods storage."
+    },
+    {
+      "entity_name": "Quarry",
+      "entity_name_slug": "quarry",
+      "settlement": "Hillend",
+      "primary_asset": "building_mine_green",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_mine_blue", "building_mine_green", "building_mine_red", "building_mine_yellow"],
+      "decoration_assets": [
+        "Stone_Brick", "Stone_Bricks_Stack_Large", "Stone_Bricks_Stack_Medium", "Stone_Bricks_Stack_Small",
+        "Stone_Chunks_Large", "Stone_Chunks_Small",
+        "resource_stone", "rock_single_A", "rock_single_B", "rock_single_C", "rock_single_D", "rock_single_E",
+        "Rock_1_A_Color1", "Rock_1_B_Color1", "Rock_1_C_Color1",
+        "pickaxe", "shovel", "hammer", "chisel", "mallet",
+        "wheelbarrow", "Pallet_Wood", "crate_long_empty",
+        "ladder", "scaffold (wall_scaffold)"
+      ],
+      "placement_rules": "Open-face limestone quarry on Grey Hills escarpment. Stone blocks sledged downslope."
+    },
+    {
+      "entity_name": "Westwood Fold",
+      "entity_name_slug": "westwood_fold",
+      "settlement": "The Westwood (forested area)",
+      "primary_asset": "fence_wood_straight",
+      "asset_category": "buildings/fences",
+      "variant_assets": [
+        "fence_wood_straight", "fence_wood_straight_gate",
+        "fence_stone_straight", "fence_stone_straight_gate"
+      ],
+      "decoration_assets": [
+        "Tree_1_A_Color1", "Tree_1_B_Color1", "Tree_1_C_Color1",
+        "tent", "barrel_small", "bucket_empty",
+        "Pannage (Bush mast decoration)"
+      ],
+      "placement_rules": "Fenced enclosure in Westwood with timber shelter for ~200 swine. Seasonal pannage forest access."
+    },
+    {
+      "entity_name": "Demesne Barn",
+      "entity_name_slug": "demesne_barn",
+      "settlement": "The Valley Floor",
+      "primary_asset": "building_home_A_blue",
+      "asset_category": "buildings/medieval",
+      "variant_assets": ["building_home_A_blue", "building_home_A_green", "building_home_A_red", "building_home_A_yellow"],
+      "decoration_assets": [
+        "Pallet_Wood", "Pallet_Wood_Covered_A", "Pallet_Wood_Covered_B",
+        "Wood_Log_A", "Wood_Log_B", "Wood_Log_Stack",
+        "sack", "barrel_large", "barrel_small",
+        "crate_A_big", "crate_A_small", "crate_long_A", "crate_long_B", "crate_long_C",
+        "building_grain", "wheelbarrow", "ladder",
+        "plough (axe for tool representation)", "shovel", "pickaxe",
+        "cart (wheelbarrow)"
+      ],
+      "placement_rules": "Cruck-framed threshing barn at center of lord's demesne fields. Plough teams and equipment storage."
+    }
+  ],
+  "roles": [
+    {
+      "entity_name": "Lord",
+      "entity_name_slug": "lord",
+      "institution": "Lord's Great Hall",
+      "primary_asset": "Skeleton_Blade",
+      "visual_representation": "Noble figure with authority symbols",
+      "asset_category": "character/equipment",
+      "icon_assets": ["Sword and shield combo - sword_shield", "sword_shield_gold", "sword_shield"],
+      "interior_assets": [
+        "chair", "armchair_pillows", "table_long_tablecloth_decorated_A",
+        "chest_gold", "coin_stack_large", "candle_triple",
+        "bed_decorated", "pillar_decorated",
+        "banner_shield_blue", "banner_triple_blue",
+        "journal_closed", "journal_open"
+      ],
+      "placement_rules": "Occupies Lord's Great Hall. Manorial court with table and chair. Land tenure records."
+    },
+    {
+      "entity_name": "Reeve",
+      "entity_name_slug": "reeve",
+      "institution": "Lord's Great Hall",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Overseer with accounting tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["map", "map_rolled", "journal_closed", "pencil_A_long"],
+      "interior_assets": [
+        "chair_B_wood", "table_medium", "book_set",
+        "scale (compass_base representation)", "journal_closed",
+        "blueprint", "blueprint_stacked"
+      ],
+      "placement_rules": "Works between Great Hall and Granary. Tracks grain stores and field assignments."
+    },
+    {
+      "entity_name": "Priest",
+      "entity_name_slug": "priest",
+      "institution": "Chapel of St. Cuthbert",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Clergy with religious symbols",
+      "asset_category": "character/equipment",
+      "icon_assets": ["spellbook_closed", "spellbook_open", "candle_lit", "book_set"],
+      "interior_assets": [
+        "chair_A_wood", "table_long_tablecloth",
+        "candle", "candle_lit", "candle_thin_lit", "candle_triple",
+        "book_set", "book_single", "journal_closed", "journal_open",
+        "spellbook_closed", "spellbook_open",
+        "banner_white", "banner_patternA_white",
+        "plate", "plate_small", "bottle_A_brown", "bottle_A_green"
+      ],
+      "placement_rules": "Occupies Chapel of St. Cuthbert. Performs Mass, baptisms, marriages, burials. Maintains parish register."
+    },
+    {
+      "entity_name": "Miller",
+      "entity_name_slug": "miller",
+      "institution": "Watermill",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with milling tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["grindstone", "sack", "hammer"],
+      "interior_assets": [
+        "grindstone", "hammer", "mallet",
+        "sack", "barrel_small", "barrel_large",
+        "chisel", "trowel",
+        "crate_A_small", "crate_A_big"
+      ],
+      "placement_rules": "Operates Watermill. Adjusts sluice gate, maintains millstones and gearing."
+    },
+    {
+      "entity_name": "Sawyer",
+      "entity_name_slug": "sawyer",
+      "institution": "Sawmill",
+      "primary_asset": "Skeleton_Axe",
+      "visual_representation": "Skilled craftsman with woodworking tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["saw", "axe", "handplane"],
+      "interior_assets": [
+        "saw", "axe", "handplane", "hammer", "mallet",
+        "chisel", "file", "handdrill",
+        "Wood_Log_A", "Wood_Log_B", "Wood_Log_Stack",
+        "Wood_Plank_A", "Wood_Plank_B", "Wood_Plank_C",
+        "Wood_Planks_Stack_Large"
+      ],
+      "placement_rules": "Operates Sawmill at Millthorpe. Selects logs, maintains water-driven saw blade."
+    },
+    {
+      "entity_name": "Blacksmith",
+      "entity_name_slug": "blacksmith",
+      "institution": "Smithy",
+      "primary_asset": "Skeleton_Blade",
+      "visual_representation": "Skilled craftsman with metalworking tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["hammer", "anvil", "tongs", "grindstone"],
+      "interior_assets": [
+        "anvil", "grindstone", "hammer", "tongs",
+        "forge (Fuel_A_Barrel)", "pickaxe", "shovel",
+        "saw", "chisel", "file", "mallet",
+        "nail", "screw_A", "screw_B", "wrench_A", "wrench_B",
+        "Iron_Bars", "Iron_Bars_Stack_Small",
+        "hammer_A", "hammer_B", "hammer_C",
+        "sword_A", "sword_B", "sword_C", "sword_D", "sword_E",
+        "dagger_A", "dagger_B",
+        "spear_A", "halberd",
+        "axe_A", "axe_B", "axe_C",
+        "knife"
+      ],
+      "placement_rules": "Occupies Smithy in Thornwick. Forge and anvil for converting blooms into finished tools."
+    },
+    {
+      "entity_name": "Smelter Master",
+      "entity_name_slug": "smelter_master",
+      "institution": "Smelter",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with smelting expertise",
+      "asset_category": "character/equipment",
+      "icon_assets": ["Iron_Nuggets", "tongs", "hammer", "Fuel_A_Barrel_Dirty"],
+      "interior_assets": [
+        "Iron_Nugget_Large", "Iron_Nugget_Medium", "Iron_Nugget_Small", "Iron_Nuggets",
+        "Iron_Bar", "Iron_Bars", "Iron_Bars_Stack_Small", "Iron_Bars_Stack_Medium",
+        "Fuel_A_Barrel", "Fuel_A_Barrel_Dirty", "Fuel_A_Barrels",
+        "Stone_Brick", "Stone_Bricks_Stack_Small",
+        "tongs", "hammer", "pickaxe",
+        "shovel", "crowbar (wrench_A)"
+      ],
+      "placement_rules": "Occupies Smelter at Hillend. Layers ore, charcoal, and limestone in bloomery. Manages bellows."
+    },
+    {
+      "entity_name": "Tanner",
+      "entity_name_slug": "tanner",
+      "institution": "Tannery",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with leatherworking tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["knife", "bucket_water", "bucket_empty"],
+      "interior_assets": [
+        "bucket_water", "bucket_empty", "bucket_metal",
+        "barrel_large", "barrel_small",
+        "knife", "scissors", "file",
+        "Textiles_A", "Textiles_B", "Textiles_C",
+        "Textiles_Stack_Small", "Textiles_Stack_Large"
+      ],
+      "placement_rules": "Occupies Tannery downstream of Thornwick. Soaking, liming, fleshing, and oak-bark tanning pits."
+    },
+    {
+      "entity_name": "Brewer",
+      "entity_name_slug": "brewer",
+      "institution": "Brewery",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with brewing tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["mug_full", "keg", "bottle_A_brown", "bottle_A_green"],
+      "interior_assets": [
+        "keg", "keg_decorated",
+        "barrel_large", "barrel_large_decorated", "barrel_small", "barrel_small_stack",
+        "bottle_A_brown", "bottle_A_green", "bottle_A_labeled_brown", "bottle_A_labeled_green",
+        "bottle_B_brown", "bottle_B_green",
+        "bottle_C_brown", "bottle_C_green",
+        "mug_empty", "mug_full",
+        "crate_A_big", "crate_long_A",
+        "sack (barley storage)"
+      ],
+      "placement_rules": "Occupies Brewery in Thornwick. Mashes barley, boils wort, ferments ale for daily distribution."
+    },
+    {
+      "entity_name": "Granary Keeper",
+      "entity_name_slug": "granary_keeper",
+      "institution": "Granary",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Peasant with measurement tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["sack", "journal_closed", "pencil_A_long"],
+      "interior_assets": [
+        "sack", "barrel_large", "barrel_small",
+        "crate_A_big", "crate_A_small", "crate_B_big", "crate_B_small",
+        "crate_long_A", "crate_long_B", "crate_long_C",
+        "pallet", "Pallet_Wood",
+        "box_large", "box_small", "box_stacked",
+        "ladder",
+        "journal_closed", "pencil_A_long"
+      ],
+      "placement_rules": "Occupies Granary in Thornwick. Measures and records grain. Turns stores to prevent rot."
+    },
+    {
+      "entity_name": "Potter",
+      "entity_name_slug": "potter",
+      "institution": "Kiln",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with clay working tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["plate", "plate_small", "plate_stack"],
+      "interior_assets": [
+        "plate", "plate_small", "plate_stack",
+        "bottle_A_brown", "bottle_A_green",
+        "bottle_B_brown", "bottle_B_green",
+        "bottle_C_brown", "bottle_C_green",
+        "dirt (clay source)",
+        "bricks_A", "bricks_B",
+        "keg", "crate_A_small"
+      ],
+      "placement_rules": "Occupies Kiln in Thornwick. Throws clay on kick wheel, fires pots and tiles."
+    },
+    {
+      "entity_name": "Salt Master",
+      "entity_name_slug": "salt_master",
+      "institution": "Salt Pans",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with salt production tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["bucket_water", "Fuel_A_Barrel_Dirty"],
+      "interior_assets": [
+        "bucket_water", "bucket_empty", "bucket_metal",
+        "Fuel_A_Barrel", "Fuel_A_Barrel_Dirty", "Fuel_A_Barrels",
+        "Fuel_B_Barrel", "Fuel_B_Barrel_Dirty",
+        "barrel_large", "barrel_small",
+        "Pallet_Wood", "Pallet_Wood_Covered_A",
+        "shovel", "trowel",
+        "sack",
+        "stone (salt block representation)"
+      ],
+      "placement_rules": "Occupies Salt Pans at Coastwatch. Transfers seawater, feeds boiling fires, rakes salt crystals."
+    },
+    {
+      "entity_name": "Dockmaster",
+      "entity_name_slug": "dockmaster",
+      "institution": "Dock",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Skilled craftsman with maritime tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["map", "rope_bundle_A", "lantern", "compass_base"],
+      "interior_assets": [
+        "rope_bundle_A", "rope_bundle_B",
+        "lantern", "torch", "torch_lit",
+        "compass_base", "drafting_compass",
+        "map", "map_empty", "map_rolled",
+        "journal_closed", "pencil_A_long",
+        "barrel_large", "barrel_small",
+        "crate_A_big", "crate_A_small",
+        "bucket_water", "bucket_empty",
+        "flag_blue", "flag_red",
+        "coin", "coin_stack_small"
+      ],
+      "placement_rules": "Occupies Dock at Coastwatch. Mooring, cargo oversight, jetty maintenance, trade records."
+    },
+    {
+      "entity_name": "Stonecutter",
+      "entity_name_slug": "stonecutter",
+      "institution": "Quarry",
+      "primary_asset": "Skeleton_Axe",
+      "visual_representation": "Peasant with stoneworking tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["pickaxe", "chisel", "hammer", "mallet"],
+      "interior_assets": [
+        "pickaxe", "shovel", "hammer", "mallet",
+        "chisel", "trowel", "file",
+        "Stone_Brick", "Stone_Bricks_Stack_Small", "Stone_Bricks_Stack_Medium", "Stone_Bricks_Stack_Large",
+        "Stone_Chunks_Large", "Stone_Chunks_Small",
+        "resource_stone",
+        "wheelbarrow", "Pallet_Wood",
+        "ladder",
+        "sledge (hammer)"
+      ],
+      "placement_rules": "Occupies Quarry at Hillend. Wedges and drills limestone, shapes blocks, loads sledges."
+    },
+    {
+      "entity_name": "Swineherd",
+      "entity_name_slug": "swineherd",
+      "institution": "Westwood Fold",
+      "primary_asset": "Skeleton_Staff",
+      "visual_representation": "Peasant with livestock tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["spear_A", "knife", "bucket_empty"],
+      "interior_assets": [
+        "spear_A (herding staff)",
+        "knife", "axe (for trimming)",
+        "bucket_empty", "bucket_water",
+        "barrel_small",
+        "tent",
+        "fence_wood_straight",
+        "Bush mast (Pannage decoration)"
+      ],
+      "placement_rules": "Occupies Westwood Fold. Drives swine between fold and pannage. Wolf protection. Breeding sows."
+    },
+    {
+      "entity_name": "Ploughman",
+      "entity_name_slug": "ploughman",
+      "institution": "Demesne Barn",
+      "primary_asset": "Skeleton_Axe",
+      "visual_representation": "Peasant with agricultural tools",
+      "asset_category": "character/equipment",
+      "icon_assets": ["shovel", "pickaxe", "axe", "sack"],
+      "interior_assets": [
+        "shovel", "pickaxe", "axe",
+        "hammer", "mallet",
+        "sack", "barrel_small",
+        "Pallet_Wood",
+        "wheelbarrow",
+        "building_grain (field decoration)",
+        "crate_long_A"
+      ],
+      "placement_rules": "Occupies Demesne Barn. Yokes ox team, ploughs demesne strips, sows and harrows fields."
+    },
+    {
+      "entity_name": "Fisher",
+      "entity_name_slug": "fisher",
+      "institution": "Dock",
+      "primary_asset": "Skeleton_Arrow",
+      "visual_representation": "Peasant with fishing equipment",
+      "asset_category": "character/equipment",
+      "icon_assets": ["spear_A", "bucket_water", "rope_bundle_A"],
+      "interior_assets": [
+        "spear_A (fishing spear)",
+        "rope_bundle_A", "rope_bundle_B",
+        "bucket_water", "bucket_empty",
+        "bucket_metal",
+        "barrel_small",
+        "plate_food_A", "plate_food_B (fish representation)",
+        "crate_A_small",
+        "torch", "torch_lit",
+        "coin", "coin_stack_small"
+      ],
+      "placement_rules": "Occupies Dock at Coastwatch. Rows clinker-built boat daily. Sets nets and lines. Salts surplus fish."
+    }
+  ]
+}

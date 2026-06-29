@@ -1,0 +1,322 @@
+{
+  "geography": [
+    {
+      "name": "The Thorn River",
+      "terrain": "river",
+      "strategic_role": "Spine of the kingdom: drinking water, irrigation, transport corridor, fish stock, and mill power. All major settlement clusters within 1 mile of its banks."
+    },
+    {
+      "name": "The Valley Floor",
+      "terrain": "valley",
+      "strategic_role": "Deep alluvial loam on both sides of the Thorn; the only zone capable of sustained grain cultivation. Houses 60% of the population. Every acre under two-field rotation of wheat and barley with fallow."
+    },
+    {
+      "name": "The Westwood",
+      "terrain": "forest",
+      "strategic_role": "Managed broadleaf woodland (oak, beech, ash, hazel) covering the western rise. Sole source of structural timber, firewood, and charcoal. Pannage for swine, coppice rotation for underwood. Enables all construction and metalworking."
+    },
+    {
+      "name": "The Grey Hills",
+      "terrain": "hill",
+      "strategic_role": "Low limestone-and-ironstone ridge east of the valley. Iron ore outcrops at the northern end; building stone throughout. Thin soils support only sheep pasture. Mining hamlet of Hillend located at the ore face."
+    },
+    {
+      "name": "The Southmarsh",
+      "terrain": "marsh",
+      "strategic_role": "Where the Thorn widens into reed beds and peat bogs before the sea. Peat for fuel (the only fuel alternative to wood), reeds for thatching, waterfowl for protein. Defensive barrier against coastal raiders."
+    },
+    {
+      "name": "Saltwick Cove",
+      "terrain": "coast",
+      "strategic_role": "A sheltered shingle beach at the marsh's southern edge. The kingdom's only access to the sea. Fishing boats, salt evaporation pans, and a timber jetty for the small coasting trade that brings in iron (supplementary) and luxury goods."
+    }
+  ],
+  "resources": [
+    {
+      "name": "Wheat",
+      "source_zone": "The Valley Floor",
+      "primary_use": "nutrition",
+      "scarcity": "Abundant"
+    },
+    {
+      "name": "Barley",
+      "source_zone": "The Valley Floor",
+      "primary_use": "brewery, nutrition",
+      "scarcity": "Abundant"
+    },
+    {
+      "name": "Hay",
+      "source_zone": "The Valley Floor",
+      "primary_use": "animal fodder",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Timber",
+      "source_zone": "The Westwood",
+      "primary_use": "construction, shipbuilding",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Firewood",
+      "source_zone": "The Westwood",
+      "primary_use": "fuel",
+      "scarcity": "Abundant"
+    },
+    {
+      "name": "Charcoal",
+      "source_zone": "The Westwood",
+      "primary_use": "metalworking fuel",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Pannage (Swine Mast)",
+      "source_zone": "The Westwood",
+      "primary_use": "nutrition (pig fattening)",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Iron Ore",
+      "source_zone": "The Grey Hills",
+      "primary_use": "smelting, tool manufacture",
+      "scarcity": "Scarce"
+    },
+    {
+      "name": "Limestone",
+      "source_zone": "The Grey Hills",
+      "primary_use": "building stone, quicklime",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Wool",
+      "source_zone": "The Grey Hills",
+      "primary_use": "clothing, trade export",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Peat",
+      "source_zone": "The Southmarsh",
+      "primary_use": "fuel",
+      "scarcity": "Abundant"
+    },
+    {
+      "name": "Reeds",
+      "source_zone": "The Southmarsh",
+      "primary_use": "thatching, floor covering",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Salt",
+      "source_zone": "Saltwick Cove",
+      "primary_use": "food preservation, trade",
+      "scarcity": "Scarce"
+    },
+    {
+      "name": "Fish",
+      "source_zone": "Saltwick Cove",
+      "primary_use": "nutrition",
+      "scarcity": "Common"
+    },
+    {
+      "name": "Clay",
+      "source_zone": "The Thorn River (riverbanks)",
+      "primary_use": "pottery, roof tiles",
+      "scarcity": "Abundant"
+    }
+  ],
+  "buildings": [
+    {
+      "name": "Lord's Great Hall",
+      "settlement": "Thornwick",
+      "core_function": "Administration, justice, tax collection, and defensive refuge. The timber-framed hall with stone foundation houses the lord's household and the twice-weekly manorial court. All land tenure records kept here.",
+      "resource_dependency": "Consumes food surplus (tax grain, meat, ale) from the demesne; timber for maintenance; limestone for foundation repairs."
+    },
+    {
+      "name": "Watermill",
+      "settlement": "Thornwick",
+      "core_function": "Grinds all household grain into flour using an undershot wheel on the Thorn River. Eliminates the need for hand-querns, saving ~400 person-hours per day across the population. Lord collects multure (toll grain).",
+      "resource_dependency": "Consumes wheat and barley; river flow (perennial, never freezes solid); millstone grit from the Grey Hills."
+    },
+    {
+      "name": "Sawmill",
+      "settlement": "Millthorpe",
+      "core_function": "Water-powered vertical saw for converting oak and ash trunks into planks, beams, and joinery stock. Located upstream at Millthorpe where the river gradient is steeper.",
+      "resource_dependency": "Consumes timber logs from the Westwood; river flow."
+    },
+    {
+      "name": "Smelter",
+      "settlement": "Hillend",
+      "core_function": "Bloomery hearth that reduces iron ore to wrought iron blooms. Uses local clay for furnace tuyeres and limestone as flux. Produces ~100–150 lbs of raw iron per week.",
+      "resource_dependency": "Consumes iron ore, charcoal (5:1 ratio by weight), limestone flux; clay for furnace repair."
+    },
+    {
+      "name": "Smithy",
+      "settlement": "Thornwick",
+      "core_function": "Forge and anvil for converting smelter blooms into finished tools: ploughshares, horseshoes, knives, nails, hinges. Central to all agricultural and construction activity.",
+      "resource_dependency": "Consumes iron blooms from Hillend; charcoal; water for quenching."
+    },
+    {
+      "name": "Tannery",
+      "settlement": "Thornwick (downstream edge)",
+      "core_function": "Converts raw cattle and pig hides into leather through soaking, liming, fleshing, and oak-bark tanning. Located downstream of the village because the process produces foul-smelling wastewater.",
+      "resource_dependency": "Consumes raw hides (from valley cattle and Westwood swine); oak bark (coppiced from Westwood); water flow for rinsing pits."
+    },
+    {
+      "name": "Brewery",
+      "settlement": "Thornwick",
+      "core_function": "Produces small beer (low-alcohol ale) as the daily safe beverage for all residents. Water in the Middle Ages is unreliable — ale is sterile. Every adult consumes ~1 gallon per day.",
+      "resource_dependency": "Consumes barley, yeast culture (perpetually propagated), firewood, water."
+    },
+    {
+      "name": "Granary",
+      "settlement": "Thornwick",
+      "core_function": "Raised timber storehouse for the lord's grain tax (multure, tithe, rent-in-kind). Holds 1.5× annual consumption as buffer against bad harvests. Rat-proofed with stone footings and a moated ditch.",
+      "resource_dependency": "Stores wheat and barley; consumes timber (maintenance); requires dry air circulation."
+    },
+    {
+      "name": "Chapel of St. Cuthbert",
+      "settlement": "Thornwick",
+      "core_function": "Fieldstone chapel serving all five settlements. Performs Mass, baptisms, marriages, burials. Collects tithe (10% of grain). Maintains the only written records. Provides sanctuary.",
+      "resource_dependency": "Consumes candle wax (trade import), wine (trade import), communion bread (local wheat); timber for roof repairs."
+    },
+    {
+      "name": "Kiln",
+      "settlement": "Thornwick",
+      "core_function": "Dual-chamber updraft kiln for firing earthenware pottery and clay roofing tiles. Produces cooking pots, storage jars, and the universal roof tiles that replace thatch in Thornwick.",
+      "resource_dependency": "Consumes clay from riverbanks; firewood; sand for glazing."
+    },
+    {
+      "name": "Salt Pans",
+      "settlement": "Coastwatch",
+      "core_function": "Series of shallow lead-lined evaporation pans on the beach. Seawater is boiled or sun-evaporated to yield salt crystals. Salt is the only effective meat/fish preservative and the kingdom's primary trade export.",
+      "resource_dependency": "Consumes seawater; large quantities of firewood or peat for boiling; lead sheeting (trade import, replaced locally with fired clay if unavailable)."
+    },
+    {
+      "name": "Dock",
+      "settlement": "Coastwatch",
+      "core_function": "Timber jetty and stone quay for mooring fishing boats and the occasional coasting cog. Storage shed for gear and trade goods. Point of entry for iron supplement, lead, wine, wax, and luxury goods.",
+      "resource_dependency": "Consumes timber (maintenance); rope and tar (trade imports)."
+    },
+    {
+      "name": "Quarry",
+      "settlement": "Hillend",
+      "core_function": "Open-face limestone quarry on the Grey Hills escarpment. Produces ashlar blocks for the Great Hall, chapel, granary footings, and millstone grit. Stone is sledged downslope to the valley.",
+      "resource_dependency": "Consumes iron wedges and hammers (from smithy); no direct natural input beyond the rock face."
+    },
+    {
+      "name": "Westwood Fold",
+      "settlement": "The Westwood (forested area)",
+      "core_function": "A fenced enclosure with a timber shelter for the lord's swine herd (~200 head). The swine are driven into the forest each autumn for pannage (acorn and beechmast fattening). Piglets farrow here in spring.",
+      "resource_dependency": "Consumes acorns and beechmast (forest mast cycle); timber for fence and shelter repair."
+    },
+    {
+      "name": "Demesne Barn",
+      "settlement": "The Valley Floor",
+      "core_function": "A cruck-framed threshing barn at the center of the lord's demesne fields. Houses plough teams (oxen), carts, and ploughing equipment. Threshing floor where grain is separated from chaff.",
+      "resource_dependency": "Consumes timber (structure); houses oxen that consume hay and oats; stores ploughs and harrows from the smithy."
+    }
+  ],
+  "roles": [
+    {
+      "title": "Lord",
+      "institution": "Lord's Great Hall",
+      "daily_responsibility": "Holds manorial court, adjudicates disputes, approves land transfers, leads the retinue in defense, and receives accounts from the reeve.",
+      "social_tier": "Nobility"
+    },
+    {
+      "title": "Reeve",
+      "institution": "Lord's Great Hall",
+      "daily_responsibility": "Oversees all demesne agricultural operations, tracks grain stores in the granary, assigns serfs to field work, and reports yields to the lord.",
+      "social_tier": "Peasant"
+    },
+    {
+      "title": "Priest",
+      "institution": "Chapel of St. Cuthbert",
+      "daily_responsibility": "Says Mass, administers sacraments, collects tithes, maintains the parish register, and provides the only literacy available to the community.",
+      "social_tier": "Clergy"
+    },
+    {
+      "title": "Miller",
+      "institution": "Watermill",
+      "daily_responsibility": "Operates the millstones, adjusts the sluice gate for water flow, collects the multure toll, and maintains the gearing and wheel.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Sawyer",
+      "institution": "Sawmill",
+      "daily_responsibility": "Operates the water-driven saw carriage, selects and positions logs from the Westwood, and maintains the blade and water wheel.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Blacksmith",
+      "institution": "Smithy",
+      "daily_responsibility": "Heats ore blooms in the forge, hammers them into tools and hardware, sharpens ploughshares, shoes horses, and repairs metalwork for all settlements.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Smelter Master",
+      "institution": "Smelter",
+      "daily_responsibility": "Layers iron ore, charcoal, and limestone in the bloomery hearth, manages the bellows to reach smelting temperature, and extracts the raw iron bloom.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Tanner",
+      "institution": "Tannery",
+      "daily_responsibility": "Soaks raw hides in lime pits, scrapes flesh and hair, steeps them in oak-bark liquor pits for months, and finishes the cured leather.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Brewer",
+      "institution": "Brewery",
+      "daily_responsibility": "Mashes barley in hot water, boils the wort with hops (or gruit herbs), cools and ferments it, and fills barrels for daily distribution.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Granary Keeper",
+      "institution": "Granary",
+      "daily_responsibility": "Measures and records all grain entering and leaving the granary, turns the stores to prevent rot, and keeps the structure rat-free.",
+      "social_tier": "Peasant"
+    },
+    {
+      "title": "Potter",
+      "institution": "Kiln",
+      "daily_responsibility": "Wedge and throw local clay on a kick wheel, fire pots and tiles in the kiln, and supply each household with cooking and storage vessels.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Salt Master",
+      "institution": "Salt Pans",
+      "daily_responsibility": "Transfers seawater into evaporation pans, feeds the boiling fires with peat, rakes the crystallized salt, and packs it for storage or trade.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Dockmaster",
+      "institution": "Dock",
+      "daily_responsibility": "Mooring incoming boats, overseeing loading and unloading of cargo, maintaining the jetty structure, and recording trade goods for the lord's tax.",
+      "social_tier": "Skilled Craftsman"
+    },
+    {
+      "title": "Stonecutter",
+      "institution": "Quarry",
+      "daily_responsibility": "Wedges and drills limestone from the quarry face, shapes blocks with chisel and mallet, and loads them onto sledges for transport down to the valley.",
+      "social_tier": "Peasant"
+    },
+    {
+      "title": "Swineherd",
+      "institution": "Westwood Fold",
+      "daily_responsibility": "Drives the lord's swine between the fold and Westwood pannage, protects them from wolves, selects breeding sows, and delivers fattened pigs at Martinmas.",
+      "social_tier": "Peasant"
+    },
+    {
+      "title": "Ploughman",
+      "institution": "Demesne Barn",
+      "daily_responsibility": "Yokes and drives the ox team, ploughs the lord's demesne strips, sows and harrows the fields, and helps bring in the harvest under the reeve's direction.",
+      "social_tier": "Peasant"
+    },
+    {
+      "title": "Fisher",
+      "institution": "Dock",
+      "daily_responsibility": "Rows a clinker-built boat into Saltwick Cove daily, sets nets and lines, brings in the catch, and splits and salts surplus fish for winter stores.",
+      "social_tier": "Peasant"
+    }
+  ]
+}
