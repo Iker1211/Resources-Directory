@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute World · Okeanos Archipelago</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#1a1f2e;overflow:hidden;font-family:Georgia,serif;user-select:none}
+        canvas{display:block}
+
+        #hud{
+            position:fixed;top:16px;left:16px;z-index:10;
+            background:rgba(10,8,18,0.85);border:1px solid rgba(180,200,220,0.15);
+            border-radius:12px;padding:18px 22px;font-size:13px;line-height:1.7;
+            min-width:260px;color:#b0c8d8;backdrop-filter:blur(10px);pointer-events:none
+        }
+        #hud h2{font-size:16px;font-weight:700;color:#c0d8e8;letter-spacing:2px;margin-bottom:2px}
+        #hud .sub{font-size:10px;color:#5a6a7a;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+        #log{font-family:'Courier New',monospace;font-size:10px;line-height:1.5;color:#5a6a7a;max-height:130px;overflow-y:auto;scrollbar-width:thin}
+        #log .ok{color:#7aaf6a}#log .warn{color:#c9a84c}#log .err{color:#c95a4c}#log .dim{color:#3a4a5a}#log .sep{color:#2a3a4a}#log .cyan{color:#6ab0c0}
+        
+        #fps{position:fixed;top:16px;right:16px;z-index:10;background:rgba(10,8,18,0.85);border:1px solid rgba(180,200,220,0.12);border-radius:8px;padding:6px 14px;font-family:'Courier New',monospace;font-size:12px;color:#7aaf6a}
+
+        /* Legend */
+        #legend{position:fixed;bottom:16px;left:16px;z-index:10;background:rgba(10,8,18,0.82);border:1px solid rgba(180,200,220,0.10);border-radius:10px;padding:10px 16px;font-family:'Courier New',monospace;font-size:10px;color:#5a6a7a}
+        .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+        #legend span{margin-right:12px;white-space:nowrap}
+
+        /* Modal parchment */
+        #modal-overlay{
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);
+            display:flex;justify-content:center;align-items:center;
+            z-index:50;opacity:0;pointer-events:none;
+            transition:opacity 0.35s ease;
+        }
+        #modal-overlay.active{opacity:1;pointer-events:auto}
+        #parchment{
+            background:#f4eccf;color:#2c3e50;
+            padding:28px 30px;width:90%;max-width:380px;
+            border:6px double #6a4a8a;border-radius:4px;
+            box-shadow:0 12px 36px rgba(0,0,0,0.6);
+            transform:scale(0.7);transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+            position:relative;
+        }
+        #modal-overlay.active #parchment{transform:scale(1)}
+        #close-btn{position:absolute;top:10px;right:15px;font-size:1.6rem;font-weight:bold;cursor:pointer;color:#7f8c8d;transition:color 0.2s}
+        #close-btn:hover{color:#c0392b}
+        #parchment-title{font-family:Georgia,serif;font-size:1.7rem;margin-top:0;border-bottom:2px solid #bdc3c7;padding-bottom:10px;color:#5a3a7a}
+        #parchment-desc{font-style:italic;line-height:1.6;margin:14px 0;color:#34495e}
+        .stats-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:0.9rem}
+        .stats-table tr{border-bottom:1px solid rgba(0,0,0,0.08)}
+        .stats-table td{padding:6px 4px}
+        .stats-table td.stat-val{font-weight:bold;text-align:right;color:#6a4a8a}
+        
+        #hint{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-size:9px;color:rgba(180,200,220,0.12);font-family:'Courier New',monospace;pointer-events:none;white-space:nowrap}
+    </style>
+</head>
+<body>
+
+<div id=hud><h2>⏤ Cute Okeanos ⏤</h2><div class=sub>The World-River · Flat Hex Archipelago</div><div id=log>λ Initializing…</div></div>
+<div id=fps>-- fps</div>
+<div id=legend>
+    <span><span class=dot style=background:#c0a050></span>Olympus</span>
+    <span><span class=dot style=background:#4a9a3a></span>Ithaca</span>
+    <span><span class=dot style=background:#3a7aba></span>Ogygia</span>
+    <span><span class=dot style=background:#8a5a3a></span>Troy</span>
+    <span><span class=dot style=background:#b8a070></span>Pylos</span>
+    <span><span class=dot style=background:#7a6a4a></span>Sparta</span>
+    <span><span class=dot style=background:#6a9a5a></span>Taphos</span>
+</div>
+<div id=hint>Click to inspect · Orbit: drag · Zoom: scroll</div>
+
+<div id=modal-overlay>
+    <div id=parchment>
+        <span id=close-btn>&times;</span>
+        <h3 id=parchment-title>Asset</h3>
+        <p id=parchment-desc>Description...</p>
+        <table class=stats-table>
+            <tbody id=parchment-stats></tbody>
+        </table>
+    </div>
+</div>
+
+<script type=importmap>{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"}}</script>
+
+<script type=module>
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader }    from 'three/addons/loaders/GLTFLoader.js';
+
+/* ─────────────────────────────────────────────────────
+   CONSTANTS
+   ───────────────────────────────────────────────────── */
+const HEX_W = 1.82;
+const HEX_H = 1.575;
+
+/* Simple seeded-ish PRNG */
+function S(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>15,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=S(4242);
+const rY=()=>R()*Math.PI*2;
+const rT=()=>(R()-0.5)*0.17;
+const rS=()=>0.82+R()*0.36;
+const rF=(n,x)=>n+R()*(x-n);
+
+function axialToWorld(q,r){
+    return new THREE.Vector3(HEX_W*(q+r*0.5),0,HEX_H*r);
+}
+
+/* ─────────────────────────────────────────────────────
+   WORLD DATA — from odyssey-grammar.json world_cells_armonico
+   ───────────────────────────────────────────────────── */
+const BIOMES = {
+    olimpo:{center:{q:0,r:0},radius:3,tileType:'stone',color:0xc0a050,labelColor:'#c0a050'},
+    itaca: {center:{q:8,r:0},radius:4,tileType:'grass', color:0x4a9a3a,labelColor:'#4a9a3a'},
+    ogigia:{center:{q:-5,r:5},radius:3,tileType:'water', color:0x3a7aba,labelColor:'#3a7aba'},
+    troya: {center:{q:12,r:-4},radius:3,tileType:'stone_dark',color:0x8a5a3a,labelColor:'#8a5a3a'},
+    pilos: {center:{q:5,r:3},radius:2,tileType:'sand',color:0xb8a070,labelColor:'#b8a070'},
+    esparta:{center:{q:7,r:5},radius:2,tileType:'dirt',color:0x7a6a4a,labelColor:'#7a6a4a'},
+    tafos: {center:{q:3,r:-2},radius:2,tileType:'sand',color:0x6a9a5a,labelColor:'#6a9a5a'}
+};
+function getBiome(q,r){
+    for(const b of Object.values(BIOMES)){
+        if(Math.abs(q-b.center.q)<=b.radius && Math.abs(r-b.center.r)<=b.radius) return b;
+    }
+    return null;
+}
+function getTileType(q,r){
+    const b=getBiome(q,r);
+    if(!b) return 'grass';
+    // Map conceptual tileTypes to actual available assets
+    const tt=b.tileType;
+    if(tt==='water'||tt==='stone'||tt==='stone_dark'||tt==='sand'||tt==='dirt') return 'grass';
+    return tt;
+}
+
+const TILE_FILES = {
+    grass:'hex_grass',
+    river:'hex_river_A',
+    road: 'hex_road_A'
+};
+
+/* World cells (37 cells from odyssey-grammar.json) */
+const CELLS = [
+    {q:0,r:0, env:['coin_stack_large','coin_stack_large','cloud_big'], occ:'building_bridge_B', label:'Olympus · Divine Throne'},
+    {q:0,r:1, env:['coin_stack_large','cloud_big'],                    occ:null,                label:'Olympus · Assembly'},
+    {q:1,r:0, env:['cloud_big'],                                       occ:null,                label:'Olympus · Summit'},
+    {q:-1,r:1,env:['hex_road_A','hex_road_A','cloud_big'],             occ:'mountain_B_grass_trees', label:'Mount Olympus'},
+    {q:8,r:0, env:[],                                                   occ:'building_castle_green',  label:'Ithaca · Palace of Odysseus'},
+    {q:8,r:1, env:['building_dirt','building_dirt'],                   occ:null,                label:'Ithaca · Camp'},
+    {q:8,r:2, env:['hex_road_A','hex_road_A','hex_road_A'],            occ:null,                label:'Ithaca · Barrier'},
+    {q:9,r:0, env:['building_grain'],                                   occ:null,                label:'Ithaca · Telemachus'},
+    {q:9,r:-1,env:['coin_stack_large'],                                occ:null,                label:'Ithaca · Penelope'},
+    {q:10,r:0,env:['building_dirt'],                                    occ:null,                label:'Ithaca · Eurycleia'},
+    {q:7,r:0, env:['building_dirt','building_grain'],                   occ:null,                label:'Ithaca · Antinous'},
+    {q:7,r:1, env:['building_dirt'],                                    occ:null,                label:'Ithaca · Eurymachus'},
+    {q:8,r:-1,env:['hex_road_A','coin_stack_large'],                    occ:null,                label:'Ithaca · Phemius'},
+    {q:6,r:1, env:['hex_road_A'],                                       occ:null,                label:'Ithaca · Suitors'},
+    {q:9,r:1, env:['hex_road_A','hex_road_A'],                         occ:null,                label:'Ithaca · East Field'},
+    {q:10,r:-1,env:['coin_stack_large'],                                occ:null,                label:'Ithaca · Servants'},
+    {q:-5,r:5,env:['cloud_big','cloud_big'],                           occ:'building_dirt',     label:'Ogygia · Island'},
+    {q:-5,r:6,env:['cloud_big'],                                        occ:null,                label:'Ogygia · Calypso'},
+    {q:-4,r:5,env:['hex_road_A','coin_stack_large'],                    occ:'building_dirt',     label:'Ogygia · Odysseus'},
+    {q:12,r:-4,env:['building_grain','coin_stack_large','hex_road_A'], occ:'building_destroyed',label:'Troy · Ruins'},
+    {q:11,r:-3,env:['hex_road_A'],                                      occ:null,                label:'Road to Troy'},
+    {q:11,r:-4,env:['building_grain'],                                  occ:null,                label:'Troy · Wall'},
+    {q:5,r:3, env:['building_dirt'],                                    occ:'building_bridge_A', label:'Pylos · Nestor'},
+    {q:5,r:4, env:['hex_road_A','coin_stack_large'],                    occ:null,                label:'Pylos · Harbor'},
+    {q:7,r:5, env:['building_grain','hex_road_A'],                     occ:'building_bridge_B', label:'Sparta · Menelaus'},
+    {q:3,r:-2,env:['building_dirt'],                                    occ:'building_bridge_A', label:'Taphos · Harbor'},
+    {q:9,r:2, env:['hex_road_A'],                                       occ:null,                label:'Dulichium'},
+    {q:10,r:1,env:['hex_road_A'],                                       occ:null,                label:'Same'},
+    {q:9,r:-2,env:[],                                                   occ:null,                label:'Zacynthus'},
+    {q:10,r:-2,env:[],                                                  occ:null,                label:'Road to Troy'},
+    {q:7,r:-2,env:[],                                                   occ:null,                label:'Road to Taphos'},
+    {q:6,r:-1,env:[],                                                   occ:null,                label:'Coastal Road'},
+    {q:5,r:2, env:['hex_road_A'],                                       occ:null,                label:'Road to Pylos'},
+    {q:6,r:3, env:[],                                                   occ:null,                label:'Road to Sparta'},
+    {q:6,r:4, env:[],                                                   occ:null,                label:'Road to Sparta'},
+    {q:4,r:3, env:[],                                                   occ:null,                label:'Ionian Sea'},
+    {q:3,r:3, env:[],                                                   occ:null,                label:'Ionian Sea'}
+];
+
+/* ─────────────────────────────────────────────────────
+   ASSET DATABASE for parchment modal
+   ───────────────────────────────────────────────────── */
+const ASSET_DB = {
+    'building_castle_green':{
+        title:'Castle of Odysseus',
+        desc:'The grand palace of Ithaca, home to King Odysseus and Queen Penelope. A bastion of hope and memory.',
+        stats:{Defense:'85/100','Garrison':'500 Soldiers','Gold/Min':'+120'}
+    },
+    'building_bridge_A':{
+        title:'Harbor Arch',
+        desc:'Sturdy stone arch bridge serving as gateway to coastal kingdoms. Merchants and travelers cross daily.',
+        stats:{Integrity:'100%','Toll':'35 Coins','Capacity':'Excellent'}
+    },
+    'building_bridge_B':{
+        title:'Divine Bridge',
+        desc:'Celestial bridge connecting the mortal world to the divine realm of Olympus. Woven with golden threads.',
+        stats:{Defense:'99/100','Divine Power':'+200','Blessing':'Active'}
+    },
+    'building_destroyed':{
+        title:'Ruins of Troy',
+        desc:'Once-mighty city of Priam and Hector, now reduced to ash and memory. The great war ended here.',
+        stats:{Danger:'Extreme','Relics':'2 Hidden','Explored':'8%'}
+    },
+    'building_dirt':{
+        title:'Humble Hut',
+        desc:'Simple dwelling of shepherds and farmers. The backbone of the kingdom\'s rustic economy.',
+        stats:{Capacity:'4 Inhabitants','Happiness':'70%','Tax':'10 Coins'}
+    },
+    'building_grain':{
+        title:'Grain Silo',
+        desc:'Storehouse for the autumn harvest. Ensures the kingdom endures the harsh winter months.',
+        stats:{Production:'80/100','Workers':'8','Food Supply':'+300'}
+    },
+    'mountain_B_grass_trees':{
+        title:'Sacred Peak',
+        desc:'Mount Olympus — the sacred peak where the gods convene. Crowned with ancient pines and divine light.',
+        stats:{Height:'+9000 ft','Deities':'5','Oracle':'Active'}
+    },
+    'cloud_big':{
+        title:'Divine Cloud',
+        desc:'A wisp of celestial mist from the halls of Olympus. Carries the whispers of the gods.',
+        stats:{Divinity:'+50','Visibility':'Low','Breeze':'Mild'}
+    },
+    'coin_stack_large':{
+        title:'Treasury Stacks',
+        desc:'Piles of gold and silver coins. Offerings to the gods or spoils of distant campaigns.',
+        stats:{Value:'5000 Drachmas','Weight':'Heavy','Origin':'Unknown'}
+    },
+    'hex_grass':{
+        title:'Verdant Meadow',
+        desc:'Fertile grasslands nourished by the river Okeanos. Perfect for grazing and cultivation.',
+        stats:{Fertility:'Maximum','Space':'1 Hexagon','Soil':'Loam'}
+    },
+    'hex_river_A':{
+        title:'River Okeanos',
+        desc:'The great world-river that encircles the earth. Its waters separate the mortal realm from the divine.',
+        stats:{Flow:'Eternal','Depth':'Unfathomable','Mythical':'Yes'}
+    },
+    'hex_road_A':{
+        title:'Stone Road',
+        desc:'Paved pathway connecting the kingdoms of the archipelago. Built with Cyclopean masonry.',
+        stats:{'March Speed':'+25%','Maintenance':'Regular','Clearance':'Open'}
+    }
+};
+
+/* ─────────────────────────────────────────────────────
+   DOM
+   ───────────────────────────────────────────────────── */
+const logEl=document.getElementById('log');
+const logBuf=[];
+function log(t,c=''){logBuf.push(c?'<span class="'+c+'">'+t+'</span>':t);logEl.innerHTML=logBuf.join('<br>');logEl.scrollTop=logEl.scrollHeight;}
+function sep(){log('━'.repeat(28),'sep');}
+
+const modalOverlay=document.getElementById('modal-overlay');
+const closeBtn=document.getElementById('close-btn');
+const pTitle=document.getElementById('parchment-title');
+const pDesc=document.getElementById('parchment-desc');
+const pStats=document.getElementById('parchment-stats');
+
+/* ─────────────────────────────────────────────────────
+   THREE.JS SETUP
+   ───────────────────────────────────────────────────── */
+const ren=new THREE.WebGLRenderer({antialias:true});
+ren.setPixelRatio(Math.min(devicePixelRatio,2));
+ren.setSize(innerWidth,innerHeight);
+ren.outputColorSpace=THREE.SRGBColorSpace;
+ren.toneMapping=THREE.ACESFilmicToneMapping;
+ren.toneMappingExposure=1.0;
+ren.shadowMap.enabled=true;
+ren.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.appendChild(ren.domElement);
+
+const skyColor=0x2a3a4a;
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(skyColor);
+scene.fog=new THREE.FogExp2(skyColor,0.010);
+
+const cam=new THREE.PerspectiveCamera(40,innerWidth/innerHeight,0.5,80);
+cam.position.set(-2,20,24);
+cam.lookAt(4,0,0);
+
+const ct=new OrbitControls(cam,ren.domElement);
+ct.enableDamping=true;ct.dampingFactor=0.06;
+ct.maxPolarAngle=Math.PI/2.05;
+ct.target.set(4,0,0);
+ct.update();
+
+/* ─────────────────────────────────────────────────────
+   OKEANOS DISC — concentric rings as world-river platform
+   ───────────────────────────────────────────────────── */
+function buildOkeanosDisc(){
+    const S=48; // ring segments
+    const rings=[
+        {inner:0,outer:6,  color:0x0a1a2e},{inner:6,outer:11, color:0x0f2a4a},
+        {inner:11,outer:16,color:0x1a4a5a},{inner:16,outer:20,color:0x28606a}
+    ];
+    rings.forEach(r=>{
+        const m=new THREE.Mesh(
+            new THREE.RingGeometry(r.inner,r.outer,S),
+            new THREE.MeshStandardMaterial({color:r.color,flatShading:true,roughness:0.95,metalness:0,side:THREE.DoubleSide})
+        );
+        m.rotation.x=-Math.PI/2;
+        m.position.set(4,-0.04,0);
+        m.receiveShadow=true;
+        scene.add(m);
+    });
+    // Outer rim (land ring)
+    const rim=new THREE.Mesh(
+        new THREE.RingGeometry(20,22.5,S),
+        new THREE.MeshStandardMaterial({color:0x2a1e15,flatShading:true,roughness:0.75,metalness:0.15,side:THREE.DoubleSide})
+    );
+    rim.rotation.x=-Math.PI/2;
+    rim.position.set(4,0.06,0);
+    rim.receiveShadow=true;
+    scene.add(rim);
+
+    // Outer wall (vertical ring)
+    const wallMat=new THREE.MeshStandardMaterial({color:0x1a100a,flatShading:true,roughness:0.75,metalness:0.15,side:THREE.DoubleSide});
+    const ow=new THREE.Mesh(new THREE.CylinderGeometry(22.5,22.5,0.08,S,1,true),wallMat);
+    ow.position.set(4,0.04,0);
+    scene.add(ow);
+    const iw=new THREE.Mesh(new THREE.CylinderGeometry(20,20,0.08,S,1,true),wallMat);
+    iw.position.set(4,0.04,0);
+    scene.add(iw);
+
+    // Halo (outer glow)
+    const halo=new THREE.Mesh(
+        new THREE.RingGeometry(22.5,27,S),
+        new THREE.MeshStandardMaterial({color:0x3a4a5a,flatShading:true,roughness:1,metalness:0,transparent:true,opacity:0.25,side:THREE.DoubleSide})
+    );
+    halo.rotation.x=-Math.PI/2;
+    halo.position.set(4,-0.06,0);
+    scene.add(halo);
+
+    // Inner river guard ring
+    const guard=new THREE.Mesh(
+        new THREE.RingGeometry(5.8,6.2,S),
+        new THREE.MeshStandardMaterial({color:0x0a2238,flatShading:true,roughness:0.95,metalness:0,side:THREE.DoubleSide})
+    );
+    guard.rotation.x=-Math.PI/2;
+    guard.position.set(4,-0.02,0);
+    scene.add(guard);
+
+    log('✔ Okeanos Disc · 48-segment rings','dim');
+}
+
+/* ─────────────────────────────────────────────────────
+   LIGHTING
+   ───────────────────────────────────────────────────── */
+const amb=new THREE.AmbientLight(0x8fb0d0,0.6);
+scene.add(amb);
+const sun=new THREE.DirectionalLight(0xffe5b0,1.8);
+sun.position.set(16,22,12);
+sun.castShadow=true;
+sun.shadow.mapSize.width=2048;
+sun.shadow.mapSize.height=2048;
+sun.shadow.camera.left=-30;
+sun.shadow.camera.right=30;
+sun.shadow.camera.top=30;
+sun.shadow.camera.bottom=-30;
+sun.shadow.camera.near=1;
+sun.shadow.camera.far=60;
+sun.shadow.camera.updateProjectionMatrix();
+scene.add(sun);
+
+/* ─────────────────────────────────────────────────────
+   ASSET LOADING
+   ───────────────────────────────────────────────────── */
+const loader=new GLTFLoader();
+const cache=new Map();
+
+const ASSETS={
+    hex_grass:{f:'hex_grass.gltf',b:'hex_grass.bin'},
+    hex_river_A:{f:'hex_river_A.gltf',b:'hex_river_A.bin'},
+    hex_road_A:{f:'hex_road_A.gltf',b:'hex_road_A.bin'},
+    cloud_big:{f:'cloud_big.gltf',b:'cloud_big.bin'},
+    coin_stack_large:{f:'coin_stack_large.gltf',b:'coin_stack_large.bin'},
+    building_castle_green:{f:'building_castle_green.gltf',b:'building_castle_green.bin'},
+    building_bridge_A:{f:'building_bridge_A.gltf',b:'building_bridge_A.bin'},
+    building_bridge_B:{f:'building_bridge_B.gltf',b:'building_bridge_B.bin'},
+    building_dirt:{f:'building_dirt.gltf',b:'building_dirt.bin'},
+    building_destroyed:{f:'building_destroyed.gltf',b:'building_destroyed.bin'},
+    building_grain:{f:'building_grain.gltf',b:'building_grain.bin'},
+    mountain_B_grass_trees:{f:'mountain_B_grass_trees.gltf',b:'mountain_B_grass_trees.bin'}
+};
+
+async function loadAllAssets(){
+    const keys=Object.keys(ASSETS);
+    log('⌂ Loading '+keys.length+' GLTFs…','dim');
+    let loaded=0,errors=0,totalBytes=0;
+    for(const k of keys){
+        try{
+            const a=ASSETS[k];
+            const [gltfResp,binResp]=await Promise.all([fetch(a.f),fetch(a.b)]);
+            const [gltfBuf,binBuf]=await Promise.all([gltfResp.arrayBuffer(),binResp.arrayBuffer()]);
+            totalBytes+=gltfBuf.byteLength+binBuf.byteLength;
+            const gltf=await new Promise((rs,rj)=>loader.load(a.f,rs,void 0,e=>rj(e)));
+            cache.set(k,gltf);
+            loaded++;
+            log('✔ '+k,'ok');
+        }catch(e){
+            errors++;
+            log('✗ '+k+' → '+e.message,'warn');
+        }
+    }
+    return {loaded,errors,totalBytes};
+}
+
+/* ─────────────────────────────────────────────────────
+   BUILDING THE WORLD
+   ───────────────────────────────────────────────────── */
+function buildInstancedTiles(){
+    // Group cells by tile asset
+    const groups={};
+    CELLS.forEach(c=>{
+        const tt=getTileType(c.q,c.r);
+        const assetKey=TILE_FILES[tt]||'hex_grass';
+        if(!groups[assetKey]) groups[assetKey]=[];
+        const p=axialToWorld(c.q,c.r);
+        p.x+=4; // center on disc
+        groups[assetKey].push(p);
+    });
+
+    Object.entries(groups).forEach(([key,positions])=>{
+        const gltf=cache.get(key);
+        if(!gltf){log('✗ Missing GLTF: '+key,'warn');return;}
+        
+        // Extract geometry and material from first mesh
+        let geo=null,mat=null;
+        gltf.scene.traverse(n=>{if(n.isMesh&&!geo){geo=n.geometry;mat=n.material;}});
+        if(!geo){log('✗ No mesh in '+key,'warn');return;}
+
+        const im=new THREE.InstancedMesh(geo,mat,positions.length);
+        im.userData.assetKey=key;
+        im.castShadow=true;
+        im.receiveShadow=true;
+
+        const dummy=new THREE.Object3D();
+        positions.forEach((p,i)=>{
+            dummy.position.copy(p);
+            dummy.rotation.y=0;
+            dummy.updateMatrix();
+            im.setMatrixAt(i,dummy.matrix);
+        });
+        im.instanceMatrix.needsUpdate=true;
+        scene.add(im);
+        log('✔ L0 '+key+': '+positions.length+' inst','dim');
+    });
+}
+
+/* validOn check */
+const VALID_L1={
+    cloud_big:['grass','dirt','mountain'],
+    coin_stack_large:['stone','grass','dirt','sand','mountain'],
+    building_dirt:['grass','dirt'],
+    building_grain:['grass','dirt'],
+    hex_road_A:['grass','stone','stone_dark','dirt','sand','mountain']
+};
+const VALID_L2={
+    building_castle_green:['grass','dirt'],
+    building_bridge_A:['grass','dirt'],
+    building_bridge_B:['grass','dirt'],
+    building_dirt:['grass','dirt'],
+    building_destroyed:['grass','dirt'],
+    building_grain:['grass','dirt'],
+    mountain_B_grass_trees:['grass','dirt','mountain']
+};
+
+function isValid(cell,assetKey,layer){
+    const tt=getTileType(cell.q,cell.r);
+    if(layer==='L1'){
+        const lu=VALID_L1[assetKey]||['grass','dirt'];
+        if(!lu.includes(tt)) return false;
+        if(cell.occ) return false; // L2 conflict
+        return true;
+    }
+    if(layer==='L2'){
+        const lu=VALID_L2[assetKey]||['grass','dirt'];
+        return lu.includes(tt);
+    }
+    return true;
+}
+
+function placeOccupant(cell,assetKey){
+    const gltf=cache.get(assetKey);
+    if(!gltf) return false;
+    const p=axialToWorld(cell.q,cell.r);
+    p.x+=4;
+    const obj=gltf.scene.clone(true);
+    obj.position.set(p.x,0.01,p.z);
+    const isAnchor=['building_castle_green','building_bridge_B','building_destroyed','mountain_B_grass_trees'].includes(assetKey);
+    const sc=isAnchor?0.85+R()*0.25:0.5+R()*0.3;
+    obj.scale.set(sc,sc,sc);
+    obj.rotation.y=rY();
+    obj.traverse(n=>{
+        n.userData.assetKey=assetKey;
+        if(n.isMesh){n.castShadow=true;n.receiveShadow=true;}
+    });
+    scene.add(obj);
+    return true;
+}
+
+function placeEnvironment(cell){
+    if(!cell.env||!cell.env.length) return;
+    const p=axialToWorld(cell.q,cell.r);
+    p.x+=4;
+
+    // Determine count: if occupant exists OR many env items, limit
+    const isDense=cell.occ!==null||cell.env.length>2;
+    const count=isDense?cell.env.length:Math.min(cell.env.length,Math.ceil(cell.env.length*0.3));
+
+    for(let i=0;i<count;i++){
+        const assetKey=cell.env[i%cell.env.length];
+        if(!isValid(cell,assetKey,'L1')) continue;
+        const gltf=cache.get(assetKey);
+        if(!gltf) continue;
+
+        const isCloud=assetKey==='cloud_big';
+        const jitter=isCloud?0.3:(isDense?0.1:0.25);
+        const bp=p.clone().add(new THREE.Vector3((R()-0.5)*jitter,0,(R()-0.5)*jitter));
+
+        if(isCloud){
+            // Determine float height by biome
+            const biome=getBiome(cell.q,cell.r);
+            let fm=1.5,fx=2.5,sm=0.3,sx=0.5;
+            if(biome){
+                const name=Object.keys(BIOMES).find(k=>BIOMES[k]===biome);
+                if(name==='olimpo'){fm=3;fx=4;sm=0.4;sx=0.6;}
+                else if(name==='ogigia'){fm=2;fx=3;sm=0.3;sx=0.5;}
+                else if(name==='troya'){fm=1.5;fx=2;sm=0.2;sx=0.4;}
+            }
+            const fy=rF(fm,fx);
+            const obj=gltf.scene.clone(true);
+            obj.position.set(bp.x,bp.y+fy,bp.z);
+            const sc=sm+R()*(sx-sm);
+            obj.scale.set(sc,sc,sc);
+            obj.rotation.set((R()-0.5)*0.08,rY(),(R()-0.5)*0.08);
+            obj.traverse(n=>{
+                n.userData.assetKey=assetKey;
+                if(n.isMesh){
+                    n.castShadow=false;n.receiveShadow=false;
+                    if(n.material){n.material.transparent=true;n.material.opacity=0.88;}
+                }
+            });
+            scene.add(obj);
+        }else{
+            const isCoin=assetKey==='coin_stack_large';
+            const sc=isCoin?0.2+R()*0.2:0.4+R()*0.3;
+            const obj=gltf.scene.clone(true);
+            obj.position.set(bp.x,0.01,bp.z);
+            obj.scale.set(sc,sc,sc);
+            obj.rotation.y=rY();
+            obj.traverse(n=>{
+                n.userData.assetKey=assetKey;
+                if(n.isMesh){n.castShadow=true;n.receiveShadow=true;}
+            });
+            scene.add(obj);
+        }
+    }
+}
+
+/* ─────────────────────────────────────────────────────
+   LABELS — canvas sprites for place names & characters
+   ───────────────────────────────────────────────────── */
+function createLabel(text,isBold,color='#c0d8e8'){
+    const c=document.createElement('canvas');
+    c.width=512;c.height=64;
+    const cx=c.getContext('2d');
+    // Rounded rect background
+    const r=6;
+    cx.beginPath();cx.moveTo(4+r,4);cx.lineTo(508-r,4);
+    cx.quadraticCurveTo(508,4,508,4+r);cx.lineTo(508,60-r);
+    cx.quadraticCurveTo(508,60,508-r,60);cx.lineTo(4+r,60);
+    cx.quadraticCurveTo(4,60,4,60-r);cx.lineTo(4,4+r);
+    cx.quadraticCurveTo(4,4,4+r,4);cx.closePath();
+    cx.fillStyle='rgba(8,6,14,0.6)';cx.fill();
+    
+    cx.font=isBold?'bold 22px Georgia':'16px Georgia';
+    cx.textAlign='center';cx.textBaseline='middle';
+    cx.fillStyle=color;cx.fillText(text,256,32);
+    const tx=new THREE.CanvasTexture(c);
+    tx.minFilter=THREE.LinearFilter;
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tx,transparent:true,depthWrite:false}));
+    sp.scale.set(isBold?2.2:1.3,isBold?0.28:0.2,1);
+    return sp;
+}
+
+function placeLabels(){
+    // Biome labels (bold)
+    const biomeLabels=[
+        {q:0,r:0,text:'Olympus',bold:true,color:'#c0a050'},
+        {q:8,r:0,text:'Ithaca',bold:true,color:'#4a9a3a'},
+        {q:-5,r:5,text:'Ogygia',bold:true,color:'#3a7aba'},
+        {q:12,r:-4,text:'Troy',bold:true,color:'#8a5a3a'},
+        {q:5,r:3,text:'Pylos',bold:false,color:'#b8a070'},
+        {q:7,r:5,text:'Sparta',bold:false,color:'#7a6a4a'},
+        {q:3,r:-2,text:'Taphos',bold:false,color:'#6a9a5a'}
+    ];
+    biomeLabels.forEach(l=>{
+        const p=axialToWorld(l.q,l.r);
+        p.x+=4;p.y=0.7;
+        const sp=createLabel(l.text,l.bold,l.color);
+        sp.position.copy(p);
+        scene.add(sp);
+    });
+
+    // Character labels (smaller, italic style)
+    const charLabels=[
+        {q:0,r:0,text:'Jupiter',color:'#c0d8e8'},{q:0,r:1,text:'Minerva',color:'#7ab0e0'},
+        {q:1,r:0,text:'Mercury',color:'#f0c060'},{q:9,r:0,text:'Telemachus'},
+        {q:9,r:-1,text:'Penelope'},{q:7,r:0,text:'Antinous',color:'#e07050'},
+        {q:8,r:-1,text:'Phemius'},{q:-5,r:6,text:'Calypso',color:'#e8a0bf'},
+        {q:-4,r:5,text:'Odysseus',color:'#c0d8e8'},{q:7,r:5,text:'Menelaus'},
+        {q:5,r:3,text:'Nestor'}
+    ];
+    charLabels.forEach(l=>{
+        const p=axialToWorld(l.q,l.r);
+        p.x+=4;p.y=0.5;
+        const sp=createLabel(l.text,false,l.color||'#8aa0b0');
+        sp.position.copy(p);
+        scene.add(sp);
+    });
+    log('✔ Labels placed','dim');
+}
+
+/* ─────────────────────────────────────────────────────
+   INTERACTION — click to inspect
+   ───────────────────────────────────────────────────── */
+const raycaster=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+
+function setupInteraction(){
+    window.addEventListener('click',e=>{
+        if(modalOverlay.classList.contains('active')) return;
+        mouse.x=(e.clientX/innerWidth)*2-1;
+        mouse.y=-(e.clientY/innerHeight)*2+1;
+        raycaster.setFromCamera(mouse,cam);
+        const hits=raycaster.intersectObjects(scene.children,true);
+        if(!hits.length) return;
+
+        let node=hits[0].object;
+        while(node.parent&&!node.userData.assetKey) node=node.parent;
+        const ak=node?.userData?.assetKey;
+        if(!ak||!ASSET_DB[ak]) return;
+
+        const data=ASSET_DB[ak];
+        pTitle.textContent=data.title;
+        pDesc.textContent=data.desc;
+        pStats.innerHTML='';
+        Object.entries(data.stats).forEach(([k,v])=>{
+            const tr=document.createElement('tr');
+            tr.innerHTML='<td>'+k+'</td><td class=stat-val>'+v+'</td>';
+            pStats.appendChild(tr);
+        });
+        modalOverlay.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click',()=>modalOverlay.classList.remove('active'));
+    modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay) modalOverlay.classList.remove('active');});
+    log('✔ Interaction ready','dim');
+}
+
+/* ─────────────────────────────────────────────────────
+   RESIZE
+   ───────────────────────────────────────────────────── */
+window.addEventListener('resize',()=>{
+    cam.aspect=innerWidth/innerHeight;
+    cam.updateProjectionMatrix();
+    ren.setSize(innerWidth,innerHeight);
+});
+
+/* ─────────────────────────────────────────────────────
+   MAIN ENTRY
+   ───────────────────────────────────────────────────── */
+async function main(){
+    const t0=performance.now();
+    log('κ Weaving Cute Okeanos World…','dim');sep();
+
+    buildOkeanosDisc();
+    sep();
+
+    const assets=await loadAllAssets();
+    log('✔ '+assets.loaded+' GLTFs · '+assets.errors+' errors · '+(assets.totalBytes/1024).toFixed(0)+' KB','ok');
+    sep();
+
+    log('ϟ Building hex tiles (Layer 0)…','dim');
+    buildInstancedTiles();
+    sep();
+
+    log('ϟ Placing Alpha Anchors (Layer 2)…','dim');
+    let anchors=0,beta=0;
+    CELLS.forEach(c=>{
+        if(!c.occ) return;
+        if(!isValid(c,c.occ,'L2')) return;
+        if(placeOccupant(c,c.occ)){
+            const isA=['building_castle_green','building_bridge_B','building_destroyed','mountain_B_grass_trees'].includes(c.occ);
+            if(isA) anchors++; else beta++;
+        }
+    });
+    log('✔ '+anchors+' anchors · '+beta+' beta occupants','ok');
+    sep();
+
+    log('ϟ Scattering environment (Layer 1)…','dim');
+    let ci=0,gr=0;
+    CELLS.forEach(c=>{
+        if(!c.env||!c.env.length) return;
+        const prevCount=scene.children.length;
+        placeEnvironment(c);
+        // Rough count (not perfect but gives idea)
+        if(c.occ||c.env.length>2) ci++; else gr++;
+    });
+    log('✔ Environment scattered','ok');
+    sep();
+
+    log('ϟ Adding labels…','dim');
+    placeLabels();
+    sep();
+
+    const dt=((performance.now()-t0)/1000).toFixed(1);
+    log('Χ '+dt+'s · ~'+scene.children.length+' objects · '+assets.loaded+' asset types','ok');
+    log('Χ Cute Okeanos World · Flat hex + Disc platform','dim');
+    sep();
+    log('✔ World Complete · Click any object to inspect','ok');
+
+    setupInteraction();
+}
+
+/* ─────────────────────────────────────────────────────
+   ANIMATION LOOP
+   ───────────────────────────────────────────────────── */
+const fpsEl=document.getElementById('fps');
+let lastTime=performance.now(),frames=0;
+
+ren.setAnimationLoop(()=>{
+    ct.update();
+    ren.render(scene,cam);
+    frames++;
+    const now=performance.now();
+    if(now-lastTime>=1000){
+        fpsEl.textContent=frames+' fps';
+        fpsEl.style.color=frames>=50?'#7aaf6a':frames>=25?'#c9a84c':'#c95a4c';
+        frames=0;lastTime=now;
+    }
+});
+
+main().catch(e=>{sep();log('☠ '+e.message,'err');console.error(e);});
+</script>
+</body>
+</html>
