@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beautiful Low-Poly Odyssey — Canto I</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#1a1f2e; overflow:hidden; font-family:'Georgia',serif; }
+    canvas { display:block; }
+    #hud {
+      position:fixed; top:16px; left:16px; z-index:10;
+      background:rgba(10,8,18,0.85); border:1px solid rgba(210,180,120,0.18);
+      border-radius:12px; padding:18px 22px; font-size:13px; line-height:1.7;
+      min-width:280px; max-width:340px; color:#c9b99a;
+      backdrop-filter:blur(10px); pointer-events:none;
+    }
+    #hud h2 { font-size:17px; font-weight:700; color:#ecd8a8; letter-spacing:1.5px; margin-bottom:4px; }
+    #hud .sub { font-size:10px; color:#7a6e55; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+    #log { font-family:'Courier New',monospace; font-size:10px; line-height:1.5; color:#6a5e45; max-height:140px; overflow-y:auto; }
+    #log .ok  { color:#7aaf6a; } #log .warn{ color:#c9a84c; } #log .err { color:#c95a4c; }
+    #log .dim { color:#4a3e25; } #log .sep { color:#2a1e15; } #log .cyan { color:#6ab0c0; }
+    #fps {
+      position:fixed; top:16px; right:16px; z-index:10;
+      background:rgba(10,8,18,0.85); border:1px solid rgba(210,180,120,0.12);
+      border-radius:8px; padding:6px 14px;
+      font-family:'Courier New',monospace; font-size:12px; color:#7aaf6a;
+    }
+    #legend {
+      position:fixed; bottom:16px; left:16px; z-index:10;
+      background:rgba(10,8,18,0.82); border:1px solid rgba(210,180,120,0.10);
+      border-radius:10px; padding:10px 16px;
+      font-family:'Courier New',monospace; font-size:10px;
+      color:#6a5e45; line-height:1.8; letter-spacing:0.5px;
+    }
+    .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+    #hint {
+      position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+      font-size:9px; color:rgba(210,180,120,0.12);
+      font-family:'Courier New',monospace; white-space:nowrap; pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="hud">
+  <h2>⏤ Beautiful Low-Poly Odyssey ⏤</h2>
+  <div class="sub">Canto I · World of Perfect Hexagons</div>
+  <div id="log">λ Initializing…</div>
+</div>
+<div id="fps">-- fps</div>
+<div id="legend">
+  <span><span class="dot" style="background:#4a7db5"></span>Olympus</span>
+  <span style="margin-left:14px"><span class="dot" style="background:#b84a3a"></span>Ithaca</span>
+  <span style="margin-left:14px"><span class="dot" style="background:#3a8a5a"></span>Ogygia</span>
+  <span style="margin-left:14px"><span class="dot" style="background:#d4b87a"></span>Troy</span>
+  <span style="margin-left:14px"><span class="dot" style="background:#7a6e55"></span>Pylos/Sparta/Taphos</span>
+</div>
+<div id="hint">Orbit: click · Zoom: scroll · Pan: right-click</div>
+
+<script type="importmap">
+{ "imports": {
+    "three":         "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+} }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// ── 0. SEEDED RNG ──
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const R=mulberry32(4242);
+const randRotY=()=>R()*Math.PI*2;
+const randTilt=()=>(R()-0.5)*0.17;
+const randScale=()=>0.82+R()*0.36;
+const randSink=()=>-(0.10+R()*0.15);
+const randFloat=(min,max)=>min+R()*(max-min);
+
+// ── 1. WORLD DATA (ontology) ──
+const HEX_W=1.82,HEX_H=1.575;
+const BIOMES={
+  olimpo:{c:{q:0,r:0},r:3,tileType:'stone',low:[0.30,0.25,0.22],mid:[0.50,0.45,0.38],high:[0.72,0.65,0.52],cloudMode:'divine'},
+  itaca:{c:{q:8,r:0},r:4,tileType:'grass',low:[0.18,0.32,0.18],mid:[0.32,0.50,0.28],high:[0.60,0.72,0.45],cloudMode:'plains'},
+  ogigia:{c:{q:-5,r:5},r:3,tileType:'water',low:[0.08,0.20,0.32],mid:[0.12,0.30,0.42],high:[0.35,0.55,0.70],cloudMode:'mystical'},
+  troya:{c:{q:12,r:-4},r:3,tileType:'stone_dark',low:[0.22,0.18,0.12],mid:[0.40,0.32,0.20],high:[0.65,0.42,0.22],cloudMode:'ruins'},
+  pilos:{c:{q:5,r:3},r:2,tileType:'sand',low:[0.50,0.45,0.30],mid:[0.65,0.60,0.45],high:[0.80,0.75,0.60],cloudMode:'plains'},
+  esparta:{c:{q:7,r:5},r:2,tileType:'dirt',low:[0.30,0.28,0.18],mid:[0.45,0.40,0.28],high:[0.70,0.60,0.42],cloudMode:'plains'},
+  tafos:{c:{q:3,r:-2},r:2,tileType:'sand',low:[0.22,0.35,0.22],mid:[0.32,0.50,0.32],high:[0.50,0.70,0.50],cloudMode:'plains'}
+};
+const DEF_LOW=[0.20,0.25,0.20],DEF_MID=[0.40,0.50,0.35],DEF_HIGH=[0.70,0.75,0.55];
+function getBiome(q,r){for(const b of Object.values(BIOMES)){if(Math.abs(q-b.c.q)<=b.r&&Math.abs(r-b.c.r)<=b.r)return b;}return null;}
+function getTileType(q,r){const b=getBiome(q,r);return b?b.tileType:'grass';}
+function getCloudMode(q,r){const b=getBiome(q,r);return b?b.cloudMode:'plains';}
+function getBiomeColor(q,r,h){
+  const b=getBiome(q,r);
+  if(!b){const hn=Math.min(1,h/0.8);return DEF_LOW.map((v,i)=>v+(DEF_MID[i]-v)*hn);}
+  const hn=Math.min(1,h/0.8);
+  if(hn<0.3){const t=hn/0.3;return[b.low[0]+(b.mid[0]-b.low[0])*t,b.low[1]+(b.mid[1]-b.low[1])*t,b.low[2]+(b.mid[2]-b.low[2])*t];}
+  const t=(hn-0.3)/0.7;return[b.mid[0]+(b.high[0]-b.mid[0])*t,b.mid[1]+(b.high[1]-b.mid[1])*t,b.mid[2]+(b.high[2]-b.mid[2])*t];
+}
+const TILE_TO_HEX={grass:'hex_grass',stone:'hex_grass',stone_dark:'hex_grass',sand:'hex_grass',dirt:'hex_grass',water:'hex_river_A',road:'hex_road_A'};
+const VALID_ON={cloud_big:['grass','dirt','mountain'],cloud_small:['grass','dirt','mountain'],coin_stack_large:['stone','grass','dirt','sand','mountain'],building_dirt:['grass','dirt'],building_grain:['grass','dirt'],hex_road_A:['grass','stone','stone_dark','dirt','sand','mountain']};
+const VALID_ON_OCC={building_castle_green:['grass','dirt'],building_bridge_A:['grass','dirt'],building_bridge_B:['grass','dirt'],building_dirt:['grass','dirt'],building_destroyed:['grass','dirt'],building_grain:['grass','dirt'],mountain_B_grass_trees:['grass','dirt','mountain']};
+const ASSETS={hex_grass:{f:'hex_grass.gltf',b:'hex_grass.bin',type:'tile'},hex_river_A:{f:'hex_river_A.gltf',b:'hex_river_A.bin',type:'tile'},hex_road_A:{f:'hex_road_A.gltf',b:'hex_road_A.bin',type:'tile'},cloud_big:{f:'cloud_big.gltf',b:'cloud_big.bin',type:'env'},coin_stack_large:{f:'coin_stack_large.gltf',b:'coin_stack_large.bin',type:'env'},building_castle_green:{f:'building_castle_green.gltf',b:'building_castle_green.bin',type:'occ'},building_bridge_A:{f:'building_bridge_A.gltf',b:'building_bridge_A.bin',type:'occ'},building_bridge_B:{f:'building_bridge_B.gltf',b:'building_bridge_B.bin',type:'occ'},building_dirt:{f:'building_dirt.gltf',b:'building_dirt.bin',type:'occ'},building_destroyed:{f:'building_destroyed.gltf',b:'building_destroyed.bin',type:'occ'},building_grain:{f:'building_grain.gltf',b:'building_grain.bin',type:'occ'},mountain_B_grass_trees:{f:'mountain_B_grass_trees.gltf',b:'mountain_B_grass_trees.bin',type:'occ'}};
+const CELLS=[
+  {q:0,r:0,env:['coin_stack_large','coin_stack_large','cloud_big'],occ:'building_bridge_B',lb:'Olympus · Temple'},
+  {q:0,r:1,env:['coin_stack_large','cloud_big'],occ:null,lb:'Olympus · Assembly'},
+  {q:1,r:0,env:['cloud_big'],occ:null,lb:'Olympus · Summit'},
+  {q:-1,r:1,env:['hex_road_A','hex_road_A','cloud_big'],occ:'mountain_B_grass_trees',lb:'Mt. Olympus'},
+  {q:8,r:0,env:[],occ:'building_castle_green',lb:'Ithaca · Palace'},
+  {q:8,r:1,env:['building_dirt','building_dirt'],occ:null,lb:'Ithaca · Camp'},
+  {q:8,r:2,env:['hex_road_A','hex_road_A','hex_road_A'],occ:null,lb:'Ithaca · Barrier'},
+  {q:9,r:0,env:['building_grain'],occ:null,lb:'Telemachus'},{q:9,r:-1,env:['coin_stack_large'],occ:null,lb:'Penelope'},
+  {q:10,r:0,env:['building_dirt'],occ:null,lb:'Eurycleia'},{q:7,r:0,env:['building_dirt','building_grain'],occ:null,lb:'Antinous'},
+  {q:7,r:1,env:['building_dirt'],occ:null,lb:'Eurymachus'},{q:8,r:-1,env:['hex_road_A','coin_stack_large'],occ:null,lb:'Phemius'},
+  {q:6,r:1,env:['hex_road_A'],occ:null,lb:'Suitors'},{q:9,r:1,env:['hex_road_A','hex_road_A'],occ:null,lb:'East Field'},
+  {q:10,r:-1,env:['coin_stack_large'],occ:null,lb:'Servants'},
+  {q:-5,r:5,env:['cloud_big','cloud_big'],occ:'building_dirt',lb:'Ogygia · Island'},
+  {q:-5,r:6,env:['cloud_big'],occ:null,lb:'Calypso'},{q:-4,r:5,env:['hex_road_A','coin_stack_large'],occ:'building_dirt',lb:'Odysseus'},
+  {q:12,r:-4,env:['building_grain','coin_stack_large','hex_road_A'],occ:'building_destroyed',lb:'Troy · Ruins'},
+  {q:11,r:-3,env:['hex_road_A'],occ:null,lb:'Road Troy'},{q:11,r:-4,env:['building_grain'],occ:null,lb:'Troy · Wall'},
+  {q:5,r:3,env:['building_dirt'],occ:'building_bridge_A',lb:'Pylos · Nestor'},
+  {q:5,r:4,env:['hex_road_A','coin_stack_large'],occ:null,lb:'Pylos · Harbor'},
+  {q:7,r:5,env:['building_grain','hex_road_A'],occ:'building_bridge_B',lb:'Sparta · Menelaus'},
+  {q:3,r:-2,env:['building_dirt'],occ:'building_bridge_A',lb:'Taphos · Harbor'},
+  {q:9,r:2,env:['hex_road_A'],occ:null,lb:'Dulichium'},{q:10,r:1,env:['hex_road_A'],occ:null,lb:'Same'},
+  {q:9,r:-2,env:[],occ:null,lb:'Zacynthus'},{q:10,r:-2,env:[],occ:null,lb:'Road Troy'},
+  {q:7,r:-2,env:[],occ:null,lb:'Road Taphos'},{q:6,r:-1,env:[],occ:null,lb:'Coastal Rd'},
+  {q:5,r:2,env:['hex_road_A'],occ:null,lb:'Road Pylos'},{q:6,r:3,env:[],occ:null,lb:'Road Sparta'},
+  {q:6,r:4,env:[],occ:null,lb:'Road Sparta'},{q:4,r:3,env:[],occ:null,lb:'Ionian Sea'},
+  {q:3,r:3,env:[],occ:null,lb:'Ionian Sea'}
+];
+
+// ── 2. THREE.JS SETUP ──
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.0;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const SKY=0x4a5a6a;
+scene.background=new THREE.Color(SKY);
+scene.fog=new THREE.FogExp2(SKY,0.012);
+const camera=new THREE.PerspectiveCamera(40,innerWidth/innerHeight,0.5,80);
+camera.position.set(-2,22,28);camera.lookAt(4,0,0);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.dampingFactor=0.06;
+// ── 3. TERRAIN (45° slope, chromatic biomes, fake AO) ──
+function buildTerrain(){
+  const gw=28,gd=20,cw=1.6,cd=1.6,cols=gw,rows=gd,ox=-gw*cw/2,oz=-gd*cd/2+4;
+  const verts=[],colors=[],indices=[];
+  function getH(x,z){
+    let h=0;
+    for(const b of Object.values(BIOMES)){
+      const bx=HEX_W*(b.c.q+b.c.r*0.5),bz=HEX_H*b.c.r;
+      const dx=x-bx,dz=z-bz,dist=Math.sqrt(dx*dx+dz*dz),rad=b.r*HEX_W*1.2;
+      if(dist<rad){const t=1-dist/rad;h+=t*t*0.5;if(dist>rad*0.5&&dist<rad)h+=((dist-rad*0.5)/(rad*0.5))*0.1*(1-t);}
+    }
+    h+=Math.abs(Math.sin(x*0.3)*Math.cos(z*0.4))*0.2+Math.abs(Math.cos(x*0.5)*Math.sin(z*0.35))*0.15;
+    h+=Math.max(0,Math.sin(x*0.8+z*0.6)*0.08);
+    return Math.max(0,h);
+  }
+  for(let r=0;r<rows;r++){for(let c=0;c<cols;c++){
+    const x=ox+c*cw,z=oz+r*cd,h=getH(x,z);
+    verts.push(x,h,z);
+    const q=Math.round((x/HEX_W-z*0.5/HEX_H)),rr=Math.round(z/HEX_H);
+    const col=getBiomeColor(q,rr,h);
+    const nx_h=c+1<cols?getH(ox+(c+1)*cw,z):h,nz_h=r+1<rows?getH(x,oz+(r+1)*cd):h;
+    if((nx_h-h)+(nz_h-h)<-0.05){col[0]=Math.max(0,col[0]-0.08);col[1]=Math.max(0,col[1]-0.04);col[2]=Math.min(1,col[2]+0.10);}
+    colors.push(col[0],col[1],col[2]);
+  }}
+  for(let r=0;r<rows-1;r++)for(let c=0;c<cols-1;c++){const a=r*cols+c,b=r*cols+c+1,d=(r+1)*cols+c,e=(r+1)*cols+c+1;indices.push(a,b,d,b,e,d);}
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  geo.setIndex(indices);geo.computeVertexNormals();
+  const mat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:0.85,metalness:0,flatShading:true,side:THREE.DoubleSide});
+  const mesh=new THREE.Mesh(geo,mat);mesh.receiveShadow=true;mesh.position.y=-0.1;scene.add(mesh);
+  return{mesh,getHeight:getH};
+}
+// ── 4. UTILITIES ──
+function axialToWorld(q,r){return new THREE.Vector3(HEX_W*(q+r*0.5),0,HEX_H*r);}
+const logEl=document.getElementById('log'),logBuf=[];
+function L(t,c=''){logBuf.push(c?`<span class="${c}">${t}</span>`:t);logEl.innerHTML=logBuf.join('<br>');logEl.scrollTop=logEl.scrollHeight;}
+function SEP(){L('━'.repeat(30),'sep');}
+const loader=new GLTFLoader(),gltfCache=new Map();
+function loadGLTF(p){if(gltfCache.has(p))return gltfCache.get(p);const prom=new Promise((res,rej)=>loader.load(p,res,void 0,e=>rej(new Error(e.message||'load error'))));gltfCache.set(p,prom);return prom;}
+async function measurePair(g,b){try{const[a1,a2]=await Promise.all([fetch(g),fetch(b)]);const[b1,b2]=await Promise.all([a1.arrayBuffer(),a2.arrayBuffer()]);return b1.byteLength+b2.byteLength;}catch(_){return 0;}}
+
+function buildInstancedLayer(gltf,positions,key){
+  const ms=[];gltf.scene.traverse(c=>{if(c.isMesh)ms.push(c);});if(!ms.length)return null;
+  const g=new THREE.Group(),d=new THREE.Object3D();
+  ms.forEach(src=>{
+    const inst=new THREE.InstancedMesh(src.geometry,src.material,positions.length);
+    inst.userData.assetKey=key;inst.castShadow=true;inst.receiveShadow=true;
+    positions.forEach((p,i)=>{d.position.copy(p);d.rotation.set(randTilt(),randRotY(),randTilt());const s=randScale();d.scale.set(s,s*(1+R()*0.15),s);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});
+    inst.instanceMatrix.needsUpdate=true;g.add(inst);
+  });return g;
+}
+
+function placeGLTF(gltf,pos,key,opts={}){
+  const o=gltf.scene.clone(true);
+  const isCloud=key==='cloud_big'||key==='cloud_small';
+  if(isCloud){
+    // CLOUD GRAMMAR: float (Section 4.2.3), no shadows (4.2.8), uniform scale (4.2.4)
+    const floatH=opts.floatY!==undefined?opts.floatY:randFloat(1.5,3.0);
+    o.position.set(pos.x,pos.y+floatH,pos.z);
+    o.traverse(n=>{n.userData.assetKey=key;if(n.isMesh){n.castShadow=false;n.receiveShadow=false;if(n.material){n.material.transparent=true;n.material.opacity=0.88;}}});
+  }else{
+    // GROUND INTERSECTION: sink into terrain (Section 5.3.3)
+    const sink=opts.sink!==undefined?opts.sink:randSink();
+    o.position.set(pos.x,pos.y+sink,pos.z);
+    o.traverse(n=>{n.userData.assetKey=key;if(n.isMesh){n.castShadow=true;n.receiveShadow=true;}});
+  }
+  const s=opts.scale||(isCloud?0.3+R()*0.3:randScale());
+  o.scale.set(opts.sx||s,opts.sy||(isCloud?s:s*(1+R()*0.15)),opts.sz||s);
+  o.rotation.set(opts.tiltX||randTilt(),opts.rotY||randRotY(),opts.tiltZ||randTilt());
+  return o;
+}
+// ── 5. LABELS ──
+function roundRect(cx,x,y,w,h,r){
+  cx.beginPath();cx.moveTo(x+r,y);cx.lineTo(x+w-r,y);
+  cx.quadraticCurveTo(x+w,y,x+w,y+r);cx.lineTo(x+w,y+h-r);
+  cx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);cx.lineTo(x+r,y+h);
+  cx.quadraticCurveTo(x,y+h,x,y+h-r);cx.lineTo(x,y+r);
+  cx.quadraticCurveTo(x,y,x+r,y);cx.closePath();
+}
+function makeLabel(text,isDeity){
+  const c=document.createElement('canvas');c.width=512;c.height=64;const cx=c.getContext('2d');
+  roundRect(cx,8,4,496,56,6);cx.fillStyle='rgba(8,6,14,0.65)';cx.fill();
+  cx.font=isDeity?'bold 22px Georgia':'18px Georgia';cx.textAlign='center';cx.textBaseline='middle';
+  cx.fillStyle=isDeity?'#ecd8a8':'#b8a888';cx.fillText(text,256,32);
+  const tex=new THREE.CanvasTexture(c);tex.minFilter=THREE.LinearFilter;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));sp.scale.set(2.2,0.28,1);return sp;
+}
+function makeSmallLabel(text,color){
+  const c=document.createElement('canvas');c.width=256;c.height=48;const cx=c.getContext('2d');
+  cx.clearRect(0,0,256,48);roundRect(cx,4,4,248,40,5);cx.fillStyle='rgba(8,6,14,0.55)';cx.fill();
+  cx.font='15px Georgia';cx.textAlign='center';cx.textBaseline='middle';
+  cx.fillStyle=color||'#b8a888';cx.fillText(text,128,24);
+  const tex=new THREE.CanvasTexture(c);tex.minFilter=THREE.LinearFilter;
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false}));sp.scale.set(1.1,0.2,1);return sp;
+}
+
+// ── 6. VALIDATION (ontological-layer-composer constraints) ──
+function validateLayer(cell,assetId,layer){
+  const tileType=cell.tileType||getTileType(cell.q,cell.r);
+  if(layer==='L0')return true;
+  if(layer==='L1'){
+    const lut=VALID_ON[assetId]||['grass','dirt','mountain'];
+    if(!lut.includes(tileType)){L(`⚠ Skipped ${assetId} @ (${cell.q},${cell.r}) tileType=${tileType}`,'warn');return false;}
+    if(cell.occ){L(`⚠ Skipped ${assetId} @ (${cell.q},${cell.r}) — L2 occupant present`,'warn');return false;}
+    return true;
+  }
+  if(layer==='L2'){
+    const lut=VALID_ON_OCC[assetId]||['grass','dirt'];
+    if(!lut.includes(tileType)){L(`⚠ Skipped ${assetId} @ (${cell.q},${cell.r}) tileType=${tileType}`,'warn');return false;}
+    return true;
+  }
+  return true;
+}
+controls.maxPolarAngle=Math.PI/2.05;controls.target.set(4,0,0);controls.update();
+const sun=new THREE.DirectionalLight(0xffe5b0,1.6);
+sun.position.set(12,22,10);sun.castShadow=true;
+sun.shadow.mapSize.width=2048;sun.shadow.mapSize.height=2048;
+sun.shadow.camera.left=-25;sun.shadow.camera.right=25;
+sun.shadow.camera.top=25;sun.shadow.camera.bottom=-25;
+sun.shadow.camera.near=1;sun.shadow.camera.far=60;
+sun.shadow.camera.updateProjectionMatrix();scene.add(sun);
+// ── 7. MAIN: build world ──
+async function buildWorld(){
+  const t0=performance.now();let totalBytes=0,totalDC=0;
+  let cloudCount=0,groundCount=0;
+  L('κ Weaving the Beautiful Low-Poly World…','dim');
+  L('  ◆ Hex tile grammar · Cloud grammar · 70/30 · validOn','dim');SEP();
+  L('⌗ Terrain: 45° slopes, 7 chromatic biomes, fake AO…','dim');
+  const{getHeight}=buildTerrain();
+  L('✔ Terrain ready — triadic palettes per biome','ok');
+  const allKeys=Object.keys(ASSETS);
+  L(`⌂ Loading ${allKeys.length} real GLTFs…`,'dim');
+  const loads=await Promise.allSettled(allKeys.map(async key=>{
+    const a=ASSETS[key];const[bytes,gltf]=await Promise.all([measurePair(a.f,a.b),loadGLTF(a.f)]);
+    return{key,bytes,gltf};
+  }));
+  SEP();const cache=new Map();let loadErrors=0;
+  loads.forEach(r=>{
+    if(r.status==='rejected'){L(`✗ ${r.reason.message}`,'err');loadErrors++;return;}
+    cache.set(r.value.key,r.value.gltf);totalBytes+=r.value.bytes;L(`✔ ${r.value.key}`,'ok');
+  });
+  L(`✔ ${cache.size} GLTFs · ${loadErrors} errors`,loadErrors>0?'warn':'ok');
+
+  // ── L0 TILES ──
+  SEP();L('ϟ Placing L0 hex tiles on terrain…','dim');
+  const tileGroups={};
+  CELLS.forEach(cell=>{
+    const tt=cell.tileType||getTileType(cell.q,cell.r);
+    const ha=TILE_TO_HEX[tt]||'hex_grass';
+    if(!tileGroups[ha])tileGroups[ha]=[];
+    const p=axialToWorld(cell.q,cell.r);p.y=getHeight(p.x,p.z);
+    tileGroups[ha].push(p);
+  });
+  Object.entries(tileGroups).forEach(([stem,poses])=>{
+    const gltf=cache.get(stem);
+    if(!gltf){L(`✗ No GLTF for ${stem}`,'warn');return;}
+    const grp=buildInstancedLayer(gltf,poses,stem);
+    if(grp){scene.add(grp);totalDC+=grp.children.length;L(`✔ L0 ${stem}: ${poses.length} instances`,'dim');}
+  });
+
+  // ── L2 ALPHA ANCHORS ──
+  SEP();L('ϟ L2 Alpha Anchors (70/30 clustering)…','dim');
+  CELLS.forEach(cell=>{
+    if(!cell.occ)return;
+    if(!validateLayer(cell,cell.occ,'L2'))return;
+    const basePos=axialToWorld(cell.q,cell.r);basePos.y=getHeight(basePos.x,basePos.z);
+    const gltf=cache.get(cell.occ);if(!gltf)return;
+    const isAlpha=['building_castle_green','building_bridge_B','building_destroyed','mountain_B_grass_trees'].includes(cell.occ);
+    const scale=isAlpha?0.85+R()*0.25:0.5+R()*0.3;
+    const sink=randSink()*0.7;
+    const obj=placeGLTF(gltf,basePos,cell.occ,{sink,scale});
+    scene.add(obj);totalDC+=1;L(`✔ ${isAlpha?'★ Anchor':'- Beta'} ${cell.occ}`,'ok');
+  });
+
+  // ── L1 ENVIRONMENT (70/30 + validOn + cloud grammar) ──
+  SEP();L('ϟ L1 Environment: 70/30 · validOn · Cloud Grammar…','dim');
+  CELLS.forEach(cell=>{
+    if(!cell.env||!cell.env.length)return;
+    const base=axialToWorld(cell.q,cell.r);base.y=getHeight(base.x,base.z);
+    const isDense=cell.occ!==null||cell.env.length>2;
+    const envCount=isDense?cell.env.length:Math.max(0,Math.min(cell.env.length,Math.ceil(cell.env.length*0.3)));
+    for(let i=0;i<envCount;i++){
+      const aid=cell.env[i%cell.env.length];
+      if(!validateLayer(cell,aid,'L1'))continue;
+      const gltf=cache.get(aid);if(!gltf)continue;
+      const isCloud=aid==='cloud_big'||aid==='cloud_small';
+      const jitter=isCloud?0.3:(isDense?0.1:0.25);
+      const pos=base.clone().add(new THREE.Vector3((R()-0.5)*jitter,0,(R()-0.5)*jitter));
+      if(isCloud){
+        const cm=getCloudMode(cell.q,cell.r);
+        let fMin=1.5,fMax=2.5,sMin=0.3,sMax=0.5;
+        switch(cm){
+          case'divine':fMin=3.0;fMax=4.0;sMin=0.4;sMax=0.6;break;
+          case'mystical':fMin=2.0;fMax=3.0;sMin=0.3;sMax=0.5;break;
+          case'ruins':fMin=1.5;fMax=2.0;sMin=0.2;sMax=0.4;break;
+        }
+        pos.y=getHeight(pos.x,pos.z);
+        const floatY=randFloat(fMin,fMax);
+        const obj=placeGLTF(gltf,pos,aid,{floatY,scale:sMin+R()*(sMax-sMin),tiltX:(R()-0.5)*0.08,tiltZ:(R()-0.5)*0.08});
+        scene.add(obj);totalDC+=1;cloudCount++;
+        if(cm==='divine'&&i===0)L(`☁ Cloud (${cm}) @ (${cell.q},${cell.r}) float=${floatY.toFixed(1)}`,'cyan');
+      }else{
+        pos.y=getHeight(pos.x,pos.z);
+        const isCoin=aid==='coin_stack_large';
+        const sink=isCoin?randSink()*0.3:randSink()*0.6;
+        const scale=isCoin?0.2+R()*0.2:0.4+R()*0.3;
+        const obj=placeGLTF(gltf,pos,aid,{sink,scale});
+        scene.add(obj);totalDC+=1;groundCount++;
+      }
+    }
+  });
+  const denseClusters=CELLS.filter(c=>c.env&&c.env.length>2).length;
+  L(`✔ L1: ${groundCount} ground + ${cloudCount} clouds · ${denseClusters} dense`,'ok');
+  // ── SACRED PEAK ──
+  const cumbre=CELLS.find(c=>c.q===-1&&c.r===1);
+  if(cumbre){
+    const pos=axialToWorld(cumbre.q,cumbre.r);pos.y=getHeight(pos.x,pos.z);
+    const mtn=cache.get('mountain_B_grass_trees');
+    if(mtn){const o=placeGLTF(mtn,pos,'mountain_B_grass_trees',{scale:0.9,rotY:randRotY()});scene.add(o);totalDC+=1;L('✔ Sacred Peak of Olympus','ok');}
+  }
+
+  // ── LABELS ──
+  [{q:0,r:0,t:'Olympus',d:true},{q:8,r:0,t:'Ithaca'},{q:-5,r:5,t:'Ogygia'},{q:12,r:-4,t:'Troy'},{q:5,r:3,t:'Pylos'},{q:7,r:5,t:'Sparta'},{q:3,r:-2,t:'Taphos'}].forEach(lc=>{
+    const p=axialToWorld(lc.q,lc.r);p.y=getHeight(p.x,p.z)+0.6;const sp=makeLabel(lc.t,lc.d);sp.position.copy(p);scene.add(sp);
+  });
+  [{q:0,r:0,t:'Jupiter',c:'#ecd8a8'},{q:0,r:1,t:'Minerva',c:'#7ab0e0'},{q:1,r:0,t:'Mercury',c:'#f0c060'},
+   {q:9,r:0,t:'Telemachus'},{q:9,r:-1,t:'Penelope'},{q:7,r:0,t:'Antinous',c:'#e07050'},{q:8,r:-1,t:'Phemius'},
+   {q:-5,r:6,t:'Calypso',c:'#e8a0bf'},{q:-4,r:5,t:'Odysseus',c:'#ecd8a8'},{q:7,r:5,t:'Menelaus'},{q:5,r:3,t:'Nestor'}].forEach(cl=>{
+    const p=axialToWorld(cl.q,cl.r);p.y=getHeight(p.x,p.z)+0.45;const sp=makeSmallLabel(cl.t,cl.c);sp.position.copy(p);scene.add(sp);
+  });
+
+  // ── REPORT ──
+  SEP();
+  L(`Χ Build: ${((performance.now()-t0)/1000).toFixed(1)}s · ${(totalBytes/1024).toFixed(0)} KB · ~${totalDC} draws`,'ok');
+  L(`Χ ${cloudCount} clouds · ${groundCount} ground · ${Object.keys(ASSETS).length} unique GLTFs`,'dim');
+  L(`Χ Sun 40° · PCFSoft 2048px · Fog #4a5a6a · ACESFilmic · AO violeta`,'dim');
+  L(`Χ validOn · L1↔L2 exclusivity · max 3 per cell · Cloud Grammar Section 4`,'dim');
+  SEP();L('✔ Beautiful Low-Poly Odyssey — World Complete','ok');
+  setTimeout(()=>{
+    console.group('%c🏛️ Beautiful Low-Poly Odyssey','color:#ecd8a8;font-weight:bold');
+    console.log('Cells:',CELLS.length,'Draws:',renderer.info.render.calls);
+    console.log('Clouds:',cloudCount,'Ground:',groundCount);
+    console.groupEnd();
+  },1500);
+}
+
+// ── 8. RENDER LOOP ──
+const fpsEl=document.getElementById('fps');
+let lastT=performance.now(),frames=0;
+renderer.setAnimationLoop(()=>{
+  controls.update();renderer.render(scene,camera);frames++;
+  const n=performance.now();
+  if(n-lastT>=1000){fpsEl.textContent=`${frames} fps`;fpsEl.style.color=frames>=50?'#7aaf6a':frames>=25?'#c9a84c':'#c95a4c';frames=0;lastT=n;}
+});
+buildWorld().catch(err=>{SEP();L(`☠ ${err.message}`,'err');console.error(err);});
+</script>
+</body>
+</html>
