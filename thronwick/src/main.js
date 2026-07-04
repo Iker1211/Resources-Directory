@@ -6,7 +6,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { getReferencedAssetKeys, loadAssets } from './systems/assetLoader.js';
-import { buildPlatform, buildTiles, buildOccupants, buildEnvironment, buildLabels } from './systems/worldBuilder.js';
+import { buildPlatform, buildTiles, buildOccupants, buildEnvironment, buildLabels, buildRiverWaterSurface } from './systems/worldBuilder.js';
+import { RIVER_PATH, FIELD_PACKS } from './data/worldData.js';
 import { setupInteraction } from './systems/interaction.js';
 import { CELLS, ENTITY_DB, HEX_W, HEX_H } from './data/worldData.js';
 
@@ -44,17 +45,17 @@ document.body.appendChild(renderer.domElement);
 const skyColor = 0x2a3a4a;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(skyColor);
-scene.fog = new THREE.FogExp2(skyColor, 0.008);
+scene.fog = new THREE.FogExp2(skyColor, 0.005);
 
 // Camera — elevated overhead view
 const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.5, 80);
-camera.position.set(5, 16, 18);
+camera.position.set(8, 28, 30);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.06;
 controls.maxPolarAngle = Math.PI / 2.05;
-controls.target.set(3, 0, 0);
+controls.target.set(0, 0, 0);
 controls.update();
 
 // ── Lighting ──
@@ -66,10 +67,10 @@ sun.position.set(12, 20, 10);
 sun.castShadow = true;
 sun.shadow.mapSize.width = 2048;
 sun.shadow.mapSize.height = 2048;
-sun.shadow.camera.left = -30;
-sun.shadow.camera.right = 30;
-sun.shadow.camera.top = 30;
-sun.shadow.camera.bottom = -30;
+sun.shadow.camera.left = -40;
+sun.shadow.camera.right = 40;
+sun.shadow.camera.top = 40;
+sun.shadow.camera.bottom = -40;
 sun.shadow.camera.near = 1;
 sun.shadow.camera.far = 60;
 scene.add(sun);
@@ -79,8 +80,8 @@ fill.position.set(-8, 6, -6);
 scene.add(fill);
 
 // ── World Center ──
-const CENTER_X = HEX_W * 3;
-const CENTER_Z = -HEX_H * 1;
+const CENTER_X = HEX_W * 0;
+const CENTER_Z = -HEX_H * 8.5;
 
 // ── Modal State ──
 let modalOpen = false;
@@ -109,22 +110,35 @@ async function main() {
   }
   sep();
 
-  // 3. Layer 0 — Tiles
+  // 3. Layer 0 — Tiles (with river variants)
   log('ϟ Building hex tiles (Layer 0)…', 'dim');
   const tileCount = buildTiles(scene, (msg) => ok(msg));
   ok(`${tileCount} hex tiles placed`);
 
-  // 4. Layer 2 — Occupants
-  log('ϟ Placing buildings (Layer 2)…', 'dim');
-  const occCount = buildOccupants(scene, (msg) => ok(msg));
-  ok(`${occCount} buildings and major features placed`);
+  // 4. River water surface — single merged mesh for seamless continuity
+  log('ϟ Weaving continuous water surface…', 'dim');
+  const waterTileCount = buildRiverWaterSurface(scene, CENTER_X, CENTER_Z);
+  ok(`Water surface: ${waterTileCount} river tiles merged into one seamless mesh`);
 
-  // 5. Layer 1 — Environment
+  // 5. Water chain system report
+  const waterChainCount = CELLS.filter(c => c.tileType === 'water').length;
+  ok(`Water chain: ${waterChainCount} pure water tiles (hex_water) — no env, no occ`);
+
+  // 5. Field packs report
+  const totalFieldCells = FIELD_PACKS.reduce((s, p) => s + p.cells.length, 0);
+  ok(`Field packs: ${FIELD_PACKS.length} packs, ${totalFieldCells} total tiles (${FIELD_PACKS.map(p => `${p.packId}: ${p.cells.length} tiles`).join(', ')})`);
+
+  // 6. Layer 2 — Occupants (buildings + field pack centroids)
+  log('ϟ Placing buildings & field occupants (Layer 2)…', 'dim');
+  const occCount = buildOccupants(scene, (msg) => ok(msg));
+  ok(`${occCount} total occupants placed`);
+
+  // 7. Layer 1 — Environment
   log('ϟ Scattering environment (Layer 1)…', 'dim');
   const envResult = buildEnvironment(scene, (msg) => ok(msg));
   ok(`${envResult.totalItems} environment items (${envResult.cloudItems} clouds)`);
 
-  // 6. Labels
+  // 8. Labels
   log('ϟ Adding place labels…', 'dim');
   const labels = buildLabels(scene, CENTER_X, CENTER_Z);
   ok(`${labels.length} labels placed`);
