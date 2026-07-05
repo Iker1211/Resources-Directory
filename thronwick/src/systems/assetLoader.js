@@ -2,6 +2,7 @@
  * Asset Loader — handles GLTF loading, caching, and instancing
  */
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RIVER_PATH, FIELD_PACKS } from '../data/worldData.js';
 
 /**
  * Registry of all assets used in the world.
@@ -12,7 +13,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 export const ASSET_REGISTRY = {
   // ── Tiles (Layer 0) ──
   hex_grass: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/base/hex_grass.gltf', type: 'tile' },
+  hex_water: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/base/hex_water.gltf', type: 'tile' },
   hex_river_A: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/rivers/hex_river_A.gltf', type: 'tile' },
+  hex_river_A_curvy: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/rivers/hex_river_A_curvy.gltf', type: 'tile' },
+  hex_river_J: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/rivers/hex_river_J.gltf', type: 'tile' },
+  hex_river_crossing_A: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/rivers/hex_river_crossing_A.gltf', type: 'tile' },
   hex_road_A: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/roads/hex_road_A.gltf', type: 'tile' },
 
   // ── Buildings (Layer 2) ──
@@ -29,6 +34,9 @@ export const ASSET_REGISTRY = {
   building_mine_blue: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/colour blue/building_mine_blue.gltf', type: 'building', scale: 0.55 },
   building_mine_green: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/colour green/building_mine_green.gltf', type: 'building', scale: 0.55 },
   building_stage_A: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/building_stage_A.gltf', type: 'building', scale: 0.55 },
+  building_grain: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/building_grain.gltf', type: 'building', scale: 0.55 },
+  building_dirt: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/building_dirt.gltf', type: 'building', scale: 0.55 },
+  building_destroyed: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/building_destroyed.gltf', type: 'building', scale: 0.55 },
 
   // ── Nature & Trees (Layer 1) ──
   Tree_1_A_Color1: { gltfPath: '/assets/KayKit_Forest_Nature_Pack_1.0_FREE/KayKit_Forest_Nature_Pack_1.0_FREE/Assets/gltf/Tree_1_A_Color1.gltf', type: 'nature', scale: 0.35 },
@@ -95,7 +103,6 @@ export const ASSET_REGISTRY = {
   cloud_big: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/nature/cloud_big.gltf', type: 'cloud', scale: 0.4 },
 
   // ── Props & Decorations (Layer 1) ──
-  building_grain: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/building_grain.gltf', type: 'prop', scale: 0.35 },
   coin_stack_large: { gltfPath: '/assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/coin_stack_large.gltf', type: 'prop', scale: 0.15 },
   Wood_Log_Stack: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Log_Stack.gltf', type: 'prop', scale: 0.2 },
   Wood_Log_A: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Wood_Log_A.gltf', type: 'prop', scale: 0.2 },
@@ -115,6 +122,8 @@ export const ASSET_REGISTRY = {
   Fuel_B_Barrels: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_B_Barrels.gltf', type: 'prop', scale: 0.2 },
   Fuel_A_Barrel: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Fuel_A_Barrel.gltf', type: 'prop', scale: 0.2 },
   Pallet_Wood: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Pallet_Wood.gltf', type: 'prop', scale: 0.2 },
+  Pallet_Wood_Covered_A: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Pallet_Wood_Covered_A.gltf', type: 'prop', scale: 0.2 },
+  Pallet_Wood_Covered_B: { gltfPath: '/assets/KayKit_ResourceBits_1.0_FREE/KayKit_ResourceBits_1.0_FREE/Assets/gltf/Pallet_Wood_Covered_B.gltf', type: 'prop', scale: 0.2 },
   barrel_small: { gltfPath: '/assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel_small.gltf', type: 'prop', scale: 0.2 },
   barrel_large: { gltfPath: '/assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/barrel_large.gltf', type: 'prop', scale: 0.2 },
   crate_A_big: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/crate_A_big.gltf', type: 'prop', scale: 0.2 },
@@ -128,6 +137,8 @@ export const ASSET_REGISTRY = {
   sand_B: { gltfPath: '/assets/KayKit_BlockBits_1.0_FREE/KayKit_BlockBits_1.0_FREE/Assets/gltf/sand_B.gltf', type: 'prop', scale: 0.25 },
   hex_coast_A: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/tiles/coast/hex_coast_A.gltf', type: 'prop', scale: 0.25 },
   fence_wood_straight: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/fence_wood_straight.gltf', type: 'prop', scale: 0.25 },
+  fence_wood_straight_gate: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/buildings/walls, gates, bridges and other buildings/fence_wood_straight_gate.gltf', type: 'prop', scale: 0.25 },
+  wheelbarrow: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/props/wheelbarrow.gltf', type: 'prop', scale: 0.2 },
 
   // ── Water plants ──
   waterplant_A: { gltfPath: '/assets/KayKit_Medieval_Hexagon_Pack_1.0_FREE/KayKit_Medieval_Hexagon_Pack_1.0_FREE/Assets/gltf/decoration/nature/waterplant_A.gltf', type: 'nature', scale: 0.3 },
@@ -217,16 +228,33 @@ export function assetExists(key) {
 }
 
 /**
- * Get all unique asset keys referenced across world cells
+ * Get all unique asset keys referenced across world cells, river path, and field packs
  */
 export function getReferencedAssetKeys(cells) {
   const keys = new Set();
+
+  // From cells
   cells.forEach(c => {
     if (c.tileType === 'grass') keys.add('hex_grass');
+    else if (c.tileType === 'water') keys.add('hex_water');
     else if (c.tileType === 'river') keys.add('hex_river_A');
     else if (c.tileType === 'road') keys.add('hex_road_A');
     if (c.occ) keys.add(c.occ);
     if (c.env) c.env.forEach(e => keys.add(e));
   });
+
+  // River variants from RIVER_PATH
+  RIVER_PATH.forEach(entry => {
+    keys.add(entry.variant);
+  });
+
+  // Field pack occupants
+  FIELD_PACKS.forEach(pack => {
+    const occupantKey = pack.cropType === 'fallow' ? 'building_dirt'
+                      : pack.cropType === 'abandoned' ? 'building_destroyed'
+                      : 'building_grain';
+    keys.add(occupantKey);
+  });
+
   return [...keys];
 }

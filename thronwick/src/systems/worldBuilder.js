@@ -1,8 +1,12 @@
 /**
  * World Builder — places Layer 0 tiles, Layer 1 environments, and Layer 2 occupants
+ *
+ * Implements:
+ *   Section 9 — RIVER GRAMMAR: edge-flow matching for continuous river paths
+ *   Section 10 — FARMING FIELD GRAMMAR: contiguous field packs with centroid occupants
  */
 import * as THREE from 'three';
-import { CELLS, axialToWorld, BIOMES, HEX_W, HEX_H, ENTITY_DB } from '../data/worldData.js';
+import { CELLS, axialToWorld, BIOMES, HEX_W, HEX_H, ENTITY_DB, RIVER_PATH, FIELD_PACKS, FIELD_PACK_MAP, getFieldPackCentroid, cellKey } from '../data/worldData.js';
 import { getAsset, extractMeshData } from './assetLoader.js';
 import { createPRNG } from '../utils/prng.js';
 
@@ -10,73 +14,108 @@ const RNG = createPRNG(1337); // deterministic seed for reproducible layout
 const rY = () => RNG() * Math.PI * 2;
 const rS = (min, max) => min + RNG() * (max - min);
 
+// ── River variant lookup from RIVER_PATH ──────────────────────────────
+const RIVER_VARIANT_LOOKUP = {};
+RIVER_PATH.forEach(entry => {
+  RIVER_VARIANT_LOOKUP[cellKey(entry.q, entry.r)] = entry.variant;
+});
+
+function getRiverVariant(q, r) {
+  const key = cellKey(q, r);
+  return RIVER_VARIANT_LOOKUP[key] || 'hex_river_A';
+}
+
 /**
- * Build Layer 0 hex tiles using InstancedMesh for performance.
- * Returns the number of instances created.
+ * Build Layer 0 hex tiles using InstancedMesh.
+ * River tiles use variant selection from RIVER_PATH for edge-flow matching.
  */
 export function buildTiles(scene, progressCb) {
-  // Group cells by tile type
-  const groups = { grass: [], river: [], road: [] };
+  const groups = { grass: [], road: [], water: [] };
+  const riverGroups = {};
+
   CELLS.forEach(c => {
     const type = c.tileType || 'grass';
-    if (!groups[type]) groups[type] = [];
     const p = axialToWorld(c.q, c.r);
-    groups[type].push(new THREE.Vector3(p.x + HEX_W * 3, 0, p.z - HEX_H * 1)); // offset for centering
+    const pos = new THREE.Vector3(p.x + HEX_W * 0, 0, p.z - HEX_H * 8.5);
+
+    if (type === 'water') {
+      groups.water.push(pos);
+    } else if (type === 'river') {
+      const variant = getRiverVariant(c.q, c.r);
+      if (!riverGroups[variant]) riverGroups[variant] = [];
+      riverGroups[variant].push(pos);
+    } else if (type === 'road') {
+      groups.road.push(pos);
+    } else {
+      groups.grass.push(pos);
+    }
   });
 
   let totalInstances = 0;
 
-  Object.entries(groups).forEach(([type, positions]) => {
-    if (positions.length === 0) return;
-    const assetKey = type === 'grass' ? 'hex_grass' : type === 'river' ? 'hex_river_A' : 'hex_road_A';
-    const gltf = getAsset(assetKey);
-    if (!gltf) {
-      console.warn(`[WorldBuilder] Missing tile asset: ${assetKey}`);
-      return;
-    }
-
-    const { geometry, material } = extractMeshData(gltf);
-    if (!geometry) {
-      console.warn(`[WorldBuilder] No mesh in ${assetKey}`);
-      return;
-    }
-
-    // Clone material for instancing (each batch gets its own)
-    const mat = material.clone();
-    mat.flatShading = true;
-
-    const mesh = new THREE.InstancedMesh(geometry, mat, positions.length);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.userData.isTile = true;
-    mesh.userData.tileType = type;
-
-    const dummy = new THREE.Object3D();
-    positions.forEach((p, i) => {
-      dummy.position.copy(p);
-      dummy.position.y = -0.005; // slight ground sink
-      dummy.rotation.set(0, (i % 6) * (Math.PI / 3), 0); // 60° variation
-      dummy.scale.set(1, 1, 1);
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-    scene.add(mesh);
-    totalInstances += positions.length;
-
-    if (progressCb) progressCb(`L0 ${assetKey}: ${positions.length} instances`);
+  if (groups.grass.length > 0) {
+    totalInstances += buildTileBatch(scene, 'hex_grass', groups.grass, 'grass', progressCb);
+  }
+  if (groups.water.length > 0) {
+    totalInstances += buildTileBatch(scene, 'hex_water', groups.water, 'water', progressCb);
+  }
+  if (groups.road.length > 0) {
+    totalInstances += buildTileBatch(scene, 'hex_road_A', groups.road, 'road', progressCb);
+  }
+  Object.entries(riverGroups).forEach(([variant, positions]) => {
+    totalInstances += buildTileBatch(scene, variant, positions, 'river', progressCb);
   });
 
   return totalInstances;
 }
 
+function buildTileBatch(scene, assetKey, positions, tileType, progressCb) {
+  if (positions.length === 0) return 0;
+
+  const gltf = getAsset(assetKey);
+  if (!gltf) {
+    console.warn(`[WorldBuilder] Missing tile asset: ${assetKey}`);
+    return 0;
+  }
+
+  const { geometry, material } = extractMeshData(gltf);
+  if (!geometry) {
+    console.warn(`[WorldBuilder] No mesh in ${assetKey}`);
+    return 0;
+  }
+
+  const mat = material.clone();
+  mat.flatShading = true;
+
+  const mesh = new THREE.InstancedMesh(geometry, mat, positions.length);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.userData.isTile = true;
+  mesh.userData.tileType = tileType;
+
+  const dummy = new THREE.Object3D();
+  positions.forEach((p, i) => {
+    dummy.position.copy(p);
+    dummy.position.y = -0.005;
+    dummy.rotation.set(0, (i % 6) * (Math.PI / 3), 0);
+    dummy.scale.set(1, 1, 1);
+    dummy.updateMatrix();
+    mesh.setMatrixAt(i, dummy.matrix);
+  });
+  mesh.instanceMatrix.needsUpdate = true;
+  scene.add(mesh);
+
+  if (progressCb) progressCb(`L0 ${assetKey}: ${positions.length} instances`);
+  return positions.length;
+}
+
 /**
- * Build Layer 2 occupants (buildings + major features).
- * Returns count of placed occupants.
+ * Build Layer 2 occupants (buildings + major features + field pack centroids).
  */
 export function buildOccupants(scene, progressCb) {
   let count = 0;
 
+  // 1. Place explicit occupants from CELLS data
   CELLS.forEach(c => {
     if (!c.occ) return;
 
@@ -87,22 +126,19 @@ export function buildOccupants(scene, progressCb) {
     }
 
     const p = axialToWorld(c.q, c.r);
-    const pos = new THREE.Vector3(p.x + HEX_W * 3, 0, p.z - HEX_H * 1);
+    const pos = new THREE.Vector3(p.x + HEX_W * 0, 0, p.z - HEX_H * 8.5);
 
     const obj = gltf.scene.clone(true);
     obj.position.copy(pos);
     obj.position.y = 0;
 
-    // Scale: use cell-specific scale or default from asset
     const baseScale = c.occScale || 0.55;
     const scaleVar = rS(0.9, 1.1);
     const s = baseScale * scaleVar;
     obj.scale.set(s, s, s);
 
-    // Rotation: use cell-specific or random
     obj.rotation.y = c.occRotY !== undefined ? c.occRotY : rY();
 
-    // Tag all meshes inside
     obj.traverse(n => {
       n.userData.assetKey = c.occ;
       n.userData.cellData = { q: c.q, r: c.r, label: c.label || '' };
@@ -118,12 +154,55 @@ export function buildOccupants(scene, progressCb) {
     if (progressCb) progressCb(`L2 ${c.occ} @ (${c.q},${c.r})`);
   });
 
+  // 2. Place field pack occupants at centroids
+  FIELD_PACKS.forEach(pack => {
+    const centroid = getFieldPackCentroid(pack.cells);
+    const occupantKey = pack.cropType === 'fallow' ? 'building_dirt'
+                      : pack.cropType === 'abandoned' ? 'building_destroyed'
+                      : 'building_grain'; // grain or pasture
+
+    const gltf = getAsset(occupantKey);
+    if (!gltf) {
+      console.warn(`[WorldBuilder] Missing field occupant: ${occupantKey}`);
+      return;
+    }
+
+    const p = axialToWorld(centroid.q, centroid.r);
+    const pos = new THREE.Vector3(p.x + HEX_W * 0, 0, p.z - HEX_H * 8.5);
+
+    const obj = gltf.scene.clone(true);
+    obj.position.copy(pos);
+    obj.position.y = 0;
+
+    const packSize = pack.cells.length;
+    const baseScale = packSize >= 6 ? 0.65 : packSize >= 4 ? 0.55 : 0.45;
+    const scaleVar = rS(0.9, 1.1);
+    const s = baseScale * scaleVar;
+    obj.scale.set(s, s, s);
+
+    obj.rotation.y = rY();
+
+    obj.traverse(n => {
+      n.userData.assetKey = occupantKey;
+      n.userData.cellData = { q: centroid.q, r: centroid.r, label: pack.label || '' };
+      n.userData.fieldPack = pack.packId;
+      if (n.isMesh) {
+        n.castShadow = true;
+        n.receiveShadow = true;
+      }
+    });
+
+    scene.add(obj);
+    count++;
+
+    if (progressCb) progressCb(`L2 field ${pack.packId}: ${occupantKey} @ (${centroid.q},${centroid.r})`);
+  });
+
   return count;
 }
 
 /**
- * Build Layer 1 environment props (trees, rocks, props, clouds).
- * Returns counts of items placed.
+ * Build Layer 1 environment props (trees, rocks, props, clouds, field boundaries).
  */
 export function buildEnvironment(scene, progressCb) {
   let totalItems = 0;
@@ -133,21 +212,19 @@ export function buildEnvironment(scene, progressCb) {
     if (!c.env || c.env.length === 0) return;
 
     const p = axialToWorld(c.q, c.r);
-    const basePos = new THREE.Vector3(p.x + HEX_W * 3, 0, p.z - HEX_H * 1);
+    const basePos = new THREE.Vector3(p.x + HEX_W * 0, 0, p.z - HEX_H * 8.5);
 
     // Validate: if cell has an occupant, skip L1 (exclusive)
     if (c.occ) return;
 
-    // Place each env item
-    c.env.forEach((assetKey, idx) => {
+    c.env.forEach((assetKey) => {
       const gltf = getAsset(assetKey);
       if (!gltf) return;
 
-      const regEntry = null; // not needed for type checking
       const isCloud = assetKey === 'cloud_big';
+      const isFence = assetKey.startsWith('fence_');
 
-      // Jitter position within hex
-      const jitterAmt = isCloud ? 0.4 : 0.25;
+      const jitterAmt = isCloud ? 0.4 : isFence ? 0.6 : 0.25;
       const pos = basePos.clone().add(
         new THREE.Vector3(
           (RNG() - 0.5) * jitterAmt,
@@ -157,7 +234,6 @@ export function buildEnvironment(scene, progressCb) {
       );
 
       if (isCloud) {
-        // Cloud float height by biome
         const biome = c.biome || 'thornwick';
         let floatMin = 1.5, floatMax = 2.5;
         if (biome === 'thornwick') { floatMin = 2.5; floatMax = 3.5; }
@@ -172,7 +248,6 @@ export function buildEnvironment(scene, progressCb) {
 
       const obj = gltf.scene.clone(true);
 
-      // Scale based on type
       let scale = 0.3;
       if (isCloud) scale = rS(0.3, 0.55);
       else if (assetKey.startsWith('Tree') || assetKey.startsWith('trees')) scale = rS(0.3, 0.4);
@@ -188,24 +263,20 @@ export function buildEnvironment(scene, progressCb) {
       else if (assetKey.startsWith('Pallet')) scale = rS(0.18, 0.25);
       else if (assetKey.startsWith('flag')) scale = rS(0.18, 0.25);
       else if (assetKey.startsWith('sand_') || assetKey === 'hex_coast_A') scale = rS(0.22, 0.3);
-      else if (assetKey.startsWith('fence_')) scale = rS(0.22, 0.3);
+      else if (isFence) scale = rS(0.22, 0.3);
       else if (assetKey.startsWith('rope_')) scale = rS(0.18, 0.25);
       else if (assetKey.startsWith('bucket_')) scale = rS(0.18, 0.25);
+      else if (assetKey.startsWith('wheelbarrow')) scale = rS(0.18, 0.25);
       else scale = rS(0.18, 0.28);
 
       obj.scale.set(scale, scale, scale);
 
-      // Ground items: slight sink; clouds: no sink
-      if (isCloud) {
-        // Clouds float
-      } else {
-        obj.position.y = -0.005; // 0.5% ground sink
+      if (!isCloud) {
+        obj.position.y = -0.005;
       }
-
       obj.position.copy(pos);
       obj.rotation.y = rY();
 
-      // Tag for interaction
       obj.traverse(n => {
         n.userData.assetKey = assetKey;
         n.userData.cellData = { q: c.q, r: c.r, label: c.label || '' };
@@ -229,28 +300,90 @@ export function buildEnvironment(scene, progressCb) {
 }
 
 /**
+ * Build a single merged water surface mesh spanning all river tiles.
+ * This creates one continuous hexagonal sheet at y = -0.002, overlaying
+ * the individual baked water textures to eliminate seam artifacts.
+ *
+ * Implements Section 9.6 of SKILL.md — Water Surface Continuity.
+ */
+export function buildRiverWaterSurface(scene, centerX, centerZ) {
+  const RIVER_TILES = CELLS.filter(c => c.tileType === 'river');
+  if (RIVER_TILES.length === 0) return 0;
+
+  const HEX_SIZE = 1.0;
+  const positions = [];
+  const indices = [];
+  let vertexOffset = 0;
+
+  RIVER_TILES.forEach(tile => {
+    const p = axialToWorld(tile.q, tile.r);
+    const cx = p.x + centerX;
+    const cz = p.z - HEX_H * 8.5;
+
+    // 6 perimeter vertices (pointy-top, starting from north)
+    for (let i = 0; i < 6; i++) {
+      const angle = Math.PI / 2 - i * Math.PI / 3;
+      positions.push(
+        cx + HEX_SIZE * Math.cos(angle),
+        -0.002,
+        cz + HEX_SIZE * Math.sin(angle)
+      );
+    }
+
+    // Center vertex
+    positions.push(cx, -0.002, cz);
+
+    // 6 triangles: center + edge pair
+    for (let i = 0; i < 6; i++) {
+      indices.push(vertexOffset + 6);                    // center
+      indices.push(vertexOffset + i);                    // vi
+      indices.push(vertexOffset + (i + 1) % 6);           // v(i+1)
+    }
+
+    vertexOffset += 7;
+  });
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geo.setIndex(indices);
+  geo.computeVertexNormals();
+
+  const mat = new THREE.MeshStandardMaterial({
+    color: 0x2a6aba,
+    transparent: true,
+    opacity: 0.5,
+    roughness: 0.3,
+    metalness: 0.0,
+    side: THREE.DoubleSide,
+    flatShading: true,
+  });
+
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.receiveShadow = true;
+  mesh.userData.isWaterSurface = true;
+  scene.add(mesh);
+
+  return RIVER_TILES.length;
+}
+
+/**
  * Build the world-river platform beneath the hex grid.
- * A decorative disc representing the Okeanos-style foundation.
  */
 export function buildPlatform(scene, centerX, centerZ) {
-  const S = 48;
+  const S = 64;
 
-  // Create concentric rings
   const rings = [
-    { inner: 0, outer: 6.5, color: 0x0a1a2e },
-    { inner: 6.5, outer: 11, color: 0x0f2a4a },
-    { inner: 11, outer: 16, color: 0x1a4a5a },
-    { inner: 16, outer: 20.5, color: 0x28606a },
+    { inner: 0, outer: 8, color: 0x0a1a2e },
+    { inner: 8, outer: 14, color: 0x0f2a4a },
+    { inner: 14, outer: 21, color: 0x1a4a5a },
+    { inner: 21, outer: 28, color: 0x28606a },
+    { inner: 28, outer: 34, color: 0x1a3a5a },
   ];
 
   rings.forEach(r => {
     const geo = new THREE.RingGeometry(r.inner, r.outer, S);
     const mat = new THREE.MeshStandardMaterial({
-      color: r.color,
-      flatShading: true,
-      roughness: 0.95,
-      metalness: 0,
-      side: THREE.DoubleSide
+      color: r.color, flatShading: true, roughness: 0.95, metalness: 0, side: THREE.DoubleSide
     });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.rotation.x = -Math.PI / 2;
@@ -259,14 +392,9 @@ export function buildPlatform(scene, centerX, centerZ) {
     scene.add(mesh);
   });
 
-  // Outer rim (land)
-  const rimGeo = new THREE.RingGeometry(20.5, 23, S);
+  const rimGeo = new THREE.RingGeometry(34, 37, S);
   const rimMat = new THREE.MeshStandardMaterial({
-    color: 0x2a1e15,
-    flatShading: true,
-    roughness: 0.75,
-    metalness: 0.15,
-    side: THREE.DoubleSide
+    color: 0x2a1e15, flatShading: true, roughness: 0.75, metalness: 0.15, side: THREE.DoubleSide
   });
   const rim = new THREE.Mesh(rimGeo, rimMat);
   rim.rotation.x = -Math.PI / 2;
@@ -274,33 +402,22 @@ export function buildPlatform(scene, centerX, centerZ) {
   rim.receiveShadow = true;
   scene.add(rim);
 
-  // Outer wall
   const wallMat = new THREE.MeshStandardMaterial({
-    color: 0x1a100a,
-    flatShading: true,
-    roughness: 0.75,
-    metalness: 0.15,
-    side: THREE.DoubleSide
+    color: 0x1a100a, flatShading: true, roughness: 0.75, metalness: 0.15, side: THREE.DoubleSide
   });
-  const outerWall = new THREE.Mesh(new THREE.CylinderGeometry(23, 23, 0.08, S, 1, true), wallMat);
+  const outerWall = new THREE.Mesh(new THREE.CylinderGeometry(37, 37, 0.08, S, 1, true), wallMat);
   outerWall.position.set(centerX, 0.04, centerZ);
   scene.add(outerWall);
 
-  const innerWall = new THREE.Mesh(new THREE.CylinderGeometry(20.5, 20.5, 0.08, S, 1, true), wallMat);
+  const innerWall = new THREE.Mesh(new THREE.CylinderGeometry(34, 34, 0.08, S, 1, true), wallMat);
   innerWall.position.set(centerX, 0.04, centerZ);
   scene.add(innerWall);
 
-  // Outer glow halo
   const halo = new THREE.Mesh(
-    new THREE.RingGeometry(23, 27, S),
+    new THREE.RingGeometry(37, 42, S),
     new THREE.MeshStandardMaterial({
-      color: 0x3a4a5a,
-      flatShading: true,
-      roughness: 1,
-      metalness: 0,
-      transparent: true,
-      opacity: 0.25,
-      side: THREE.DoubleSide
+      color: 0x3a4a5a, flatShading: true, roughness: 1, metalness: 0,
+      transparent: true, opacity: 0.25, side: THREE.DoubleSide
     })
   );
   halo.rotation.x = -Math.PI / 2;
@@ -316,12 +433,11 @@ export function buildPlatform(scene, centerX, centerZ) {
 export function buildLabels(scene, centerX, centerZ) {
   const labels = [];
 
-  // Biome/area labels
   CELLS.forEach(c => {
     if (!c.label) return;
 
     const p = axialToWorld(c.q, c.r);
-    const pos = new THREE.Vector3(p.x + centerX, 0.8, p.z - HEX_H * 1);
+    const pos = new THREE.Vector3(p.x + centerX, 0.8, p.z - HEX_H * 8.5);
 
     const isBuilding = !!c.occ;
     const text = c.label;
@@ -331,18 +447,17 @@ export function buildLabels(scene, centerX, centerZ) {
     canvas.height = 64;
     const ctx = canvas.getContext('2d');
 
-    // Rounded rect bg
-    const r = 6;
+    const rr = 6;
     ctx.beginPath();
-    ctx.moveTo(4 + r, 4);
-    ctx.lineTo(508 - r, 4);
-    ctx.quadraticCurveTo(508, 4, 508, 4 + r);
-    ctx.lineTo(508, 60 - r);
-    ctx.quadraticCurveTo(508, 60, 508 - r, 60);
-    ctx.lineTo(4 + r, 60);
-    ctx.quadraticCurveTo(4, 60, 4, 60 - r);
-    ctx.lineTo(4, 4 + r);
-    ctx.quadraticCurveTo(4, 4, 4 + r, 4);
+    ctx.moveTo(4 + rr, 4);
+    ctx.lineTo(508 - rr, 4);
+    ctx.quadraticCurveTo(508, 4, 508, 4 + rr);
+    ctx.lineTo(508, 60 - rr);
+    ctx.quadraticCurveTo(508, 60, 508 - rr, 60);
+    ctx.lineTo(4 + rr, 60);
+    ctx.quadraticCurveTo(4, 60, 4, 60 - rr);
+    ctx.lineTo(4, 4 + rr);
+    ctx.quadraticCurveTo(4, 4, 4 + rr, 4);
     ctx.closePath();
 
     if (isBuilding) {
