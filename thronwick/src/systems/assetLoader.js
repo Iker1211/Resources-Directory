@@ -3,12 +3,14 @@
  */
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RIVER_PATH, FIELD_PACKS } from '../data/worldData.js';
+import { R2_ASSET_MANIFEST, R2_ASSET_MANIFEST_VERSION } from '../data/r2AssetManifest.js';
 
 /**
  * Registry of all assets used in the world.
- * Maps asset key -> { gltfPath, binPath, type, scaleHint }
+ * Maps asset key -> { gltfPath, type, scale }.
  *
- * Paths are relative to the assets/ directory served from public/
+ * gltfPath remains the local development fallback. Production R2 object keys
+ * are resolved through R2_ASSET_MANIFEST without coupling world data to URLs.
  */
 export const ASSET_REGISTRY = {
   // ── Tiles (Layer 0) ──
@@ -152,35 +154,113 @@ export const ASSET_REGISTRY = {
   plate_food_B: { gltfPath: '/assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_food_B.gltf', type: 'prop', scale: 0.15 },
 };
 
+const LOCAL_ASSET_BASE_URL = '/assets/';
+const configuredAssetBaseUrl = import.meta.env.VITE_ASSET_BASE_URL?.trim() || '';
+const allowLocalFallback = import.meta.env.VITE_ASSET_LOCAL_FALLBACK === 'true';
+
+function normalizeRemoteBaseUrl(value) {
+  if (!value) return null;
+
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`[AssetLoader] VITE_ASSET_BASE_URL is not a valid absolute URL: ${value}`);
+  }
+
+  if (url.protocol !== 'https:') {
+    throw new Error('[AssetLoader] VITE_ASSET_BASE_URL must use HTTPS.');
+  }
+  if (url.search || url.hash) {
+    throw new Error('[AssetLoader] VITE_ASSET_BASE_URL must not contain query parameters or a fragment.');
+  }
+
+  url.pathname = `${url.pathname.replace(/\/+$/, '')}/`;
+  return url;
+}
+
+const remoteAssetBaseUrl = normalizeRemoteBaseUrl(configuredAssetBaseUrl);
+
+export const ASSET_SOURCE = Object.freeze({
+  mode: remoteAssetBaseUrl ? 'r2' : 'local',
+  baseUrl: remoteAssetBaseUrl?.href || LOCAL_ASSET_BASE_URL,
+  manifestVersion: R2_ASSET_MANIFEST_VERSION,
+  allowLocalFallback,
+});
+
+/**
+ * Resolve an application asset ID to either its immutable R2 GLB or its local
+ * GLTF fallback. Object-key segments are encoded individually so spaces and
+ * punctuation in the flat R2 namespace cannot corrupt the request URL.
+ */
+export function resolveAssetUrl(key) {
+  const reg = ASSET_REGISTRY[key];
+  if (!reg) {
+    throw new Error(`[AssetLoader] Unknown asset: ${key}`);
+  }
+
+  if (!remoteAssetBaseUrl) return reg.gltfPath;
+
+  const objectKey = R2_ASSET_MANIFEST[key];
+  if (!objectKey) {
+    throw new Error(`[AssetLoader] R2 manifest ${R2_ASSET_MANIFEST_VERSION} has no entry for: ${key}`);
+  }
+
+  const encodedObjectKey = objectKey
+    .split('/')
+    .map(segment => encodeURIComponent(segment))
+    .join('/');
+
+  return new URL(encodedObjectKey, remoteAssetBaseUrl).href;
+}
+
 const loader = new GLTFLoader();
 const loadCache = new Map();
 const loadedGeos = new Map(); // key -> { geometry, material, scene }
 
-/**
- * Load a single GLTF asset from the registry
- */
-export function loadAsset(key) {
+function loadGltf(url) {
   return new Promise((resolve, reject) => {
-    if (loadCache.has(key)) {
-      resolve(loadCache.get(key));
-      return;
-    }
-    const reg = ASSET_REGISTRY[key];
-    if (!reg) {
-      console.warn(`[AssetLoader] Unknown asset: ${key}`);
-      reject(new Error(`Unknown asset: ${key}`));
-      return;
-    }
-    loader.load(
-      reg.gltfPath,
-      (gltf) => {
-        loadCache.set(key, gltf);
-        resolve(gltf);
-      },
-      undefined,
-      (err) => reject(err)
-    );
+    loader.load(url, resolve, undefined, reject);
   });
+}
+
+/**
+ * Load a single asset from the configured source and cache the parsed GLTF.
+ */
+export async function loadAsset(key) {
+  if (loadCache.has(key)) return loadCache.get(key);
+
+  const reg = ASSET_REGISTRY[key];
+  if (!reg) {
+    throw new Error(`[AssetLoader] Unknown asset: ${key}`);
+  }
+
+  const primaryUrl = resolveAssetUrl(key);
+
+  try {
+    const gltf = await loadGltf(primaryUrl);
+    loadCache.set(key, gltf);
+    return gltf;
+  } catch (primaryError) {
+    if (remoteAssetBaseUrl && allowLocalFallback) {
+      console.warn(`[AssetLoader] R2 load failed for ${key}; retrying local fallback.`, primaryError);
+      try {
+        const gltf = await loadGltf(reg.gltfPath);
+        loadCache.set(key, gltf);
+        return gltf;
+      } catch (fallbackError) {
+        throw new AggregateError(
+          [primaryError, fallbackError],
+          `[AssetLoader] Failed to load ${key} from R2 and local fallback.`
+        );
+      }
+    }
+
+    const message = primaryError instanceof Error ? primaryError.message : String(primaryError);
+    throw new Error(`[AssetLoader] Failed to load ${key} from ${primaryUrl}: ${message}`, {
+      cause: primaryError,
+    });
+  }
 }
 
 /**
