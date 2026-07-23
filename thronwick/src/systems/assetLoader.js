@@ -1,11 +1,13 @@
 /**
  * Asset Loader — handles GLTF loading, caching, and instancing
  */
-import { Float32BufferAttribute } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RIVER_PATH, FIELD_PACKS } from '../data/worldData.js';
 import { R2_ASSET_MANIFEST, R2_ASSET_MANIFEST_VERSION } from '../data/r2AssetManifest.js';
+import { extractMeshData } from '../utils/sceneGeometry.js';
+
+export { extractMeshData };
 
 /**
  * Registry of all assets used in the world.
@@ -287,48 +289,6 @@ export async function loadAssets(keys) {
  */
 export function getAsset(key) {
   return loadCache.get(key) || null;
-}
-
-function toFloatAttribute(attribute) {
-  const values = new Float32Array(attribute.count * attribute.itemSize);
-  for (let index = 0; index < attribute.count; index++) {
-    for (let component = 0; component < attribute.itemSize; component++) {
-      values[index * attribute.itemSize + component] = attribute.getComponent(index, component);
-    }
-  }
-  return new Float32BufferAttribute(values, attribute.itemSize);
-}
-
-/**
- * Extract the first mesh in scene space.
- *
- * gltfpack stores quantized integer coordinates and a compensating node
- * transform. BufferGeometry.applyMatrix4 writes transformed values back through
- * integer setters, which clamps them. Convert transform-sensitive attributes to
- * float first, then bake the complete node world matrix for InstancedMesh.
- */
-export function extractMeshData(gltf) {
-  let geo = null;
-  let mat = null;
-
-  gltf.scene.updateMatrixWorld(true);
-  gltf.scene.traverse(child => {
-    if (child.isMesh && !geo) {
-      geo = child.geometry.clone();
-      ['position', 'normal', 'tangent'].forEach(name => {
-        const attribute = geo.getAttribute(name);
-        if (attribute && (!(attribute.array instanceof Float32Array) || attribute.normalized)) {
-          geo.setAttribute(name, toFloatAttribute(attribute));
-        }
-      });
-      geo.applyMatrix4(child.matrixWorld);
-      geo.computeBoundingBox();
-      geo.computeBoundingSphere();
-      mat = child.material;
-    }
-  });
-
-  return { geometry: geo, material: mat };
 }
 
 /**
