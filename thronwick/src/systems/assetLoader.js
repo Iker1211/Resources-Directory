@@ -13,8 +13,8 @@ export { extractMeshData };
  * Registry of all assets used in the world.
  * Maps asset key -> { gltfPath, type, scale }.
  *
- * gltfPath remains the local development fallback. Production R2 object keys
- * are resolved through R2_ASSET_MANIFEST without coupling world data to URLs.
+ * gltfPath is retained as provenance metadata only. Runtime model bytes are
+ * resolved exclusively through R2_ASSET_MANIFEST for local and production use.
  */
 export const ASSET_REGISTRY = {
   // ── Tiles (Layer 0) ──
@@ -158,13 +158,10 @@ export const ASSET_REGISTRY = {
   plate_food_B: { gltfPath: '/assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_food_B.gltf', type: 'prop', scale: 0.15 },
 };
 
-const LOCAL_ASSET_BASE_URL = '/assets/';
-const configuredAssetBaseUrl = import.meta.env.VITE_ASSET_BASE_URL?.trim() || '';
-const allowLocalFallback = import.meta.env.VITE_ASSET_LOCAL_FALLBACK === 'true';
+const DEFAULT_ASSET_BASE_URL = 'https://pub-37dce3d7ecf94df9acc08cadeb70022c.r2.dev/';
+const configuredAssetBaseUrl = import.meta.env.VITE_ASSET_BASE_URL?.trim() || DEFAULT_ASSET_BASE_URL;
 
 function normalizeRemoteBaseUrl(value) {
-  if (!value) return null;
-
   let url;
   try {
     url = new URL(value);
@@ -186,24 +183,16 @@ function normalizeRemoteBaseUrl(value) {
 const remoteAssetBaseUrl = normalizeRemoteBaseUrl(configuredAssetBaseUrl);
 
 export const ASSET_SOURCE = Object.freeze({
-  mode: remoteAssetBaseUrl ? 'r2' : 'local',
-  baseUrl: remoteAssetBaseUrl?.href || LOCAL_ASSET_BASE_URL,
+  mode: 'r2',
+  baseUrl: remoteAssetBaseUrl.href,
   manifestVersion: R2_ASSET_MANIFEST_VERSION,
-  allowLocalFallback,
 });
 
-/**
- * Resolve an application asset ID to either its immutable R2 GLB or its local
- * GLTF fallback. Object-key segments are encoded individually so spaces and
- * punctuation in the flat R2 namespace cannot corrupt the request URL.
- */
+/** Resolve an application asset ID to its immutable R2 GLB URL. */
 export function resolveAssetUrl(key) {
-  const reg = ASSET_REGISTRY[key];
-  if (!reg) {
+  if (!ASSET_REGISTRY[key]) {
     throw new Error(`[AssetLoader] Unknown asset: ${key}`);
   }
-
-  if (!remoteAssetBaseUrl) return reg.gltfPath;
 
   const objectKey = R2_ASSET_MANIFEST[key];
   if (!objectKey) {
@@ -219,7 +208,6 @@ export function resolveAssetUrl(key) {
 }
 
 // R2 assets are generated with gltfpack and require EXT_meshopt_compression.
-// The decoder is also safe for the uncompressed local GLTF fallback.
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const loadCache = new Map();
 const loadedGeos = new Map(); // key -> { geometry, material, scene }
@@ -230,42 +218,18 @@ function loadGltf(url) {
   });
 }
 
-/**
- * Load a single asset from the configured source and cache the parsed GLTF.
- */
+/** Load a single R2 asset and cache the parsed GLTF. */
 export async function loadAsset(key) {
   if (loadCache.has(key)) return loadCache.get(key);
 
-  const reg = ASSET_REGISTRY[key];
-  if (!reg) {
-    throw new Error(`[AssetLoader] Unknown asset: ${key}`);
-  }
-
-  const primaryUrl = resolveAssetUrl(key);
-
+  const url = resolveAssetUrl(key);
   try {
-    const gltf = await loadGltf(primaryUrl);
+    const gltf = await loadGltf(url);
     loadCache.set(key, gltf);
     return gltf;
-  } catch (primaryError) {
-    if (remoteAssetBaseUrl && allowLocalFallback) {
-      console.warn(`[AssetLoader] R2 load failed for ${key}; retrying local fallback.`, primaryError);
-      try {
-        const gltf = await loadGltf(reg.gltfPath);
-        loadCache.set(key, gltf);
-        return gltf;
-      } catch (fallbackError) {
-        throw new AggregateError(
-          [primaryError, fallbackError],
-          `[AssetLoader] Failed to load ${key} from R2 and local fallback.`
-        );
-      }
-    }
-
-    const message = primaryError instanceof Error ? primaryError.message : String(primaryError);
-    throw new Error(`[AssetLoader] Failed to load ${key} from ${primaryUrl}: ${message}`, {
-      cause: primaryError,
-    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`[AssetLoader] Failed to load ${key} from ${url}: ${message}`, { cause: error });
   }
 }
 
