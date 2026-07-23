@@ -289,17 +289,27 @@ export function getAsset(key) {
 }
 
 /**
- * Extract first mesh geometry+material from a GLTF scene
+ * Extract the first mesh in scene space.
+ *
+ * gltfpack stores quantized mesh coordinates and the corresponding decode
+ * transform on the mesh node. InstancedMesh receives geometry directly, so the
+ * node's complete world matrix must be baked into a cloned geometry first.
  */
 export function extractMeshData(gltf) {
   let geo = null;
   let mat = null;
+
+  gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(child => {
     if (child.isMesh && !geo) {
-      geo = child.geometry;
+      geo = child.geometry.clone();
+      geo.applyMatrix4(child.matrixWorld);
+      geo.computeBoundingBox();
+      geo.computeBoundingSphere();
       mat = child.material;
     }
   });
+
   return { geometry: geo, material: mat };
 }
 
