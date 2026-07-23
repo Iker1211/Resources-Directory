@@ -84,6 +84,13 @@ function buildTileBatch(scene, assetKey, positions, tileType, progressCb) {
     return 0;
   }
 
+  const bounds = geometry.boundingBox;
+  const size = bounds?.getSize(new THREE.Vector3());
+  if (!size || size.x < 0.25 || size.z < 0.25 || size.x > 4 || size.z > 4 || size.y > 4) {
+    console.error(`[WorldBuilder] Invalid scene-space tile bounds for ${assetKey}:`, size);
+    return 0;
+  }
+
   const mat = material.clone();
   mat.flatShading = true;
 
