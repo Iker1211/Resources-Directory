@@ -1,21 +1,22 @@
 /**
- * World Generator — doubles the Thronwick hex grid (2nd doubling)
+ * Thronwick World Generator — Second-Crown Basin
+ *
  * Run: node scripts/generateWorld.cjs > src/data/worldData.js
- * 
- * Generates a ~2x larger world (from ~300 to ~600 cells) with:
- *   - Extended river (96 water tiles, doubled from 48)
- *   - 9 biomes with greatly expanded coverage
- *   - 36 field packs (doubled from 18)
- *   - More buildings, roads, clouds, trees, rocks
- *   - Deterministic PRNG for reproducibility
- * 
- * Target: ~600 cells (from ~300)
+ *
+ * Generates a completely new deterministic world while preserving the original
+ * architecture and rules:
+ *   - axial pointy-top hex grid
+ *   - one cell record per coordinate
+ *   - continuous north-to-south water chain
+ *   - contiguous 3–12 tile field packs
+ *   - Layer 0 terrain, Layer 1 environment, Layer 2 occupants
+ *   - only assets registered by the application loader
+ *   - deterministic output from a fixed seed
  */
 
-const fs = require('fs');
-const path = require('path');
+const WORLD_SEED = 20260723;
 
-// ── PRNG (mulberry32) ──
+// ── Deterministic PRNG ──────────────────────────────────────────────────
 function createPRNG(seed) {
   let s = seed | 0;
   return () => {
@@ -26,12 +27,15 @@ function createPRNG(seed) {
   };
 }
 
-const RNG = createPRNG(1337);
+const RNG = createPRNG(WORLD_SEED);
 const rng = () => RNG();
 
-// ── Constants ──
+// ── Hex geometry ────────────────────────────────────────────────────────
 const HEX_W = 1.82;
 const HEX_H = 1.575;
+const HEX_DIRS = [
+  [1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1],
+];
 
 function axialToWorld(q, r) {
   return { x: HEX_W * (q + r * 0.5), z: HEX_H * r };
@@ -39,165 +43,78 @@ function axialToWorld(q, r) {
 
 function cellKey(q, r) { return `${q},${r}`; }
 
-// ── Biomes ──
-const BIOMES = {
-  thornwick: { name: 'Thornwick', color: 0xc0a050, labelColor: '#c0d8e8', tileColor: 0x4a7a3a, desc: 'Central settlement of the kingdom' },
-  valley_floor: { name: 'The Valley Floor', color: 0x4a9a3a, labelColor: '#4a9a3a', tileColor: 0x3a7a3a, desc: 'Deep alluvial loam — grain cultivation' },
-  westwood: { name: 'The Westwood', color: 0x2a6a2a, labelColor: '#2a6a2a', tileColor: 0x2a5a2a, desc: 'Managed broadleaf woodland' },
-  grey_hills: { name: 'The Grey Hills', color: 0x7a6a4a, labelColor: '#7a6a4a', tileColor: 0x6a5a4a, desc: 'Limestone-and-ironstone ridge' },
-  southmarsh: { name: 'The Southmarsh', color: 0x3a7aba, labelColor: '#3a7aba', tileColor: 0x3a6a5a, desc: 'Reed beds and peat bogs' },
-  saltwick: { name: 'Saltwick Cove', color: 0x8a7a5a, labelColor: '#8a7a5a', tileColor: 0x7a6a4a, desc: 'Sheltered shingle beach' },
-  eastweald: { name: 'East Weald', color: 0x5a8a4a, labelColor: '#5a8a4a', tileColor: 0x4a7a3a, desc: 'Rolling wooded hills' },
-  northdowns: { name: 'North Downs', color: 0x8a9a7a, labelColor: '#8a9a7a', tileColor: 0x7a8a6a, desc: 'Chalk grassland escarpment' },
-};
-
-// ── River Path (96 water tiles, doubled from 48) ──
-// The Thorn River now flows from r=-20 far north to r=48 far south
-const RIVER_PATH = [
-  // Far north headwaters (r=-20 to r=-10)
-  { q: 1,  r: -20, variant: 'hex_river_J' },
-  { q: 1,  r: -19, variant: 'hex_river_A' },
-  { q: 0,  r: -18, variant: 'hex_river_A_curvy' },
-  { q: 0,  r: -17, variant: 'hex_river_A' },
-  { q: -1, r: -16, variant: 'hex_river_A_curvy' },
-  { q: -1, r: -15, variant: 'hex_river_A' },
-  { q: 0,  r: -15, variant: 'hex_river_A_curvy' },
-  { q: 0,  r: -14, variant: 'hex_river_A' },
-  { q: 1,  r: -14, variant: 'hex_river_A_curvy' },
-  { q: 1,  r: -13, variant: 'hex_river_A' },
-  { q: 0,  r: -12, variant: 'hex_river_A_curvy' },
-  { q: 0,  r: -11, variant: 'hex_river_A' },
-  // North headwaters continuation (r=-10 to 0)
-  { q: 0,  r: -10, variant: 'hex_river_J' },
-  { q: 0,  r: -9,  variant: 'hex_river_A' },
-  { q: -1, r: -8,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: -7,  variant: 'hex_river_A' },
-  { q: 0,  r: -7,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: -6,  variant: 'hex_river_J' },
-  { q: 0,  r: -5,  variant: 'hex_river_A' },
-  { q: -1, r: -4,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: -3,  variant: 'hex_river_A' },
-  { q: 0,  r: -3,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: -2,  variant: 'hex_river_A' },
-  { q: -1, r: -1,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 0,   variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 0,   variant: 'hex_river_A_curvy' },
-  // Central valley (r=1 to 12)
-  { q: 0,  r: 1,   variant: 'hex_river_A' },
-  { q: 0,  r: 2,   variant: 'hex_river_A' },
-  { q: 0,  r: 3,   variant: 'hex_river_A' },
-  { q: 1,  r: 3,   variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 4,   variant: 'hex_river_A' },
-  { q: 0,  r: 5,   variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 6,   variant: 'hex_river_A' },
-  { q: 1,  r: 6,   variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 7,   variant: 'hex_river_A' },
-  { q: 0,  r: 8,   variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 9,   variant: 'hex_river_A' },
-  { q: -1, r: 9,   variant: 'hex_river_A_curvy' },
-  { q: -1, r: 10,  variant: 'hex_river_A' },
-  { q: 0,  r: 10,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 11,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 12,  variant: 'hex_river_A' },
-  // Extended southern delta (r=12 to 24)
-  { q: -1, r: 12,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 13,  variant: 'hex_river_A' },
-  { q: 0,  r: 13,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 14,  variant: 'hex_river_A' },
-  { q: 1,  r: 14,  variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 15,  variant: 'hex_river_A' },
-  { q: 0,  r: 16,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 17,  variant: 'hex_river_A' },
-  { q: -1, r: 17,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 18,  variant: 'hex_river_A' },
-  { q: 0,  r: 18,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 19,  variant: 'hex_river_A' },
-  { q: -1, r: 19,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 20,  variant: 'hex_river_A' },
-  { q: 0,  r: 20,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 21,  variant: 'hex_river_A' },
-  { q: 1,  r: 21,  variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 22,  variant: 'hex_river_A' },
-  { q: 0,  r: 23,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 24,  variant: 'hex_river_A' },
-  // Far south extension (r=24 to 48)
-  { q: -1, r: 24,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 25,  variant: 'hex_river_A' },
-  { q: 0,  r: 25,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 26,  variant: 'hex_river_A' },
-  { q: 1,  r: 26,  variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 27,  variant: 'hex_river_A' },
-  { q: 0,  r: 28,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 29,  variant: 'hex_river_A' },
-  { q: -1, r: 29,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 30,  variant: 'hex_river_A' },
-  { q: 0,  r: 30,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 31,  variant: 'hex_river_A' },
-  { q: 1,  r: 31,  variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 32,  variant: 'hex_river_A' },
-  { q: 0,  r: 33,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 34,  variant: 'hex_river_A' },
-  { q: -1, r: 34,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 35,  variant: 'hex_river_A' },
-  { q: 0,  r: 35,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 36,  variant: 'hex_river_A' },
-  { q: 1,  r: 36,  variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 37,  variant: 'hex_river_A' },
-  { q: 0,  r: 38,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 39,  variant: 'hex_river_A' },
-  { q: -1, r: 39,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 40,  variant: 'hex_river_A' },
-  { q: 0,  r: 40,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 41,  variant: 'hex_river_A' },
-  { q: 1,  r: 41,  variant: 'hex_river_A_curvy' },
-  { q: 1,  r: 42,  variant: 'hex_river_A' },
-  { q: 0,  r: 43,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 44,  variant: 'hex_river_A' },
-  { q: -1, r: 44,  variant: 'hex_river_A_curvy' },
-  { q: -1, r: 45,  variant: 'hex_river_A' },
-  { q: 0,  r: 46,  variant: 'hex_river_A_curvy' },
-  { q: 0,  r: 47,  variant: 'hex_river_A' },
-  { q: 0,  r: 48,  variant: 'hex_river_J' },
-];
-
-// ── Water cells from river path ──
-const waterCells = RIVER_PATH.map(e => ({
-  q: e.q, r: e.r, tileType: 'water', biome: 'valley_floor', env: [], occ: null
-}));
-
-// ── Helper: get neighbors ──
-const HEX_DIRS = [
-  [1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]
-];
-
-function getNeighbors(q, r) {
-  return HEX_DIRS.map(([dq, dr]) => [q + dq, r + dr]);
+function hexDistance(a, b) {
+  const dq = a.q - b.q;
+  const dr = a.r - b.r;
+  return (Math.abs(dq) + Math.abs(dr) + Math.abs(dq + dr)) / 2;
 }
 
-// ── Track used cells ──
-const used = new Set();
-waterCells.forEach(c => used.add(cellKey(c.q, c.r)));
+function axialLine(a, b) {
+  const count = hexDistance(a, b);
+  const ac = { x: a.q, z: a.r, y: -a.q - a.r };
+  const bc = { x: b.q, z: b.r, y: -b.q - b.r };
+  const result = [];
 
-function isUsed(q, r) { return used.has(cellKey(q, r)); }
-function markUsed(q, r) { used.add(cellKey(q, r)); }
+  function cubeRound(cube) {
+    let rx = Math.round(cube.x);
+    let ry = Math.round(cube.y);
+    let rz = Math.round(cube.z);
+    const dx = Math.abs(rx - cube.x);
+    const dy = Math.abs(ry - cube.y);
+    const dz = Math.abs(rz - cube.z);
+    if (dx > dy && dx > dz) rx = -ry - rz;
+    else if (dy > dz) ry = -rx - rz;
+    else rz = -rx - ry;
+    return { q: rx, r: rz };
+  }
 
-// ── Building definitions ──
-const BUILDINGS = [
-  { key: 'building_castle_blue', label: "Lord's Great Hall", scale: 1.0 },
-  { key: 'building_tavern_blue', label: 'Brewery', scale: 1.0 },
-  { key: 'building_blacksmith_blue', label: 'Smithy', scale: 1.0 },
-  { key: 'building_church_blue', label: 'Chapel of St. Cuthbert', scale: 1.0 },
-  { key: 'building_market_blue', label: 'Granary', scale: 1.0 },
-  { key: 'building_tower_base_blue', label: 'Kiln', scale: 0.9 },
-  { key: 'building_home_A_blue', label: 'Demesne Barn', scale: 0.9 },
-  { key: 'building_home_B_blue', label: 'Tannery', scale: 0.9 },
-  { key: 'building_lumbermill_blue', label: 'Sawmill', scale: 0.9 },
-  { key: 'building_mine_blue', label: 'Smelter', scale: 0.9 },
-  { key: 'building_mine_green', label: 'Quarry', scale: 0.9 },
-  { key: 'building_stage_A', label: 'Dock', scale: 0.8 },
-];
+  for (let i = 0; i <= count; i++) {
+    const t = count === 0 ? 0 : i / count;
+    result.push(cubeRound({
+      x: ac.x + (bc.x - ac.x) * t,
+      y: ac.y + (bc.y - ac.y) * t,
+      z: ac.z + (bc.z - ac.z) * t,
+    }));
+  }
+  return result;
+}
 
-// ── Tree/asset pools ──
+function shuffled(values) {
+  const copy = [...values];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function pick(values) { return values[Math.floor(rng() * values.length)]; }
+function pickN(values, count) { return shuffled(values).slice(0, Math.min(count, values.length)); }
+
+// ── Biome vocabulary ───────────────────────────────────────────────────
+const BIOMES = {
+  thornwick: { name: 'Thornwick Crown', color: 0xc0a050, labelColor: '#d7c56a', tileColor: 0x4f7b3d, desc: 'Hill-town overlooking the Crown Bend' },
+  valley_floor: { name: 'Crown Valley', color: 0x4a9a3a, labelColor: '#61aa50', tileColor: 0x3b783a, desc: 'River-fed meadows and arable terraces' },
+  westwood: { name: 'The Deep Westwood', color: 0x2a6a2a, labelColor: '#4f9848', tileColor: 0x285728, desc: 'Dense managed woodland and coppice' },
+  grey_hills: { name: 'The Broken Grey Hills', color: 0x7a6a4a, labelColor: '#a09270', tileColor: 0x665943, desc: 'Ironstone shelves and limestone ridges' },
+  southmarsh: { name: 'The Reed March', color: 0x3a7aba, labelColor: '#5695ca', tileColor: 0x37695b, desc: 'Peat islands, reeds, and wet meadows' },
+  saltwick: { name: 'Saltwick Estuary', color: 0x8a7a5a, labelColor: '#b2a17e', tileColor: 0x76674d, desc: 'Tidal flats, shingle banks, and docks' },
+  eastweald: { name: 'The Amber Weald', color: 0x5a8a4a, labelColor: '#75a366', tileColor: 0x4a733d, desc: 'Open woodland and eastern grazing country' },
+  northdowns: { name: 'The Windward Downs', color: 0x8a9a7a, labelColor: '#a6b496', tileColor: 0x718263, desc: 'High chalk pasture above the headwaters' },
+};
+
+function classifyBiome(q, r) {
+  if (hexDistance({ q, r }, { q: 2, r: 0 }) <= 3) return 'thornwick';
+  if (r >= 20 && Math.abs(q + r * 0.12) <= 9) return 'saltwick';
+  if (r >= 10) return 'southmarsh';
+  if (r <= -8) return 'northdowns';
+  if (q <= -6) return 'westwood';
+  if (q >= 8 && r <= -1) return 'eastweald';
+  if (q >= 7) return 'grey_hills';
+  return 'valley_floor';
+}
+
+// ── Asset pools (all keys are present in ASSET_REGISTRY) ───────────────
 const TREE_POOL = [
   'Tree_1_A_Color1', 'Tree_1_B_Color1', 'Tree_1_C_Color1',
   'Tree_2_A_Color1', 'Tree_2_B_Color1', 'Tree_2_C_Color1', 'Tree_2_D_Color1', 'Tree_2_E_Color1',
@@ -214,572 +131,334 @@ const BUSH_POOL = [
 ];
 
 const ROCK_POOL = [
-  'Rock_1_A_Color1', 'Rock_1_J_Color1', 'Rock_1_K_Color1', 'Rock_1_L_Color1',
-  'Rock_1_M_Color1', 'Rock_1_N_Color1', 'Rock_1_O_Color1', 'Rock_1_P_Color1', 'Rock_1_Q_Color1',
-  'Rock_2_A_Color1', 'Rock_2_B_Color1', 'Rock_2_C_Color1', 'Rock_2_D_Color1', 'Rock_2_E_Color1', 'Rock_2_F_Color1',
-  'Rock_3_A_Color1', 'Rock_3_B_Color1', 'Rock_3_C_Color1', 'Rock_3_D_Color1', 'Rock_3_E_Color1', 'Rock_3_F_Color1',
-  'rock_single_A', 'rock_single_B', 'rock_single_C', 'rock_single_D', 'rock_single_E',
+  'Rock_1_A_Color1', 'Rock_1_B_Color1', 'Rock_1_J_Color1', 'Rock_1_K_Color1',
+  'Rock_1_L_Color1', 'Rock_1_M_Color1', 'Rock_1_N_Color1', 'Rock_1_O_Color1',
+  'Rock_1_P_Color1', 'Rock_1_Q_Color1', 'Rock_2_A_Color1', 'Rock_2_B_Color1',
+  'Rock_2_C_Color1', 'Rock_2_D_Color1', 'Rock_2_E_Color1', 'Rock_2_F_Color1',
+  'Rock_3_A_Color1', 'Rock_3_B_Color1', 'Rock_3_C_Color1', 'Rock_3_D_Color1',
+  'Rock_3_E_Color1', 'Rock_3_F_Color1', 'rock_single_A', 'rock_single_B',
+  'rock_single_C', 'rock_single_D', 'rock_single_E',
 ];
 
 const WATER_PLANT_POOL = ['waterplant_A', 'waterplant_B', 'waterplant_C', 'waterlily_A', 'waterlily_B'];
+const PROP_POOL = ['coin_stack_large', 'sack', 'barrel_small', 'barrel_large', 'Pallet_Wood', 'Pallet_Wood_Covered_A', 'Pallet_Wood_Covered_B', 'flag_blue', 'wheelbarrow'];
+const WOOD_POOL = ['Wood_Log_Stack', 'Wood_Log_A', 'Wood_Log_B', 'Wood_Planks_Stack_Large', 'resource_lumber'];
+const STONE_POOL = ['Iron_Nuggets', 'Iron_Nugget_Large', 'Iron_Bars_Stack_Small', 'Stone_Bricks_Stack_Medium', 'Stone_Bricks_Stack_Large', 'Stone_Chunks_Large', 'Stone_Brick', 'resource_stone'];
+const MARSH_RESOURCE_POOL = ['Fuel_B_Barrel', 'Fuel_B_Barrel_Dirty', 'Fuel_B_Barrels', 'Fuel_A_Barrel'];
+const COAST_POOL = ['sand_A', 'sand_B', 'hex_coast_A', 'crate_A_big', 'crate_A_small', 'crate_long_A', 'rope_bundle_A', 'bucket_water'];
 
-const PROP_POOL = [
-  'coin_stack_large', 'sack', 'barrel_small', 'barrel_large',
-  'Pallet_Wood', 'Pallet_Wood_Covered_A', 'Pallet_Wood_Covered_B',
-  'flag_blue', 'wheelbarrow',
-];
-
-const RESOURCE_POOL = [
-  'Wood_Log_Stack', 'Wood_Log_A', 'Wood_Log_B', 'Wood_Planks_Stack_Large', 'resource_lumber',
-  'Iron_Nuggets', 'Iron_Nugget_Large', 'Iron_Bars_Stack_Small',
-  'Stone_Bricks_Stack_Medium', 'Stone_Bricks_Stack_Large', 'Stone_Chunks_Large', 'Stone_Brick', 'resource_stone',
-  'Fuel_B_Barrel', 'Fuel_B_Barrel_Dirty', 'Fuel_B_Barrels', 'Fuel_A_Barrel',
-  'crate_A_big', 'crate_A_small', 'crate_long_A', 'rope_bundle_A', 'bucket_water',
-  'sand_A', 'sand_B', 'hex_coast_A',
-];
-
-function pick(arr) { return arr[Math.floor(rng() * arr.length)]; }
-function pickN(arr, n) {
-  const shuffled = [...arr].sort(() => rng() - 0.5);
-  return shuffled.slice(0, Math.min(n, shuffled.length));
+function baseEnvironment(biome) {
+  switch (biome) {
+    case 'westwood':
+      return pickN([...TREE_POOL, ...TREE_POOL, ...BUSH_POOL, ...ROCK_POOL], 2 + Math.floor(rng() * 2));
+    case 'grey_hills':
+      return pickN([...ROCK_POOL, ...ROCK_POOL, ...STONE_POOL], 1 + Math.floor(rng() * 2));
+    case 'eastweald':
+      return pickN([...TREE_POOL, ...BUSH_POOL, ...ROCK_POOL], 1 + Math.floor(rng() * 2));
+    case 'northdowns':
+      return pickN([...ROCK_POOL, ...BUSH_POOL], 1 + Math.floor(rng() * 2));
+    case 'southmarsh':
+      return pickN([...WATER_PLANT_POOL, ...WATER_PLANT_POOL, ...MARSH_RESOURCE_POOL], 1 + Math.floor(rng() * 2));
+    case 'saltwick':
+      return pickN([...COAST_POOL, ...PROP_POOL], 1 + Math.floor(rng() * 2));
+    case 'thornwick':
+      return rng() < 0.25 ? [pick(PROP_POOL)] : [];
+    default:
+      if (rng() < 0.35) return [pick([...TREE_POOL, ...BUSH_POOL, ...PROP_POOL])];
+      return [];
+  }
 }
 
-// ── Generate cells ──
-const cells = [];
+// ── World footprint ────────────────────────────────────────────────────
+// A broad central basin with a northern upland lobe and southern estuary.
+const cellMap = new Map();
+for (let q = -18; q <= 18; q++) {
+  for (let r = -16; r <= 28; r++) {
+    const inBasin = hexDistance({ q, r }, { q: 0, r: 4 }) <= 14;
+    const inNorthLobe = hexDistance({ q, r }, { q: -3, r: -9 }) <= 5;
+    const inSouthLobe = hexDistance({ q, r }, { q: 3, r: 20 }) <= 6;
+    if (!inBasin && !inNorthLobe && !inSouthLobe) continue;
 
-// 1. Water cells
-cells.push(...waterCells);
+    const biome = classifyBiome(q, r);
+    cellMap.set(cellKey(q, r), {
+      q,
+      r,
+      tileType: 'grass',
+      biome,
+      env: baseEnvironment(biome),
+      occ: null,
+    });
+  }
+}
 
-// 2. Thornwick settlement (expanded)
-const thornwickCells = [
-  { q: 1,  r: -1, env: ['hex_road_A'], occ: 'building_castle_blue', label: "Lord's Great Hall", occScale: 1.0 },
-  { q: 1,  r: 0,  env: [], occ: 'building_blacksmith_blue', label: 'Smithy', occScale: 1.0 },
-  { q: 1,  r: 1,  env: [], occ: 'building_church_blue', label: 'Chapel of St. Cuthbert', occScale: 1.0 },
-  { q: -1, r: 1,  env: ['hex_road_A'], occ: 'building_market_blue', label: 'Granary', occScale: 1.0 },
-  { q: -1, r: 2,  env: ['hex_road_A'], occ: 'building_tower_base_blue', label: 'Kiln', occScale: 0.9 },
-  { q: -2, r: 1,  env: [], occ: 'building_home_B_blue', label: 'Tannery', occScale: 0.9 },
-  { q: -2, r: 2,  env: ['hex_road_A'], occ: null, label: 'Thornwick Village' },
-  { q: 0,  r: -1, env: [], occ: 'building_tavern_blue', label: 'Brewery', occScale: 1.0 },
-  { q: 2,  r: -1, env: ['hex_road_A'], occ: 'building_home_A_blue', label: 'Demesne Barn', occScale: 0.9 },
-  { q: 2,  r: 0,  env: ['hex_road_A'], occ: null, label: 'Thornwick Market' },
-  { q: -2, r: 0,  env: ['hex_road_A'], occ: null },
-  { q: 0,  r: -2, env: [], occ: null },
-  { q: 2,  r: -2, env: ['hex_road_A'], occ: null },
-  { q: -3, r: 1,  env: [], occ: null },
-  { q: 3,  r: -1, env: [], occ: null },
-  { q: -1, r: -2, env: [], occ: null },
-  { q: 3,  r: 0,  env: ['hex_road_A'], occ: null },
-  { q: -3, r: 0,  env: [], occ: null },
-  { q: -3, r: 2,  env: [], occ: null },
-  { q: 3,  r: 1,  env: [], occ: null },
-  // Extra Thornwick blocks
-  { q: 4,  r: -2, env: ['hex_road_A'], occ: null },
-  { q: -4, r: 1,  env: [], occ: null },
-  { q: 4,  r: 1,  env: [], occ: null },
-  { q: -4, r: 2,  env: [], occ: null },
-];
+function requireCell(q, r) {
+  const cell = cellMap.get(cellKey(q, r));
+  if (!cell) throw new Error(`World feature falls outside footprint: ${q},${r}`);
+  return cell;
+}
 
-thornwickCells.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    cells.push({ q: c.q, r: c.r, tileType: 'grass', biome: 'thornwick', env: c.env || [], occ: c.occ || null, label: c.label || undefined, occScale: c.occScale || undefined });
+// ── Continuous Thorn River ─────────────────────────────────────────────
+const RIVER_PATH = [];
+const lateralByRow = new Map([
+  [-11, 1], [-7, 1], [-3, -1], [2, -1], [6, 1],
+  [10, 1], [14, -1], [18, -1], [22, 1],
+]);
+let riverQ = -2;
+for (let r = -14; r <= 26; r++) {
+  const rowVariant = r === -14 || r === 26 ? 'hex_river_J'
+    : r === 0 ? 'hex_river_crossing_A'
+    : 'hex_river_A';
+  RIVER_PATH.push({ q: riverQ, r, variant: rowVariant });
+  if (lateralByRow.has(r)) {
+    riverQ += lateralByRow.get(r);
+    RIVER_PATH.push({ q: riverQ, r, variant: 'hex_river_A_curvy' });
+  }
+}
+
+const riverLabels = new Map([
+  [-12, 'Thorn Headwaters'],
+  [0, 'The Crown Bend'],
+  [12, 'Reedwater Reach'],
+  [22, 'Saltwick Estuary'],
+  [26, "River's End"],
+]);
+const labeledRiverRows = new Set();
+RIVER_PATH.forEach(entry => {
+  const cell = requireCell(entry.q, entry.r);
+  cell.tileType = 'water';
+  cell.biome = entry.r >= 20 ? 'saltwick' : entry.r >= 10 ? 'southmarsh' : 'valley_floor';
+  cell.env = [];
+  cell.occ = null;
+  if (riverLabels.has(entry.r) && !labeledRiverRows.has(entry.r)) {
+    cell.label = riverLabels.get(entry.r);
+    labeledRiverRows.add(entry.r);
   }
 });
 
-// 3. Millthorpe (expanded)
-const millthorpeCells = [
-  { q: -1, r: -2, env: [], occ: 'building_lumbermill_blue', label: 'Sawmill', occScale: 0.9 },
-  { q: -1, r: -3, env: ['Wood_Log_Stack', 'Wood_Log_A'], occ: null, label: 'Millthorpe' },
-  { q: -2, r: -2, env: ['Wood_Log_A', 'Wood_Log_B'], occ: null },
-  { q: -2, r: -3, env: ['Wood_Planks_Stack_Large', 'resource_lumber'], occ: null },
-  { q: -3, r: -3, env: ['Wood_Log_Stack', 'Wood_Log_A'], occ: null },
-  { q: -3, r: -2, env: ['trees_A_medium', 'trees_A_small'], occ: null },
-  { q: -4, r: -3, env: ['Wood_Log_B', 'resource_lumber'], occ: null },
-  { q: -4, r: -2, env: ['Wood_Planks_Stack_Large', 'Wood_Log_Stack'], occ: null },
-  // New Millthorpe expansion
-  { q: -5, r: -3, env: ['Wood_Log_A', 'Wood_Log_B'], occ: null },
-  { q: -5, r: -2, env: ['trees_A_large', 'trees_B_medium'], occ: null },
-  { q: -4, r: -4, env: ['Wood_Planks_Stack_Large', 'resource_lumber'], occ: null },
-  { q: -2, r: -4, env: ['Wood_Log_Stack', 'resource_lumber'], occ: null },
+// ── Road network ───────────────────────────────────────────────────────
+const HUBS = {
+  thornwick: { q: 2, r: 0 },
+  millthorpe: { q: -3, r: -5 },
+  northwatch: { q: -5, r: -10 },
+  hillend: { q: 8, r: 2 },
+  eastweald: { q: 10, r: -3 },
+  saltwick: { q: 1, r: 22 },
+};
+
+const roadPairs = [
+  ['thornwick', 'millthorpe'],
+  ['millthorpe', 'northwatch'],
+  ['thornwick', 'hillend'],
+  ['hillend', 'eastweald'],
+  ['thornwick', 'saltwick'],
 ];
 
-millthorpeCells.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    cells.push({ q: c.q, r: c.r, tileType: 'grass', biome: 'valley_floor', env: c.env || [], occ: c.occ || null, label: c.label || undefined, occScale: c.occScale || undefined });
-  }
-});
-
-// 4. Field packs (36 packs — doubled from 18)
-const fieldPacks = [
-  // ── Original 18 packs ──
-  { packId: 'demesne_grain_1', cropType: 'grain', label: "Lord's Demesne — Wheat", cells: [
-    { q: -3, r: -1 }, { q: -3, r: 0 }, { q: -2, r: 0 }, { q: -2, r: -1 }, { q: -1, r: -2 }, { q: -2, r: -2 },
-  ]},
-  { packId: 'valley_grain_1', cropType: 'grain', label: 'Valley Grain Fields', cells: [
-    { q: 2, r: 0 }, { q: 2, r: 1 }, { q: 1, r: 2 }, { q: 2, r: 2 },
-  ]},
-  { packId: 'valley_fallow_1', cropType: 'fallow', label: 'Fallow Fields', cells: [
-    { q: -1, r: 3 }, { q: 0, r: 4 }, { q: -1, r: 4 },
-  ]},
-  { packId: 'valley_grain_2', cropType: 'grain', label: 'Barley Fields', cells: [
-    { q: 1, r: 5 }, { q: 2, r: 5 }, { q: 1, r: 6 },
-  ]},
-  { packId: 'thornwick_gardens', cropType: 'grain', label: 'Thornwick Gardens', cells: [
-    { q: 2, r: -2 }, { q: 3, r: -2 },
-  ]},
-  { packId: 'grey_hills_pasture', cropType: 'pasture', label: 'Hill Pasture', cells: [
-    { q: 3, r: 2 }, { q: 4, r: 2 }, { q: 3, r: 3 }, { q: 4, r: 3 },
-  ]},
-  { packId: 'eastweald_grain_1', cropType: 'grain', label: 'East Weald Cornfields', cells: [
-    { q: 5, r: 0 }, { q: 5, r: 1 }, { q: 6, r: 0 }, { q: 6, r: 1 }, { q: 5, r: 2 },
-  ]},
-  { packId: 'northdowns_pasture', cropType: 'pasture', label: 'North Downs Sheep Walk', cells: [
-    { q: -4, r: -4 }, { q: -4, r: -3 }, { q: -5, r: -3 }, { q: -5, r: -2 },
-  ]},
-  { packId: 'valley_fallow_2', cropType: 'fallow', label: 'Lower Fallows', cells: [
-    { q: 2, r: 4 }, { q: 3, r: 4 }, { q: 2, r: 5 },
-  ]},
-  { packId: 'westwood_meadow', cropType: 'pasture', label: 'Westwood Meadow', cells: [
-    { q: -5, r: 1 }, { q: -5, r: 2 }, { q: -4, r: 1 }, { q: -4, r: 2 },
-  ]},
-  { packId: 'valley_grain_3', cropType: 'grain', label: 'South Valley Grain', cells: [
-    { q: 3, r: 5 }, { q: 3, r: 6 }, { q: 4, r: 5 }, { q: 4, r: 6 }, { q: 4, r: 7 },
-  ]},
-  { packId: 'thornwick_gardens_2', cropType: 'grain', label: 'Millthorpe Gardens', cells: [
-    { q: -3, r: -4 }, { q: -3, r: -3 }, { q: -2, r: -5 }, { q: -2, r: -4 },
-  ]},
-  { packId: 'north_grain_1', cropType: 'grain', label: 'Northern Wheatfields', cells: [
-    { q: -2, r: -6 }, { q: -2, r: -5 }, { q: -1, r: -6 }, { q: -1, r: -5 },
-  ]},
-  { packId: 'grey_hills_fallow', cropType: 'fallow', label: 'Hill Fallow', cells: [
-    { q: 5, r: 3 }, { q: 5, r: 4 }, { q: 6, r: 3 }, { q: 6, r: 4 },
-  ]},
-  { packId: 'eastweald_pasture', cropType: 'pasture', label: 'East Pasture', cells: [
-    { q: 7, r: 1 }, { q: 7, r: 2 }, { q: 8, r: 1 }, { q: 8, r: 2 },
-  ]},
-  { packId: 'southmarsh_grain', cropType: 'grain', label: 'Marsh Edge Fields', cells: [
-    { q: -2, r: 9 }, { q: -2, r: 10 }, { q: -1, r: 10 }, { q: -1, r: 11 },
-  ]},
-  { packId: 'valley_grain_4', cropType: 'grain', label: 'Riverbend Fields', cells: [
-    { q: 2, r: 7 }, { q: 2, r: 8 }, { q: 3, r: 7 }, { q: 3, r: 8 },
-  ]},
-  { packId: 'northdowns_fallow', cropType: 'fallow', label: 'Downs Fallow', cells: [
-    { q: -5, r: -5 }, { q: -5, r: -4 }, { q: -6, r: -4 },
-  ]},
-  // ── 18 NEW packs (doubling) ──
-  { packId: 'far_north_grain_1', cropType: 'grain', label: 'High Moor Barley', cells: [
-    { q: -3, r: -10 }, { q: -3, r: -9 }, { q: -2, r: -10 }, { q: -2, r: -9 },
-  ]},
-  { packId: 'far_north_fallow_1', cropType: 'fallow', label: 'High Moor Fallow', cells: [
-    { q: -4, r: -8 }, { q: -4, r: -7 }, { q: -3, r: -8 }, { q: -3, r: -7 },
-  ]},
-  { packId: 'far_north_pasture_1', cropType: 'pasture', label: 'North Ridge Pasture', cells: [
-    { q: -6, r: -9 }, { q: -6, r: -8 }, { q: -5, r: -9 }, { q: -5, r: -8 },
-  ]},
-  { packId: 'west_deep_grain', cropType: 'grain', label: 'Deep Westwood Fields', cells: [
-    { q: -8, r: -1 }, { q: -8, r: 0 }, { q: -7, r: -1 }, { q: -7, r: 0 }, { q: -8, r: 1 },
-  ]},
-  { packId: 'west_deep_fallow', cropType: 'fallow', label: 'Western Fallow', cells: [
-    { q: -9, r: 1 }, { q: -9, r: 2 }, { q: -8, r: 2 }, { q: -8, r: 3 },
-  ]},
-  { packId: 'south_valley_grain_5', cropType: 'grain', label: 'Great South Fields', cells: [
-    { q: 2, r: 11 }, { q: 2, r: 12 }, { q: 3, r: 11 }, { q: 3, r: 12 }, { q: 3, r: 13 },
-  ]},
-  { packId: 'south_valley_fallow', cropType: 'fallow', label: 'South Fallow', cells: [
-    { q: -2, r: 13 }, { q: -2, r: 14 }, { q: -1, r: 13 }, { q: -1, r: 14 },
-  ]},
-  { packId: 'south_valley_pasture', cropType: 'pasture', label: 'Southfen Pasture', cells: [
-    { q: 2, r: 13 }, { q: 2, r: 14 }, { q: 3, r: 14 }, { q: 3, r: 15 },
-  ]},
-  { packId: 'far_east_grain_1', cropType: 'grain', label: 'Eastern Plains Grain', cells: [
-    { q: 9, r: -2 }, { q: 9, r: -1 }, { q: 10, r: -2 }, { q: 10, r: -1 },
-  ]},
-  { packId: 'far_east_pasture', cropType: 'pasture', label: 'Eastern Sheep Run', cells: [
-    { q: 11, r: -1 }, { q: 11, r: 0 }, { q: 12, r: -1 }, { q: 12, r: 0 }, { q: 11, r: 1 },
-  ]},
-  { packId: 'far_east_fallow', cropType: 'fallow', label: 'East Fallow Ground', cells: [
-    { q: 10, r: 1 }, { q: 10, r: 2 }, { q: 11, r: 2 }, { q: 11, r: 3 },
-  ]},
-  { packId: 'deep_south_grain_1', cropType: 'grain', label: 'Delta Grain Fields', cells: [
-    { q: 2, r: 20 }, { q: 2, r: 21 }, { q: 3, r: 20 }, { q: 3, r: 21 }, { q: 3, r: 22 },
-  ]},
-  { packId: 'deep_south_fallow_1', cropType: 'fallow', label: 'Delta Fallow', cells: [
-    { q: -2, r: 20 }, { q: -2, r: 21 }, { q: -3, r: 20 }, { q: -3, r: 21 },
-  ]},
-  { packId: 'deep_south_pasture_1', cropType: 'pasture', label: 'Delta Meadow', cells: [
-    { q: -2, r: 16 }, { q: -2, r: 17 }, { q: -3, r: 16 }, { q: -3, r: 17 },
-  ]},
-  { packId: 'far_south_grain_1', cropType: 'grain', label: 'Lower Marsh Grain', cells: [
-    { q: 2, r: 27 }, { q: 2, r: 28 }, { q: 3, r: 27 }, { q: 3, r: 28 },
-  ]},
-  { packId: 'far_south_fallow_1', cropType: 'fallow', label: 'Lower Marsh Fallow', cells: [
-    { q: -2, r: 27 }, { q: -2, r: 28 }, { q: -3, r: 27 }, { q: -3, r: 28 },
-  ]},
-  { packId: 'far_south_pasture_1', cropType: 'pasture', label: 'River Mouth Pasture', cells: [
-    { q: 2, r: 33 }, { q: 2, r: 34 }, { q: 3, r: 33 }, { q: 3, r: 34 }, { q: 3, r: 35 },
-  ]},
-  { packId: 'far_south_grain_2', cropType: 'grain', label: 'Estuary Barley', cells: [
-    { q: -2, r: 33 }, { q: -2, r: 34 }, { q: -3, r: 33 }, { q: -3, r: 34 },
-  ]},
-];
-
-// Add field pack cells
-fieldPacks.forEach(pack => {
-  pack.cells.forEach(c => {
-    if (!isUsed(c.q, c.r)) {
-      markUsed(c.q, c.r);
-      const biome = 
-        c.r >= 25 ? 'southmarsh' :
-        c.r >= 13 ? 'saltwick' :
-        c.r >= 9 ? 'southmarsh' :
-        c.q >= 9 ? 'eastweald' :
-        c.q >= 7 ? 'eastweald' :
-        c.q >= 4 && c.r >= 3 ? 'grey_hills' :
-        c.q <= -7 ? 'westwood' :
-        c.q <= -5 && c.r >= -2 ? 'westwood' :
-        c.q <= -5 ? 'northdowns' :
-        c.q <= -4 ? 'northdowns' :
-        c.r <= -8 ? 'northdowns' :
-        'valley_floor';
-      const env = [];
-      if (rng() < 0.5) env.push('fence_wood_straight');
-      if (rng() < 0.2) env.push('fence_wood_straight_gate');
-      if (rng() < 0.3) env.push(pack.cropType === 'pasture' ? 'Pallet_Wood_Covered_A' : 'sack');
-      cells.push({ q: c.q, r: c.r, tileType: 'grass', biome, env, occ: null, packId: pack.packId, cropType: pack.cropType });
-    }
+const roadKeys = new Set();
+roadPairs.forEach(([from, to]) => {
+  axialLine(HUBS[from], HUBS[to]).forEach(({ q, r }) => {
+    const cell = cellMap.get(cellKey(q, r));
+    if (!cell || cell.tileType === 'water') return;
+    cell.tileType = 'road';
+    cell.env = [];
+    roadKeys.add(cellKey(q, r));
   });
 });
 
-// 5. Westwood (expanded — larger western forest)
-for (let q = -12; q <= -3; q++) {
-  for (let r = -8; r <= 8; r++) {
-    if (!isUsed(q, r) && Math.abs(q + r * 0.5) < 11 && Math.abs(r) < 9) {
-      markUsed(q, r);
-      const envCount = 1 + Math.floor(rng() * 2);
-      const env = [];
-      for (let i = 0; i < envCount; i++) {
-        if (rng() < 0.6) env.push(pick(TREE_POOL));
-        else if (rng() < 0.8) env.push(pick(BUSH_POOL));
-        else env.push(pick(ROCK_POOL));
+// ── Settlements and industries ─────────────────────────────────────────
+const settlementCells = [
+  { q: 2, r: 0, occ: 'building_castle_blue', label: 'Thornwick Crown — Great Hall', scale: 1.0 },
+  { q: 3, r: 0, occ: 'building_tavern_blue', label: 'Crown Brewery', scale: 0.9 },
+  { q: 2, r: 1, occ: 'building_blacksmith_blue', label: 'Crown Smithy', scale: 0.9 },
+  { q: 3, r: -1, occ: 'building_church_blue', label: 'Chapel of St. Cuthbert', scale: 0.9 },
+  { q: 4, r: -1, occ: 'building_market_blue', label: 'Crown Granary', scale: 0.9 },
+  { q: 4, r: 0, occ: 'building_tower_base_blue', label: 'Eastwatch Tower', scale: 0.85 },
+  { q: 1, r: 1, occ: 'building_home_A_blue', label: 'Demesne Barn', scale: 0.85 },
+  { q: 3, r: 1, occ: 'building_home_B_blue', label: 'Tannery', scale: 0.85 },
+
+  { q: -3, r: -5, occ: 'building_lumbermill_blue', label: 'Millthorpe Sawmill', scale: 0.9 },
+  { q: -1, r: -5, occ: 'building_watermill_blue', label: 'Upper Thorn Watermill', scale: 0.9 },
+
+  { q: 8, r: 2, occ: 'building_mine_blue', label: 'Hillend Smelter', scale: 0.9 },
+  { q: 9, r: 2, occ: 'building_mine_green', label: 'Grey Hills Quarry', scale: 0.9 },
+
+  { q: 1, r: 22, occ: 'building_stage_A', label: 'Saltwick Dock', scale: 0.8 },
+];
+
+settlementCells.forEach(def => {
+  const cell = requireCell(def.q, def.r);
+  if (cell.tileType === 'water') throw new Error(`Settlement overlaps river: ${def.label}`);
+  cell.occ = def.occ;
+  cell.label = def.label;
+  cell.occScale = def.scale;
+  cell.env = [];
+});
+
+const featureCells = [
+  { q: -4, r: -5, label: 'Millthorpe', env: ['Wood_Log_Stack', 'Wood_Log_A', 'Wood_Planks_Stack_Large'] },
+  { q: -5, r: -6, label: 'The Timber Yards', env: ['Wood_Log_B', 'resource_lumber'] },
+  { q: 7, r: 3, label: 'Hillend Ore Face', env: ['Iron_Nuggets', 'Iron_Nugget_Large', 'Iron_Bars_Stack_Small'] },
+  { q: 8, r: 3, label: 'Quarry Steps', env: ['Stone_Bricks_Stack_Medium', 'Stone_Chunks_Large'] },
+  { q: 2, r: 22, label: 'Salt Pans', env: ['sand_A', 'sand_B', 'bucket_water'] },
+  { q: 2, r: 23, label: 'Harbour Stores', env: ['barrel_large', 'crate_A_big', 'rope_bundle_A'] },
+  { q: -4, r: 15, label: 'The Peat Beds', env: ['Fuel_B_Barrel', 'Fuel_B_Barrel_Dirty', 'waterplant_A'] },
+];
+featureCells.forEach(def => {
+  const cell = requireCell(def.q, def.r);
+  if (cell.tileType === 'water' || cell.occ) return;
+  cell.label = def.label;
+  cell.env = def.env;
+});
+
+// ── Contiguous field packs ─────────────────────────────────────────────
+const PACK_DEFINITIONS = [
+  ['crown_wheat', 'grain', 'Crown Wheat Terraces', 5, 3, 6],
+  ['crown_fallow', 'fallow', 'Crown Fallow', 4, 6, 5],
+  ['lower_barley', 'grain', 'Lower Valley Barley', 2, 8, 6],
+  ['west_meadow', 'pasture', 'Westwood Meadow', -5, 5, 5],
+  ['millthorpe_oats', 'grain', 'Millthorpe Oats', -5, -3, 5],
+  ['north_sheepwalk', 'pasture', 'Windward Sheep Walk', -6, -9, 6],
+  ['north_fallow', 'fallow', 'Downs Fallow', -3, -8, 4],
+  ['east_corn', 'grain', 'Amber Weald Corn', 9, -1, 6],
+  ['east_pasture', 'pasture', 'East Weald Pasture', 11, 1, 5],
+  ['hill_fallow', 'fallow', 'Grey Hills Fallow', 7, 5, 4],
+  ['riverbend_grain', 'grain', 'Riverbend Grain', 4, 10, 6],
+  ['reed_meadow', 'pasture', 'Reedwater Meadow', -4, 11, 5],
+  ['marsh_grain', 'grain', 'March Edge Grain', 3, 13, 5],
+  ['marsh_fallow', 'fallow', 'March Fallow', -5, 13, 4],
+  ['peat_pasture', 'pasture', 'Peat Island Pasture', 5, 15, 5],
+  ['lost_croft', 'abandoned', 'The Lost Croft', -6, 17, 4],
+  ['estuary_barley', 'grain', 'Estuary Barley', 4, 19, 5],
+  ['estuary_fallow', 'fallow', 'Estuary Fallow', -4, 19, 4],
+  ['saltwick_grazing', 'pasture', 'Saltwick Grazing', 5, 22, 5],
+  ['old_salt_fields', 'abandoned', 'Old Salt Fields', -5, 22, 4],
+  ['south_wheat', 'grain', 'Southbank Wheat', 4, 24, 5],
+  ['south_meadow', 'pasture', 'Southbank Meadow', -4, 24, 5],
+  ['west_coppice_field', 'fallow', 'Coppice Edge Fallow', -8, 1, 4],
+  ['quarry_pasture', 'pasture', 'Quarry Pasture', 10, 5, 4],
+];
+
+const fieldPacks = [];
+const fieldKeys = new Set();
+
+function fieldCellAvailable(q, r) {
+  const cell = cellMap.get(cellKey(q, r));
+  return Boolean(cell)
+    && cell.tileType === 'grass'
+    && !cell.occ
+    && !fieldKeys.has(cellKey(q, r));
+}
+
+function growFieldPack(packIndex, q, r, size) {
+  const target = { q, r };
+  const candidates = [...cellMap.values()]
+    .filter(cell => fieldCellAvailable(cell.q, cell.r) && hexDistance(cell, target) <= 4)
+    .sort((a, b) => hexDistance(a, target) - hexDistance(b, target) || a.r - b.r || a.q - b.q);
+  if (candidates.length === 0) throw new Error(`No available seed near ${q},${r}`);
+
+  const start = candidates[0];
+  const cells = [];
+  const queued = new Set([cellKey(start.q, start.r)]);
+  const queue = [start];
+  const directionOffset = packIndex % HEX_DIRS.length;
+
+  while (queue.length > 0 && cells.length < size) {
+    const current = queue.shift();
+    if (!fieldCellAvailable(current.q, current.r)) continue;
+    cells.push({ q: current.q, r: current.r });
+    fieldKeys.add(cellKey(current.q, current.r));
+
+    for (let i = 0; i < HEX_DIRS.length; i++) {
+      const [dq, dr] = HEX_DIRS[(i + directionOffset) % HEX_DIRS.length];
+      const next = { q: current.q + dq, r: current.r + dr };
+      const key = cellKey(next.q, next.r);
+      if (!queued.has(key) && fieldCellAvailable(next.q, next.r)) {
+        queued.add(key);
+        queue.push(next);
       }
-      const label = (q === -6 && r === 0) ? 'The Westwood' : undefined;
-      cells.push({ q, r, tileType: 'grass', biome: 'westwood', env, occ: null, label });
     }
   }
+
+  if (cells.length < 3) throw new Error(`Field pack at ${q},${r} has only ${cells.length} cells`);
+  return cells;
 }
 
-// 6. Grey Hills (expanded further east)
-for (let q = 3; q <= 14; q++) {
-  for (let r = -6; r <= 10; r++) {
-    if (!isUsed(q, r) && Math.abs(q + r * 0.5) < 16 && Math.abs(r) < 11) {
-      markUsed(q, r);
-      const envCount = 1 + Math.floor(rng() * 2);
-      const env = [];
-      for (let i = 0; i < envCount; i++) {
-        if (rng() < 0.7) env.push(pick(ROCK_POOL));
-        else if (rng() < 0.85) env.push(pick(RESOURCE_POOL.filter(k => k.startsWith('Iron_') || k.startsWith('Stone_'))));
-        else env.push(pick(TREE_POOL));
+PACK_DEFINITIONS.forEach(([packId, cropType, label, q, r, size], index) => {
+  const packCells = growFieldPack(index, q, r, size);
+  const pack = { packId, cropType, label, cells: packCells };
+  fieldPacks.push(pack);
+
+  packCells.forEach((coord, cellIndex) => {
+    const cell = requireCell(coord.q, coord.r);
+    cell.packId = packId;
+    cell.cropType = cropType;
+    cell.env = [];
+    if (cellIndex === 0 || rng() < 0.45) cell.env.push('fence_wood_straight');
+    if (rng() < 0.15) cell.env.push('fence_wood_straight_gate');
+    if (rng() < 0.25) cell.env.push(cropType === 'pasture' ? 'Pallet_Wood_Covered_A' : 'sack');
+  });
+});
+
+// ── Biome labels and atmospheric clouds ────────────────────────────────
+const biomeLabels = [
+  [-9, 2, 'The Deep Westwood'],
+  [10, 3, 'The Broken Grey Hills'],
+  [10, -4, 'The Amber Weald'],
+  [-5, -11, 'The Windward Downs'],
+  [3, 6, 'Crown Valley'],
+  [-5, 14, 'The Reed March'],
+  [4, 22, 'Saltwick Estuary'],
+];
+biomeLabels.forEach(([q, r, label]) => {
+  const cell = cellMap.get(cellKey(q, r));
+  if (cell && !cell.label) cell.label = label;
+});
+
+const cloudCandidates = shuffled([...cellMap.values()].filter(cell =>
+  cell.tileType === 'grass' && !cell.occ && !cell.packId && cell.env.length < 2
+));
+cloudCandidates.slice(0, 18).forEach((cell, index) => {
+  cell.env.push('cloud_big');
+  if (index % 7 === 0) cell.env.push('cloud_big');
+});
+
+// ── Final cell list and invariant checks ───────────────────────────────
+const cells = [...cellMap.values()].sort((a, b) => a.r - b.r || a.q - b.q);
+
+function assert(condition, message) {
+  if (!condition) throw new Error(`World validation failed: ${message}`);
+}
+
+assert(cells.length === cellMap.size, 'duplicate cell coordinates');
+assert(RIVER_PATH.length >= 40, 'river is too short');
+for (let i = 1; i < RIVER_PATH.length; i++) {
+  assert(hexDistance(RIVER_PATH[i - 1], RIVER_PATH[i]) === 1, `river discontinuity at index ${i}`);
+}
+fieldPacks.forEach(pack => {
+  assert(pack.cells.length >= 3 && pack.cells.length <= 12, `${pack.packId} size outside 3–12`);
+  const connected = new Set([cellKey(pack.cells[0].q, pack.cells[0].r)]);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    pack.cells.forEach(cell => {
+      if (connected.has(cellKey(cell.q, cell.r))) return;
+      if (HEX_DIRS.some(([dq, dr]) => connected.has(cellKey(cell.q + dq, cell.r + dr)))) {
+        connected.add(cellKey(cell.q, cell.r));
+        changed = true;
       }
-      const label = (q === 3 && r === 0) ? 'The Grey Hills' : undefined;
-      cells.push({ q, r, tileType: 'grass', biome: 'grey_hills', env, occ: null, label });
-    }
+    });
   }
-}
-
-// 7. Southmarsh (expanded further south)
-for (let q = -7; q <= 7; q++) {
-  for (let r = 6; r <= 24; r++) {
-    if (!isUsed(q, r) && Math.abs(q + r * 0.5) < 10 && r >= 6) {
-      markUsed(q, r);
-      const envCount = 1 + Math.floor(rng() * 2);
-      const env = [];
-      for (let i = 0; i < envCount; i++) {
-        if (rng() < 0.6) env.push(pick(WATER_PLANT_POOL));
-        else if (rng() < 0.8) env.push(pick(['Fuel_B_Barrel', 'Fuel_B_Barrel_Dirty', 'Fuel_B_Barrels']));
-        else env.push(pick(PROP_POOL));
-      }
-      const label = (q === -1 && r === 6) ? 'The Southmarsh' : (q === -1 && r === 7) ? 'Peat Beds' : undefined;
-      cells.push({ q, r, tileType: 'grass', biome: 'southmarsh', env, occ: null, label });
-    }
-  }
-}
-
-// 8. Saltwick Cove (expanded — larger coastal area)
-const saltwickCells = [
-  { q: -1, r: 7,  env: ['sand_A', 'sand_B'], occ: null, label: 'Saltwick Cove' },
-  { q: -2, r: 7,  env: ['sand_A'], occ: null },
-  { q: 1,  r: 7,  env: ['sand_B', 'hex_coast_A'], occ: null },
-  { q: 0,  r: 8,  env: ['barrel_large', 'crate_A_big', 'rope_bundle_A'], occ: 'building_stage_A', label: 'Dock', occScale: 0.8 },
-  { q: -1, r: 8,  env: ['Fuel_A_Barrel', 'bucket_water'], occ: null, label: 'Salt Pans' },
-  { q: 1,  r: 8,  env: ['crate_long_A', 'crate_A_small'], occ: null },
-  { q: 2,  r: 7,  env: ['flag_blue', 'barrel_small'], occ: null },
-  { q: 0,  r: 9,  env: ['coin_stack_large', 'sack'], occ: null, label: 'Coastwatch' },
-  { q: -2, r: 8,  env: ['barrel_small', 'barrel_small'], occ: null },
-  { q: -3, r: 7,  env: ['sand_A', 'sand_B'], occ: null },
-  { q: -3, r: 8,  env: ['sand_A', 'flag_blue'], occ: null },
-  { q: 2,  r: 8,  env: ['sand_B', 'crate_A_small'], occ: null },
-  { q: 1,  r: 9,  env: ['coin_stack_large', 'barrel_small'], occ: null },
-  { q: -1, r: 9,  env: ['sand_A', 'bucket_water'], occ: null },
-  { q: -4, r: 9,  env: ['sand_A', 'sand_B', 'flag_blue'], occ: null, label: "Fisherman's Bay" },
-  { q: -4, r: 10, env: ['sand_B', 'crate_long_A'], occ: null },
-  { q: -3, r: 10, env: ['sand_A', 'barrel_small'], occ: null },
-  { q: -2, r: 10, env: ['sand_A', 'bucket_water'], occ: null },
-  { q: 3,  r: 9,  env: ['sand_B', 'flag_blue', 'crate_A_big'], occ: null },
-  { q: 3,  r: 10, env: ['sand_B', 'barrel_large'], occ: null },
-  { q: 2,  r: 10, env: ['sand_A', 'coin_stack_large'], occ: null },
-  // New saltwick expansion
-  { q: -5, r: 9,  env: ['sand_A', 'flag_blue'], occ: null },
-  { q: -5, r: 10, env: ['sand_B', 'barrel_small'], occ: null },
-  { q: 4,  r: 9,  env: ['sand_A', 'crate_A_big'], occ: null },
-  { q: 4,  r: 10, env: ['sand_B', 'rope_bundle_A'], occ: null },
-  { q: -4, r: 11, env: ['sand_A', 'barrel_small'], occ: null },
-  { q: -3, r: 11, env: ['sand_B', 'bucket_water'], occ: null },
-  { q: 3,  r: 11, env: ['sand_A', 'crate_A_small'], occ: null },
-  { q: 2,  r: 11, env: ['sand_B', 'flag_blue'], occ: null },
-  { q: -5, r: 11, env: ['sand_A', 'sand_B'], occ: null, label: 'Far Shore' },
-  { q: 4,  r: 11, env: ['sand_A', 'barrel_large'], occ: null },
-  { q: 5,  r: 10, env: ['sand_B', 'crate_long_A'], occ: null },
-  { q: -6, r: 10, env: ['sand_A', 'flag_blue'], occ: null },
-];
-
-saltwickCells.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    cells.push({ q: c.q, r: c.r, tileType: 'grass', biome: 'saltwick', env: c.env || [], occ: c.occ || null, label: c.label || undefined, occScale: c.occScale || undefined });
-  }
+  assert(connected.size === pack.cells.length, `${pack.packId} is not contiguous`);
 });
 
-// 9. East Weald (expanded further east)
-for (let q = 7; q <= 16; q++) {
-  for (let r = -7; r <= 6; r++) {
-    if (!isUsed(q, r) && Math.abs(q + r * 0.5) < 18 && Math.abs(r) < 8) {
-      markUsed(q, r);
-      const envCount = 1 + Math.floor(rng() * 2);
-      const env = [];
-      for (let i = 0; i < envCount; i++) {
-        if (rng() < 0.5) env.push(pick(TREE_POOL));
-        else if (rng() < 0.7) env.push(pick(BUSH_POOL));
-        else env.push(pick(ROCK_POOL));
-      }
-      const label = (q === 8 && r === -1) ? 'East Weald' : undefined;
-      cells.push({ q, r, tileType: 'grass', biome: 'eastweald', env, occ: null, label });
-    }
-  }
-}
+const waterCells = cells.filter(cell => cell.tileType === 'water');
+const roadCells = cells.filter(cell => cell.tileType === 'road');
+const occupiedCells = cells.filter(cell => cell.occ);
+const environmentItems = cells.reduce((sum, cell) => sum + cell.env.length, 0);
 
-// 10. North Downs (expanded further north)
-for (let q = -12; q <= -3; q++) {
-  for (let r = -14; r <= -7; r++) {
-    if (!isUsed(q, r)) {
-      markUsed(q, r);
-      const env = [pick(ROCK_POOL)];
-      if (rng() < 0.5) env.push(pick(BUSH_POOL));
-      const label = (q === -5 && r === -9) ? 'North Downs' : undefined;
-      cells.push({ q, r, tileType: 'grass', biome: 'northdowns', env, occ: null, label });
-    }
-  }
-}
-
-// 11. Hillend (expanded)
-const hillendCells = [
-  { q: 5,  r: 1,  env: ['Iron_Nuggets', 'Iron_Nugget_Large', 'Iron_Bars_Stack_Small'], occ: null, label: 'Hillend — Ore Outcrop' },
-  { q: 5,  r: 2,  env: ['Stone_Bricks_Stack_Medium', 'resource_stone'], occ: 'building_mine_blue', label: 'Smelter', occScale: 0.9 },
-  { q: 6,  r: 0,  env: ['Stone_Chunks_Large', 'Stone_Bricks_Stack_Large'], occ: 'building_mine_green', label: 'Quarry', occScale: 0.9 },
-  { q: 6,  r: 1,  env: ['Stone_Brick', 'Rock_3_E_Color1'], occ: null },
-  { q: 7,  r: 0,  env: ['Stone_Chunks_Large', 'Iron_Nuggets'], occ: null },
-  { q: 7,  r: 1,  env: ['resource_stone', 'Stone_Brick'], occ: null },
-  { q: 5,  r: 0,  env: ['Iron_Bars_Stack_Small', 'rock_single_A'], occ: null },
-  { q: 6,  r: 2,  env: ['Stone_Bricks_Stack_Large', 'Iron_Nuggets'], occ: null },
-  { q: 8,  r: 0,  env: ['Stone_Chunks_Large', 'resource_stone'], occ: null },
-  { q: 8,  r: 1,  env: ['Rock_3_D_Color1', 'Iron_Bars_Stack_Small'], occ: null },
-  // New Hillend expansion
-  { q: 9,  r: -1, env: ['Iron_Nuggets', 'Iron_Nugget_Large'], occ: null },
-  { q: 9,  r: 0,  env: ['Stone_Chunks_Large', 'resource_stone'], occ: null },
-  { q: 10, r: -1, env: ['Rock_2_D_Color1', 'Iron_Bars_Stack_Small'], occ: null },
-  { q: 10, r: 0,  env: ['Stone_Bricks_Stack_Medium', 'resource_stone'], occ: null },
-];
-
-hillendCells.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    cells.push({ q: c.q, r: c.r, tileType: 'grass', biome: 'grey_hills', env: c.env || [], occ: c.occ || null, label: c.label || undefined, occScale: c.occScale || undefined });
-  }
-});
-
-// 12. Far south delta settlements
-const deltaCells = [
-  { q: -3, r: 15, env: ['waterplant_A', 'Fuel_B_Barrel'], occ: null, label: 'Lower Marsh' },
-  { q: -3, r: 18, env: ['waterplant_B', 'Fuel_B_Barrel_Dirty'], occ: null },
-  { q: -3, r: 22, env: ['waterplant_A', 'Fuel_B_Barrels'], occ: null, label: 'Deep Marsh' },
-  { q: -3, r: 25, env: ['sand_A', 'flag_blue'], occ: 'building_stage_A', label: 'South Dock', occScale: 0.8 },
-  { q: -3, r: 29, env: ['waterplant_C', 'Fuel_B_Barrel'], occ: null },
-  { q: -3, r: 32, env: ['sand_B', 'crate_A_big'], occ: null, label: 'Eastern Delta' },
-  { q: -3, r: 36, env: ['waterplant_A', 'sand_A'], occ: null },
-  { q: -3, r: 39, env: ['sand_B', 'barrel_large'], occ: null, label: 'South Shore' },
-  { q: -3, r: 42, env: ['sand_A', 'flag_blue'], occ: null },
-  { q: -3, r: 45, env: ['sand_B', 'rope_bundle_A'], occ: null, label: "River's End" },
-  { q: 3,  r: 16, env: ['waterplant_B', 'Fuel_B_Barrel'], occ: null },
-  { q: 3,  r: 19, env: ['waterplant_A', 'Fuel_B_Barrels'], occ: null, label: 'Fen Edge' },
-  { q: 3,  r: 23, env: ['sand_A', 'barrel_small'], occ: null },
-  { q: 3,  r: 26, env: ['sand_B', 'crate_long_A'], occ: null },
-  { q: 3,  r: 30, env: ['waterplant_C', 'Fuel_B_Barrel_Dirty'], occ: null },
-  { q: 3,  r: 37, env: ['sand_A', 'flag_blue'], occ: null },
-  { q: 3,  r: 43, env: ['sand_B', 'bucket_water'], occ: null },
-  { q: 3,  r: 46, env: ['sand_A', 'coin_stack_large'], occ: null },
-];
-
-deltaCells.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    cells.push({ q: c.q, r: c.r, tileType: 'grass', biome: 'southmarsh', env: c.env || [], occ: c.occ || null, label: c.label || undefined, occScale: c.occScale || undefined });
-  }
-});
-
-// 13. Road network (expanded fully)
-const roadCells = [
-  // Original roads
-  { q: -2, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 },
-  { q: 2, r: -2 }, { q: 1, r: -2 },
-  { q: -2, r: 1 }, { q: -2, r: 2 }, { q: -2, r: 3 }, { q: -2, r: 4 },
-  { q: 1, r: 4 }, { q: 2, r: 3 }, { q: 2, r: 4 },
-  { q: 3, r: 3 }, { q: 3, r: 4 },
-  { q: 3, r: -1 }, { q: 4, r: -1 },
-  { q: -3, r: 0 }, { q: -3, r: 1 },
-  { q: 4, r: 0 }, { q: 4, r: 1 },
-  { q: 5, r: 0 }, { q: 5, r: 1 },
-  { q: -2, r: -1 }, { q: -2, r: -2 },
-  { q: 0, r: -2 }, { q: 0, r: -3 },
-  { q: -1, r: 5 }, { q: -1, r: 6 },
-  { q: 0, r: 7 }, { q: 0, r: 8 },
-  { q: -3, r: 5 }, { q: -3, r: 6 },
-  { q: 3, r: 5 }, { q: 4, r: 5 },
-  { q: -4, r: -2 }, { q: -4, r: -1 },
-  { q: 6, r: -1 }, { q: 6, r: 0 },
-  { q: -3, r: -2 }, { q: -3, r: -3 },
-  { q: -4, r: 0 }, { q: -4, r: 1 },
-  { q: -4, r: 2 }, { q: -5, r: 2 },
-  { q: 5, r: 2 }, { q: 6, r: 2 },
-  { q: 7, r: -1 }, { q: 7, r: 0 },
-  { q: -2, r: 5 }, { q: -2, r: 6 },
-  { q: -3, r: 7 }, { q: -3, r: 8 },
-  { q: 2, r: 6 }, { q: 3, r: 6 },
-  { q: 4, r: 6 }, { q: 4, r: 7 },
-  { q: -5, r: -1 }, { q: -5, r: 0 },
-  { q: -6, r: -2 }, { q: -6, r: -1 },
-  { q: 8, r: -1 }, { q: 8, r: 0 },
-  { q: 9, r: 0 }, { q: 9, r: 1 },
-  { q: -4, r: 6 }, { q: -4, r: 7 },
-  { q: -3, r: 9 }, { q: -2, r: 9 },
-  { q: 0, r: 10 }, { q: 0, r: 11 },
-  { q: 5, r: 5 }, { q: 5, r: 6 },
-  // New expanded roads (2nd doubling)
-  { q: -6, r: 0 }, { q: -6, r: 1 },
-  { q: -7, r: -1 }, { q: -7, r: 0 },
-  { q: 10, r: 0 }, { q: 10, r: 1 },
-  { q: 11, r: -1 }, { q: 11, r: 0 },
-  { q: -5, r: -6 }, { q: -5, r: -5 },
-  { q: -6, r: -5 }, { q: -6, r: -4 },
-  { q: 0, r: -5 }, { q: 0, r: -4 },
-  { q: -1, r: -8 }, { q: -1, r: -9 },
-  { q: -3, r: -7 }, { q: -3, r: -6 },
-  { q: -2, r: 11 }, { q: -2, r: 12 },
-  { q: -3, r: 12 }, { q: -3, r: 13 },
-  { q: 2, r: 9 }, { q: 2, r: 10 },
-  { q: 3, r: 9 }, { q: 3, r: 10 },
-  { q: -2, r: 14 }, { q: -2, r: 15 },
-  { q: 2, r: 15 }, { q: 2, r: 16 },
-  { q: -3, r: 16 }, { q: -3, r: 17 },
-  { q: 3, r: 17 }, { q: 3, r: 18 },
-  { q: -4, r: 18 }, { q: -4, r: 19 },
-  { q: 4, r: 19 }, { q: 4, r: 20 },
-  { q: -4, r: 22 }, { q: -4, r: 23 },
-  { q: 4, r: 23 }, { q: 4, r: 24 },
-  { q: -5, r: 25 }, { q: -4, r: 25 },
-  { q: 4, r: 26 }, { q: 5, r: 26 },
-  { q: -4, r: 28 }, { q: -5, r: 28 },
-  { q: 4, r: 30 }, { q: 4, r: 31 },
-  { q: -5, r: 31 }, { q: -5, r: 32 },
-  { q: 4, r: 35 }, { q: 4, r: 36 },
-  { q: -5, r: 36 }, { q: -5, r: 37 },
-  { q: 4, r: 40 }, { q: 4, r: 41 },
-  { q: -5, r: 40 }, { q: -5, r: 41 },
-  { q: 4, r: 44 }, { q: 4, r: 45 },
-  { q: -5, r: 44 }, { q: -5, r: 45 },
-];
-
-roadCells.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    const biome = 
-      c.r >= 28 ? 'southmarsh' :
-      c.r >= 13 ? 'saltwick' :
-      c.r >= 9 ? 'southmarsh' :
-      c.r >= 6 ? 'southmarsh' :
-      c.r >= 3 ? 'valley_floor' :
-      c.q >= 8 ? 'grey_hills' :
-      c.q >= 5 ? 'grey_hills' :
-      c.q >= 3 ? 'grey_hills' :
-      c.q <= -6 ? 'westwood' :
-      c.q <= -4 ? 'westwood' :
-      c.r <= -6 ? 'northdowns' :
-      'thornwick';
-    cells.push({ q: c.q, r: c.r, tileType: 'road', biome, env: [], occ: null });
-  }
-});
-
-// 14. Clouds (expanded — more atmospheric coverage)
-const cloudPositions = [
-  // Original clouds
-  { q: 0,  r: -1 }, { q: -3, r: -2 }, { q: 4,  r: 0 },
-  { q: 5,  r: 1 },  { q: -1, r: 7 },  { q: -2, r: 4 },
-  { q: -5, r: -2 }, { q: -5, r: 0 },  { q: 6,  r: -1 },
-  { q: 7,  r: 0 },  { q: -4, r: 5 },  { q: 3,  r: 5 },
-  { q: -6, r: -3 }, { q: -6, r: 2 },  { q: 8,  r: 1 },
-  { q: 9,  r: 2 },  { q: -2, r: 7 },  { q: 1,  r: 11 },
-  { q: 5,  r: 7 },  { q: 6,  r: 5 },  { q: -5, r: 4 },
-  { q: -7, r: 0 },  { q: 4,  r: 8 },  { q: -3, r: 10 },
-  { q: -1, r: 12 }, { q: 2,  r: 10 },
-  // New clouds — far north
-  { q: -4, r: -11 }, { q: -5, r: -12 }, { q: -7, r: -9 },
-  { q: -2, r: -12 }, { q: -8, r: -10 }, { q: 0,  r: -11 },
-  { q: -9, r: -7 },  { q: -10, r: -5 }, { q: -11, r: -3 },
-  // New clouds — far east
-  { q: 10, r: -3 }, { q: 11, r: -2 }, { q: 12, r: 0 },
-  { q: 13, r: 1 },  { q: 12, r: 3 },  { q: 11, r: 4 },
-  { q: 14, r: -1 }, { q: 15, r: 0 },
-  // New clouds — far south
-  { q: -4, r: 15 }, { q: 3,  r: 16 }, { q: -3, r: 19 },
-  { q: 4,  r: 22 }, { q: -4, r: 24 }, { q: 3,  r: 25 },
-  { q: -3, r: 30 }, { q: 4,  r: 32 }, { q: -4, r: 35 },
-  { q: 3,  r: 38 }, { q: -4, r: 41 }, { q: 4,  r: 44 },
-  { q: -5, r: 46 }, { q: 5,  r: 47 },
-];
-
-cloudPositions.forEach(c => {
-  if (!isUsed(c.q, c.r)) {
-    markUsed(c.q, c.r);
-    const biome = 
-      c.r >= 30 ? 'southmarsh' :
-      c.r >= 13 ? 'saltwick' :
-      c.r >= 6 ? 'southmarsh' :
-      c.q >= 8 ? 'grey_hills' :
-      c.q <= -7 ? 'northdowns' :
-      c.q <= -4 ? 'westwood' :
-      'thornwick';
-    const env = rng() < 0.3 ? ['cloud_big', 'cloud_big'] : ['cloud_big'];
-    cells.push({ q: c.q, r: c.r, tileType: 'grass', biome, env, occ: null });
-  }
-});
-
-// ── Sort cells by q, r ──
-cells.sort((a, b) => a.r - b.r || a.q - b.q);
-
-// ── Generate output ──
 function generateOutput() {
   let out = `/**
- * Thronwick Kingdom — Complete Hex Grid World Data
- * Auto-generated by scripts/generateWorld.js
+ * Thronwick Kingdom — Second-Crown Basin World Data
+ * Auto-generated by scripts/generateWorld.cjs with seed 20260723
  *
  * Axial coordinates (q, r). Pointy-top hexagons.
  * Layer 0: Tile type (grass, water, river, road)
@@ -858,7 +537,7 @@ export function getFieldPackCentroid(cells) {
 }
 
 /**
- * CELLS — the complete hex grid for Thronwick (2x doubled).
+ * CELLS — the complete Second-Crown Basin hex world.
  * Each cell appears exactly once. Priority: Water > Road > Occupant > Field > Cloud > Env
  */
 export const CELLS = ${JSON.stringify(cells, null, 2).replace(/"(\w+)":/g, '$1:').replace(/"0x([0-9a-f]+)"/g, '0x$1')};
@@ -1160,4 +839,4 @@ export function getTileAt(q, r) {
 
 const output = generateOutput();
 console.log(output);
-console.error(`Generated ${cells.length} cells, ${waterCells.length} water tiles, ${fieldPacks.length} field packs`);
+console.error(`Generated ${cells.length} cells, ${waterCells.length} water tiles, ${roadCells.length} road tiles, ${fieldPacks.length} field packs, ${occupiedCells.length} explicit occupants, ${environmentItems} environment items`);
