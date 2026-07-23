@@ -6,6 +6,7 @@ The application can load its Three.js models from Cloudflare R2 while preserving
 
 - `src/data/r2AssetManifest.js` maps stable application asset IDs to audited R2 GLB object keys.
 - `src/systems/assetLoader.js` resolves those keys against `VITE_ASSET_BASE_URL`.
+- Every R2 GLB was produced by `gltfpack` with required `EXT_meshopt_compression`; `GLTFLoader` must be configured with Three.js `MeshoptDecoder` before loading them.
 - If `VITE_ASSET_BASE_URL` is absent, the loader keeps using the existing local GLTF files.
 - If `VITE_ASSET_LOCAL_FALLBACK=true`, a failed R2 request is retried against the local GLTF path. Disable this after the R2 rollout is stable so failures remain visible.
 - R2 keys in a published manifest version are immutable. Upload a replacement under a new object key and update the manifest instead of overwriting an existing object.
