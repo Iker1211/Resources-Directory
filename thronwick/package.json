@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
+    "prebuild": "npm run validate:world && npm run validate:tiles",
     "build": "vite build",
     "preview": "vite preview",
     "generate:world": "node scripts/generateWorld.cjs > src/data/worldData.js",
     "validate:world": "node scripts/validateWorld.mjs",
+    "validate:tiles": "node scripts/validateTileGeometry.mjs",
     "validate:assets": "node scripts/validateR2Assets.mjs"
   },
   "keywords": [],
