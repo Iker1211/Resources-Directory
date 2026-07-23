@@ -2,6 +2,7 @@
  * Asset Loader — handles GLTF loading, caching, and instancing
  */
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RIVER_PATH, FIELD_PACKS } from '../data/worldData.js';
 import { R2_ASSET_MANIFEST, R2_ASSET_MANIFEST_VERSION } from '../data/r2AssetManifest.js';
 
@@ -214,7 +215,9 @@ export function resolveAssetUrl(key) {
   return new URL(encodedObjectKey, remoteAssetBaseUrl).href;
 }
 
-const loader = new GLTFLoader();
+// R2 assets are generated with gltfpack and require EXT_meshopt_compression.
+// The decoder is also safe for the uncompressed local GLTF fallback.
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const loadCache = new Map();
 const loadedGeos = new Map(); // key -> { geometry, material, scene }
 
