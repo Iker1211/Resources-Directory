@@ -2,13 +2,19 @@
  * Asset Loader — handles GLTF loading, caching, and instancing
  */
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RIVER_PATH, FIELD_PACKS } from '../data/worldData.js';
+import { R2_ASSET_MANIFEST, R2_ASSET_MANIFEST_VERSION } from '../data/r2AssetManifest.js';
+import { extractMeshData } from '../utils/sceneGeometry.js';
+
+export { extractMeshData };
 
 /**
  * Registry of all assets used in the world.
- * Maps asset key -> { gltfPath, binPath, type, scaleHint }
+ * Maps asset key -> { gltfPath, type, scale }.
  *
- * Paths are relative to the assets/ directory served from public/
+ * gltfPath is retained as provenance metadata only. Runtime model bytes are
+ * resolved exclusively through R2_ASSET_MANIFEST for local and production use.
  */
 export const ASSET_REGISTRY = {
   // ── Tiles (Layer 0) ──
@@ -152,35 +158,79 @@ export const ASSET_REGISTRY = {
   plate_food_B: { gltfPath: '/assets/KayKit_DungeonRemastered_1.1_FREE/KayKit_DungeonRemastered_1.1_FREE/Assets/gltf/plate_food_B.gltf', type: 'prop', scale: 0.15 },
 };
 
-const loader = new GLTFLoader();
+const DEFAULT_ASSET_BASE_URL = 'https://pub-37dce3d7ecf94df9acc08cadeb70022c.r2.dev/';
+const configuredAssetBaseUrl = import.meta.env.VITE_ASSET_BASE_URL?.trim() || DEFAULT_ASSET_BASE_URL;
+
+function normalizeRemoteBaseUrl(value) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`[AssetLoader] VITE_ASSET_BASE_URL is not a valid absolute URL: ${value}`);
+  }
+
+  if (url.protocol !== 'https:') {
+    throw new Error('[AssetLoader] VITE_ASSET_BASE_URL must use HTTPS.');
+  }
+  if (url.search || url.hash) {
+    throw new Error('[AssetLoader] VITE_ASSET_BASE_URL must not contain query parameters or a fragment.');
+  }
+
+  url.pathname = `${url.pathname.replace(/\/+$/, '')}/`;
+  return url;
+}
+
+const remoteAssetBaseUrl = normalizeRemoteBaseUrl(configuredAssetBaseUrl);
+
+export const ASSET_SOURCE = Object.freeze({
+  mode: 'r2',
+  baseUrl: remoteAssetBaseUrl.href,
+  manifestVersion: R2_ASSET_MANIFEST_VERSION,
+});
+
+/** Resolve an application asset ID to its immutable R2 GLB URL. */
+export function resolveAssetUrl(key) {
+  if (!ASSET_REGISTRY[key]) {
+    throw new Error(`[AssetLoader] Unknown asset: ${key}`);
+  }
+
+  const objectKey = R2_ASSET_MANIFEST[key];
+  if (!objectKey) {
+    throw new Error(`[AssetLoader] R2 manifest ${R2_ASSET_MANIFEST_VERSION} has no entry for: ${key}`);
+  }
+
+  const encodedObjectKey = objectKey
+    .split('/')
+    .map(segment => encodeURIComponent(segment))
+    .join('/');
+
+  return new URL(encodedObjectKey, remoteAssetBaseUrl).href;
+}
+
+// R2 assets are generated with gltfpack and require EXT_meshopt_compression.
+const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const loadCache = new Map();
 const loadedGeos = new Map(); // key -> { geometry, material, scene }
 
-/**
- * Load a single GLTF asset from the registry
- */
-export function loadAsset(key) {
+function loadGltf(url) {
   return new Promise((resolve, reject) => {
-    if (loadCache.has(key)) {
-      resolve(loadCache.get(key));
-      return;
-    }
-    const reg = ASSET_REGISTRY[key];
-    if (!reg) {
-      console.warn(`[AssetLoader] Unknown asset: ${key}`);
-      reject(new Error(`Unknown asset: ${key}`));
-      return;
-    }
-    loader.load(
-      reg.gltfPath,
-      (gltf) => {
-        loadCache.set(key, gltf);
-        resolve(gltf);
-      },
-      undefined,
-      (err) => reject(err)
-    );
+    loader.load(url, resolve, undefined, reject);
   });
+}
+
+/** Load a single R2 asset and cache the parsed GLTF. */
+export async function loadAsset(key) {
+  if (loadCache.has(key)) return loadCache.get(key);
+
+  const url = resolveAssetUrl(key);
+  try {
+    const gltf = await loadGltf(url);
+    loadCache.set(key, gltf);
+    return gltf;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`[AssetLoader] Failed to load ${key} from ${url}: ${message}`, { cause: error });
+  }
 }
 
 /**
@@ -203,21 +253,6 @@ export async function loadAssets(keys) {
  */
 export function getAsset(key) {
   return loadCache.get(key) || null;
-}
-
-/**
- * Extract first mesh geometry+material from a GLTF scene
- */
-export function extractMeshData(gltf) {
-  let geo = null;
-  let mat = null;
-  gltf.scene.traverse(child => {
-    if (child.isMesh && !geo) {
-      geo = child.geometry;
-      mat = child.material;
-    }
-  });
-  return { geometry: geo, material: mat };
 }
 
 /**
